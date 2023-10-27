@@ -221,18 +221,24 @@ of a Secure Shell (SSH) log file tracking activity within the server:
 
 ![SHH_Log_File_Example.png](docs/SHH_Log_File_Example.png "Example Excerpt of Log File")
 
-The above details a date and timestamp of an activity, a server using OpenSSH Daemon (sshd) hosting the activity, and a type of activity committed by a user's name 
-and IP location to a specific port.  
+The above details a date and timestamp of an activity, a server using OpenSSH Daemon (sshd) hosting
+the activity, and a type of activity committed by a user's name and IP location to a specific port.
 
-We can see that there are multiple occurrences of failed passwords, accepted passwords, and invalid users through a quick scan of the log file.  Upon closer look we can see that the block of failed 
-passwords happened within milliseconds, indicating that a non-human entity was hitting the server multiple times within the 0.1 seconds!
+We can see that there are multiple occurrences of failed passwords, accepted passwords, and
+invalid users through a quick scan of the log file.  Upon closer look we can see that the block
+of failed passwords happened within milliseconds, indicating that a non-human entity was hitting
+the server multiple times within the 0.1 seconds!
 
-The above log file sample is part of a larger [SSH log file](data/SSH_Files/SSH_log_UnParsed.txt) that will be used for our SSH log file parsing and analysis.  There are many types of log files but the one we will focus 
-on for this project comes from [Zenodo-Loghub]("https://zenodo.org/record/3227177#.ZEc9T-zMI-Q) dataset.
+The above log file sample is part of a larger [raw SSH log
+file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing)
+that will be used for our SSH log file parsing and analysis.  There are many
+types of log files but the one we will focus on for this project comes from
+[Zenodo-Loghub]("https://zenodo.org/record/3227177#.ZEc9T-zMI-Q) dataset.
 
 
-Digging deeper, here is a helpful video for a big picture on simple approach in analyzing log files for specific patterns and attacks:
-[Basic Approach: Analyzing Files Log For Attacks (2021)](https://www.youtube.com/watch?v=-T6oue5E4KQ)
+Digging deeper, here is a helpful video for a big picture on simple approach in analyzing
+log files for specific patterns and attacks: [Basic Approach: Analyzing Files Log For Attacks
+(2021)](https://www.youtube.com/watch?v=-T6oue5E4KQ)
 
 
 ## 3. Specifications
@@ -267,7 +273,7 @@ that you can verify against your parsing:
 
 
 ### 3.1.1 Demo
-An example [demo](Demo/Log-File-Parsing-Demo.md "Demo") for filtering a log file is available
+An example [demo](demo/Log-File-Parsing-Demo.md) for filtering a log file is available
 to aid in reducing irrelevant log file information and explore Regular Expressions.
 
 ### 3.2. Problem
@@ -515,11 +521,10 @@ data file. This allows us to quickly set the file cursor to anywhere in the file
 in O(1) time using the `position(long pos)` method. We will use the ByteBuffer
 class to read/write to the B-Tree data file.  Please see the example of writing
 to a random access binary data file shown in DiskReadWrite.java in the [Disk IO
-example](https://github.com/BoiseState/CS321-resources/tree/master/examples/disk-IO-examples)
+examples](https://github.com/BoiseState/CS321-resources/tree/master/examples/disk-IO-examples)
 folder in CS321-resources repo. This example shows a complete binary search tree as an external
-data structure in a binary file on disk.  Another source comes from this StackOverFlow post:
-[Strings-to-ByteBuffer](https://stackoverflow.com/questions/24633980/java-nio-bytebuffer-put-and-get-strings) on writing and 
-reading strings to a `ByteBuffer`. 
+data structure in a binary file on disk.  
+
 
 
 ## 6. Using a Cache
