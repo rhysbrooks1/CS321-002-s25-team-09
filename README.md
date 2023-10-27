@@ -53,7 +53,7 @@ It is recommended to use any of the following versions:
 - JDK 21 (LTS)
 
 :book: See this 
-[wiki page for additional details regarding the supported Java versions and links to download the correct JDK versions](https://github.com/BoiseState/CS321_Bioinformatics/wiki/Install-the-correct-JDK-version).
+[wiki page for additional details regarding the supported Java versions and links to download the correct JDK versions](https://github.com/BoiseState/CS321_Cybersecurity/wiki/Install-the-correct-JDK-version).
 
 
 ## One-Time Team Setup
@@ -123,12 +123,12 @@ This project can be opened with [IntelliJ IDEA](https://www.jetbrains.com/idea/)
 :bulb: HINT: As a student, you can get [IntelliJ IDEA](https://www.jetbrains.com/idea/) for free ([using an academic license](https://www.jetbrains.com/community/education/#students)) 
 by signing up with your Boise State email.
 
-:book: See this [wiki page for additional instructions to run this project in IntelliJ IDEA](https://github.com/BoiseState/CS321_Bioinformatics/wiki/Instructions-to-run-in-IntelliJ-IDEA).
+:book: See this [wiki page for additional instructions to run this project in IntelliJ IDEA](https://github.com/BoiseState/CS321_Cybersecurity/wiki/Instructions-to-run-in-IntelliJ-IDEA).
 
 ### VSCode
 Alternatively, this project can be opened with [VSCode](https://code.visualstudio.com/).
 
-:book: See this [wiki page for detailed instructions to run this project in VSCode](https://github.com/BoiseState/CS321_Bioinformatics/wiki/Instructions-to-run-in-VSCode).
+:book: See this [wiki page for detailed instructions to run this project in VSCode](https://github.com/BoiseState/CS321_Cybersecurity/wiki/Instructions-to-run-in-VSCode).
 
 ## Notes for creating additional files and tests, while keeping the Gradle project structure
 We can add as many classes as we want in `src/main/java`, and gradle should build
@@ -153,9 +153,9 @@ can be [run from the command line](#compile-and-run-the-project-from-the-command
 Creating the tasks upfront will allow dividing and assigning the work in order to provide
 transparency and accountability within the team.
 
-Use the [Projects](https://github.com/BoiseState/CS321_Bioinformatics/projects) tab (i.e., a simplified version
+Use the [Projects](https://github.com/BoiseState/CS321_Cybersecurity/projects) tab (i.e., a simplified version
 of [ZenHub](https://www.zenhub.com)) to configure our own team Scrum board,
-based on this [project example](https://github.com/BoiseState/CS321_Bioinformatics/projects/1)
+based on this [project example](https://github.com/BoiseState/CS321_Cybersecurity/projects/1)
 (feel free to copy the contents of these tasks to your Scrum board).
 
 Your Scrum board should contain the following columns (pipelines):
@@ -647,11 +647,11 @@ survey will be  provided by the instructor.
 
 In addition, each team member should log their project-related
 activities for the week, including the URL to the tasks (e.g.,
-`https://github.com/StudentUserNameHostingRepo/CS321_Bioinformatics/issues/123`) completed that
+`https://github.com/StudentUserNameHostingRepo/CS321_Cybersecurity/issues/123`) completed that
 week, in a separate file named `Project-Log.md`.
 
 Here is a sample log file:
-[Project-log-sample.md](https://github.com/BoiseState/CS321_Bioinformatics/tree/master/Project-log-sample.md)
+[Project-log-sample.md](https://github.com/BoiseState/CS321_Cybersecurity/tree/master/Project-log-sample.md)
 
 As a reminder, each commit should link (reference) in the commit message the completed task
 (e.g., `Implements task #123`), in order to automatically link the task to the commit, and make
