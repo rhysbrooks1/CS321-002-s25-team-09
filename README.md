@@ -66,8 +66,8 @@ One team member should:
 - Clone (**not fork**) this repository and verify that gradle can be run.
 
 ```bash
-$ git clone https://github.com/BoiseState/CS321_SSH.git
-$ cd CS321_SSH_Logs
+$ git clone https://github.com/BoiseState/CS321_Cybersecurity.git
+$ cd CS321_Cybersecurity
 $ ./gradlew tasks
 ```
 
@@ -115,7 +115,7 @@ $ java -jar build/libs/SSHSearchBTree.jar <arguments>
 This repository is an [Eclipse](https://www.eclipse.org/) project, and can be directly opened in
 [Eclipse](https://www.eclipse.org/).
 
-:book: See this [wiki page for additional instructions to run this project in Eclipse](https://github.com/BoiseState/CS321_SSH/wiki/Instructions-to-run-in-Eclipse).
+:book: See this [wiki page for additional instructions to run this project in Eclipse](https://github.com/BoiseState/CS321_Cybersecurity/wiki/Instructions-to-run-in-Eclipse).
 
 ### IntelliJ IDEA
 This project can be opened with [IntelliJ IDEA](https://www.jetbrains.com/idea/).
@@ -207,9 +207,12 @@ Here is a sample project log from a team from a previous semester:
 <hr/>
 
 ## 1. Introduction
-In this assignment, we will analyze log files to better understand network observability within the field of Cyber-security.  We will look and observe patterns, activities, and operations within 
-a system's server and house the corresponding data using B-Trees.   The amount of data that we have is large and any data structure is not likely to fit in memory, hence why B-Trees being a good 
-choice for the task at hand.  We will then store our findings in a database and analyze its results for patterns and specific activities.
+In this assignment, we will analyze log files to better understand network observability within
+the field of Cybersecurity.  We will look and observe patterns, activities, and operations
+within a system's server and house the corresponding data using B-Trees.   The amount of data
+that we have is large and any data structure is not likely to fit in memory, hence why B-Trees
+being a good choice for the task at hand.  We will then store our findings in a database and
+analyze its results for patterns and specific activities.
 
 ## 2. Background
 Log files are textual data files that store events, messages, and processes within a system/network.  They log information from users and monitor IT environments.  They can detect when a 
@@ -241,7 +244,7 @@ help in parsing through the log files to create the proper B-Tree keys.
 
 ![Stripped_log_file.png](docs/Stripped_log_file.png "Example Stripped of Log File")
 
-Many key words like `LabSZ`, `for`, `Dec`, `password`, and `sshd[xxxx]:` are removed leaving only the necessary terms for creating our B-Trees.  Here is a [demo](#311-demo) link that provides a walkthrough on how to parse and filter through certain keywords, phrases, and terms. 
+Many key words like `LabSZ`, `for`, `Dec`, `password`, and `sshd[xxxx]:` are removed leaving only the necessary terms for creating our B-Trees.  Here is a [demo](demo/Log-File-Parsing-Demo.md) link that provides a walkthrough on how to parse and filter through certain keywords, phrases, and terms. 
 
 Once the [raw SSH text file](data/SSH_Files/SSH_log_UnParsed.txt "Actual file to use for B-Tree") has been parsed, the file should have the below amounts
 of types that you can verify against your parsing:
@@ -663,10 +666,9 @@ Progress reports are confidential.
 
 ## 12. Submission
 Before submission, make sure that you:
-- make sure that your `README-submission.md` file is complete!
-- can clone the team repository on the `onyx` server
-- can [compile and run the program from the command line](#compile-and-run-the-project-from-the-command-line) on `onyx` and obtain the expected results (just try test0.gbk)
+- that your `README-submission.md` file is complete!
+- can [compile and run the program from the command line](#compile-and-run-the-project-from-the-command-line) and obtain the expected results (just try test0.gbk)
 - run the [test scripts](#9-test-scripts)
-- submit on onyx 
+- add a note in your `README-submission.md` that the team is done and then commit and push.
 
 Make sure the [instructor and the teaching assistant(s) have access to the repository](#one-time-team-setup).
