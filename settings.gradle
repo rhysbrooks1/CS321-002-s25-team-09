@@ -16,4 +16,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'CS321_SSH'
+rootProject.name = 'CS321_Cybersecurity'

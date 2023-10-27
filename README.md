@@ -52,8 +52,9 @@ It is recommended to use any of the following versions:
 - JDK 17 (LTS)
 - JDK 21 (LTS)
 
-:book: See this 
-[wiki page for additional details regarding the supported Java versions and links to download the correct JDK versions](https://github.com/BoiseState/CS321_Cybersecurity/wiki/Install-the-correct-JDK-version).
+:book: See this [wiki page for additional details regarding the
+supported Java versions and links to download the correct JDK
+versions](https://github.com/BoiseState/CS321_Cybersecurity/wiki/Install-the-correct-JDK-version).
 
 
 ## One-Time Team Setup
@@ -71,11 +72,11 @@ $ cd CS321_Cybersecurity
 $ ./gradlew tasks
 ```
 
-The last command should perform a one-time gradle setup, followed by
-listing all the available gradle tasks and their descriptions.
+The last command should perform a one-time gradle setup, followed by listing all the available
+gradle tasks and their descriptions.
 
-**NOTE:** On Windows, the `./gradlew` command should be replaced with `gradlew`
-(which will call the [`gradlew.bat`](/gradlew.bat) file)
+**NOTE:** On Windows, the `./gradlew` command should be replaced with `gradlew` (which will
+call the [`gradlew.bat`](/gradlew.bat) file)
 
 The same team member should push the cloned repository to the new private repository.  This can
 be done by changing the remote URL of the cloned repository to the new private repository's URL.
@@ -120,7 +121,8 @@ This repository is an [Eclipse](https://www.eclipse.org/) project, and can be di
 ### IntelliJ IDEA
 This project can be opened with [IntelliJ IDEA](https://www.jetbrains.com/idea/).
 
-:bulb: HINT: As a student, you can get [IntelliJ IDEA](https://www.jetbrains.com/idea/) for free ([using an academic license](https://www.jetbrains.com/community/education/#students)) 
+:bulb: HINT: As a student, you can get [IntelliJ IDEA](https://www.jetbrains.com/idea/) for
+free ([using an academic license](https://www.jetbrains.com/community/education/#students))
 by signing up with your Boise State email.
 
 :book: See this [wiki page for additional instructions to run this project in IntelliJ IDEA](https://github.com/BoiseState/CS321_Cybersecurity/wiki/Instructions-to-run-in-IntelliJ-IDEA).
@@ -130,9 +132,9 @@ Alternatively, this project can be opened with [VSCode](https://code.visualstudi
 
 :book: See this [wiki page for detailed instructions to run this project in VSCode](https://github.com/BoiseState/CS321_Cybersecurity/wiki/Instructions-to-run-in-VSCode).
 
-## Notes for creating additional files and tests, while keeping the Gradle project structure
-We can add as many classes as we want in `src/main/java`, and gradle should build
-them automatically. In other words, we should not have to make any changes to the `build.gradle`.
+## Notes for creating additional files and tests, while keeping the Gradle project structure We can
+add as many classes as we want in `src/main/java`, and gradle should build them automatically. In
+other words, we should not have to make any changes to the `build.gradle`.
 
 Also, we can add new test files with new tests cases in `src/test/java` and those will be run
 automatically by gradle or our IDE.
@@ -142,21 +144,20 @@ automatically by gradle or our IDE.
 # Scrum Process
 The focus of this project is to learn about data structures, while working effectively in a group.
 In addition, given the small project scope, and the fixed set of requirements that are already
-defined (and will not need to be elicited with the use of a Product Owner), the team can
-customize the Scrum process learned in CS-HU 271 and focus exclusively on:
-- creating tasks
-- linking commits to task IDs (e.g., `Implements task #123`)
-- Test-Driven Development and unit testing. The [starter code](#starter-code) already contains a few [sample unit tests](src/test/java/cs321) that 
-can be [run from the command line](#compile-and-run-the-project-from-the-command-line).
+defined (and will not need to be elicited with the use of a Product Owner), the team can customize
+the Scrum process learned in CS-HU 271 and focus exclusively on: - creating tasks - linking
+commits to task IDs (e.g., `Implements task #123`) - Test-Driven Development and unit testing. The
+[starter code](#starter-code) already contains a few [sample unit tests](src/test/java/cs321)
+that can be [run from the command line](#compile-and-run-the-project-from-the-command-line).
 
 ## Scrum Board
 Creating the tasks upfront will allow dividing and assigning the work in order to provide
 transparency and accountability within the team.
 
-Use the [Projects](https://github.com/BoiseState/CS321_Cybersecurity/projects) tab (i.e., a simplified version
-of [ZenHub](https://www.zenhub.com)) to configure our own team Scrum board,
-based on this [project example](https://github.com/orgs/BoiseState/projects/124)
-(feel free to copy the contents of these tasks to your Scrum board).
+Use the [Projects](https://github.com/BoiseState/CS321_Cybersecurity/projects) tab (i.e., a
+simplified version of [ZenHub](https://www.zenhub.com)) to configure our own team Scrum board,
+based on this [project example](https://github.com/orgs/BoiseState/projects/124) (feel free to
+copy the contents of these tasks to your Scrum board).
 
 Your Scrum board should contain the following columns (pipelines):
 
@@ -215,9 +216,11 @@ being a good choice for the task at hand.  We will then store our findings in a 
 analyze its results for patterns and specific activities.
 
 ## 2. Background
-Log files are textual data files that store events, messages, and processes within a system/network.  They log information from users and monitor IT environments.  They can detect when a 
-network has become compromised or is under attack. For example, security logs check successful and unsuccessful logins, application log failures, and other various activity within a server.  Below is an example 
-of a Secure Shell (SSH) log file tracking activity within the server:
+Log files are textual data files that store events, messages, and processes within a
+system/network.  They log information from users and monitor IT environments.  They can detect when
+a network has become compromised or is under attack. For example, security logs check successful
+and unsuccessful logins, application log failures, and other various activity within a server.
+Below is an example of a Secure Shell (SSH) log file tracking activity within the server:
 
 ![SHH_Log_File_Example.png](docs/SHH_Log_File_Example.png "Example Excerpt of Log File")
 
@@ -243,7 +246,12 @@ log files for specific patterns and attacks: [Basic Approach: Analyzing Files Lo
 
 ## 3. Specifications
 
-### 3.1. Input Files
+### 3.1. Input Files and Data Wrangling
+In data science, the process of [data wrangling](https://en.wikipedia.org/wiki/Data_wrangling),
+also known as data munging, is the process of transforming and mapping data from one "raw"
+data form into another format with the intent of making it more appropriate and valuable for
+a variety of downstream purposes such as analytics.
+
 The [raw SSH log
 file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing) (70MB)
 contains lots of important data pertaining to the details of an activity. Note that this file
@@ -252,15 +260,15 @@ a select few keywords to use within our B-Tree keys, it is easiest to strip the 
 the necessary items. Below is a stripped version of the above file that will greatly help in
 parsing through the log files to create the proper B-Tree keys.
 
-![Stripped_log_file.png](docs/Stripped_log_file.png "Example Stripped of Log File")
+![Stripped_log_file.png](docs/Stripped_log_file.png "Stripped Example Log File")
 
 Many keywords like `LabSZ`, `for`, `Dec`, `password`, and `sshd[xxxx]:` are removed leaving only
 the necessary terms for creating our B-Trees.  Here is a [demo](demo/Log-File-Parsing-Demo.md)
-link that provides a walkthrough on how to parse and filter through certain keywords, phrases,
+link that provides a walkthrough on how to wrangle and filter through certain keywords, phrases,
 and terms.
 
-Once the raw SSH text file has been parsed, the file should have the below amounts of types
-that you can verify against your parsing:
+Once the raw SSH text file has been wrangled, the file should have the following amounts of types
+that you can verify against your reduced data file:
 
 | Type of Activity | Line count |
 |------------------|------------|
@@ -273,16 +281,29 @@ that you can verify against your parsing:
 
 
 ### 3.1.1 Demo
-An example [demo](demo/Log-File-Parsing-Demo.md) for filtering a log file is available
-to aid in reducing irrelevant log file information and explore Regular Expressions.
+An example [demo](demo/Log-File-Wrangling-Demo.md) for wrangling a log file is available
+to aid in reducing irrelevant log file information and explore Regular Expressions. 
+
+### 3.1.2 Data Wrangling Program
+While using a text editor to wrangle the data is feasible for one file, it would be infeasible
+if you have to do that for hundreds or thousands of log files. So for this project, please 
+write java program named `SSHDataWrangler.java` to wrangle the raw SSH data file into a useful form
+as decsribed above. You can use regular experessions nuilt into Java to accomplish the task.
+
+Note that we have include the final wrangled file so you can diff your output with the final
+form to verify the correctness. Including the warangled log file allows team members to proceed
+with other parts of the project sooner!
+
 
 ### 3.2. Problem
 
-The motivation for the problem is to analyze the frequency of certain activities and patterns within the log files; whether that be most commonly accepted 
-passwords at certain IPs, commonly failed passwords at specific times of the day, or what common user's IPs are.
+The motivation for the problem is to analyze the frequency of certain activities and patterns
+within the log files; whether that be most commonly accepted passwords at certain IPs, commonly
+failed passwords at specific times of the day, or what common user's IPs are.
 
-For the given log file, we want to convert its different activity types into various B-Trees to better analyze specific types of operations, i.e. we will 
-make 9 total B-Trees with a certain category of extracted data from the log file.
+For the given log file, we want to convert its different activity types into various B-Trees to
+better analyze specific types of operations, i.e. we will make 9 total B-Trees with a certain
+category of extracted data from the log file.
 
 The following are the types of B-Trees that will be created:
 - Accepted IPs
@@ -295,8 +316,8 @@ The following are the types of B-Trees that will be created:
 - Reverse & Address timestamps
 - User's name and their IPs
 
-Once we have each B-Tree for each type of activity, we will then search the B-Trees for the top frequencies within each category and display those frequencies
-from searching an SQL database.
+Once we have each B-Tree for each type of activity, we will then search the B-Trees for the
+top frequencies within each category and display those frequencies from searching an SQL database.
 
 The following displays what each main driver must output:
 
@@ -310,8 +331,8 @@ The following displays what each main driver must output:
 ## 4. Design Issues
 
 ### 4.1. Memory
-We could represent each SHH Log sequence as a string of that is 32 bytes long.  No value should go over 32 bytes and if so, we simply 
-truncate the sequence to just 32 bytes. 
+We could represent each SHH Log sequence as a string of that is 32 bytes long.  No value should
+go over 32 bytes and if so, we simply truncate the sequence to just 32 bytes.
 
 ### 4.2. Key Values
 Note that the key values will be the two variables of that B-Tree's type concatenated with a dash (`-`)
@@ -328,13 +349,21 @@ B-Tree will be similar to the objects we stored in the previous `Hashtable` assi
 call the relevant class `TreeObject` to represent the objects using the `Comparable` interface.
 
 ## 5. Implementation
-We will create three programs:
-- one that **creates a B-Tree** from a given parse SSH log file and outputs a query with all unique values found within the SHH log file, a
-RAF file of the B-Tree, a dump file (if applicable), and a SQL Database (if applicable).
-- another for **searching a specified B-Tree** for top occurring activity pairs. The search program
-assumes that the user specified the proper B-Tree and top frequency count to use to output the top occurring searched queries.
-- a final for **searching in the SQL database** for the top occurring activities pairs. This database
-  would be created as a by-product of the first program and print the top search queries from searching the B-Tree.
+We will create four programs:
+
+- one that **wrangles the raw SSH file** into the form suitable for ucreating BTrees.
+
+- one that **creates a B-Tree** from a given parse SSH log file and outputs a query with
+all unique values found within the SHH log file, a RAF file of the B-Tree, a dump file (if
+applicable), and a SQL Database (if applicable).
+
+- another for **searching a specified B-Tree** for top occurring activity pairs. The search
+program assumes that the user specified the proper B-Tree and top frequency count to use to
+output the top occurring searched queries.
+
+- a final for **searching in the SQL database** for the top occurring activities pairs. This
+database would be created as a by-product of the first program and print the top search
+queries from searching the B-Tree.
 
 The main Java classes should be named `SSHCreateBTree`, `SSHSearchBTree`, and `SSHSearchDatabase`.
 
@@ -342,28 +371,32 @@ The main Java classes should be named `SSHCreateBTree`, `SSHSearchBTree`, and `S
 The required arguments for the three programs are shown below:
 
 ```bash
+java -jar build/libs/SSHDataWrangler.jar --rawSshFile=>raw-ssh-file> --sshFile=<wrangled-ssh-file>
+
 java -jar build/libs/SSHCreateBTree.jar --cache=<0/1> --degree=<btree-degree> --sshFile=<ssh-File> 
     --type=<tree-type> [--size=<n>]  [--debug=<0|1>]
 
 
-java -jar build/libs/SSHSearchBTree.jar --cache=<0/1> --degree=<btreebdegree> 
-  --btreefile=<bTree-file> --queryfile=<query-file> --topfrequency=<10/25/50> 
+java -jar build/libs/SSHSearchBTree.jar --cache=<0/1> --degree=<btree-degree> 
+  --btreefile=<btree-file> --queryfile=<query-file> --topfrequency=<10/25/50> 
   [--size=<n>]  [--debug=<0|1>]
 
-java -jar build/libs/SSHSearchDatabase.jar --database=<SQLite-database-path> 
+java -jar build/libs/SSHSearchDatabase.jar --database=<sqlite-database-path> 
       --searchqueryfile=<search-query-file>
 ```
 
 **Note that the arguments can be provided in any order.**
 
 - `<cache>` specifies whether the program should use cache (value `1`) or
-no cache (value `0`); if the value is `1`, the `<cache-size>` has to be specified
+no cache (value `0`); if the value is `1`, the `<size>` has to be specified
 
 - `<degree>` is the degree to be used for the B-Tree. If the user specifies `0`, then our
 program should choose the optimum degree based on a disk block size of `4096` bytes and the
 size of our B-Tree node on disk
 
-- `<sshFile>` is the input `.txt` file containing the SSH log file
+- `<rawSshFile>` is the input `.txt` file containing the raw SSH log file
+
+- `<sshFile>` is the input `.txt` file containing the wrangled SSH log file
 
 - `<type>` is the type of B-Tree used and is one of nine options:
   - `accepted-ip`
@@ -378,31 +411,33 @@ size of our B-Tree node on disk
 
 - `<btreefile>` is the name of the B-Tree file generated by the `SSHCreateBTree` program
 
-- `<queryfile>` contains the same SSH key pairs type (e.g., `Accepted-20:48` and `Accepted-21:32`) that will then be 
-searched for in the specified B-Tree file of the same type. The strings are one per line and must align
-with the corresponding B-Tree file of the same type.  
+- `<queryfile>` contains the same SSH key pairs type (e.g., `Accepted-20:48` and `Accepted-21:32`)
+that will then be searched for in the specified B-Tree file of the same type. The strings are
+one per line and must align with the corresponding B-Tree file of the same type.
 
-- `<topfrequency>` is the most frequent occurring keys within a B-Tree.  Gets either the top `10`,`25`, or `50` values.  Note B-Tree 
-type: `accepted-ip` does not have enough values for `50` top values (i.e., total unique values for `accepted-ip` is `42`).    
+- `<topfrequency>` is the most frequent occurring keys within a B-Tree.  Gets either the top
+`10`,`25`, or `50` values.  Note B-Tree type: `accepted-ip` does not have enough values for
+`50` top values (i.e., total unique values for `accepted-ip` is `42`).
 
-- `[<size>]` is an integer between `100` and `10000` (inclusive) that represents the
-maximum number of `BTreeNode` objects that can be stored in memory
+- `[<size>]` is an integer between `100` and `10000` (inclusive) that represents the maximum
+number of `BTreeNode` objects that can be stored in the memory cache
 
-- `<database>` the path to the SQL database created after B-Tree creation for a
-specific B-Tree type. The name of the database file should be `SSHLogDB.db`
+- `<database>` the path to the SQL database created after B-Tree creation for a specific B-Tree
+type. The name of the database file should be `SSHLogDB.db`
 
-- `<searchqueryfile>` contains the same **top** SSH key pairs type (ex. `Accepted-20:48` and `Accepted-21:32`) 
-that will then be searched for in the `.db` database file to a specific B-Tree database of the same type. The strings are one per line and must align
-  with the corresponding `.db` B-Tree file of the same type outputted by SSHCreateBTree.  These files are to contain either `10`/`25`/`50` top keys
-  depending on the specified `<topfrequency>` of the `SSHCreateBTree` output search query.
+- `<searchqueryfile>` contains the same **top** SSH key pairs type (ex. `Accepted-20:48` and
+`Accepted-21:32`) that will then be searched for in the `.db` database file to a specific B-Tree
+database of the same type. The strings are one per line and must align with the corresponding
+`.db` B-Tree file of the same type outputted by SSHCreateBTree.  These files are to contain either
+`10`/`25`/`50` top keys depending on the specified `<topfrequency>` of the `SSHCreateBTree`
+output search query.
 
 - `[<debug>]` is an optional argument with a default value of zero
 
     - It must support at least the following values for `SSHSearchBTree`:
 
         - `0`: The output of the queries should be printed on the standard output stream. Any
-        diagnostic messages, help and status messages must be printed on the standard
-        error stream
+        diagnostic messages, help and status messages must be printed on the standard error stream
 
 		- `1`: The program displays more verbose messages. For example, it prints the `PriorityQueue`'s contents upon completion.
 
@@ -411,15 +446,15 @@ that will then be searched for in the `.db` database file to a specific B-Tree d
         - `0`: Any diagnostic messages, help and status messages must be printed on standard
         error stream
 
-        - `1`: The program writes a text file named `dump-treetype.degree`, ex. `dump-accepted-ip0`, 
-      containing the SSH key and corresponding frequency in an inorder traversal, and has the following
-        line format:
+        - `1`: The program writes a text file named `dump-treetype.degree`,
+        ex. `dump-accepted-ip0`, containing the SSH key and corresponding frequency in an
+        inorder traversal, and has the following line format:
 
 ```log
 <SSH Key> <frequency>
 ```
 
-The following shows a segment of the dumpfile `dumps/dump-user-ip0`. It has a total of 5294 lines!
+The following shows a segment of the dumpfile `dumps/dump-user-ip0`. It has a total of 5294 lines.
 ```log
 huangqx-115.71.16.143 20
 huangt-183.136.169.234 2
@@ -434,11 +469,32 @@ huf-183.136.178.26 2
 
 ### 5.2. Example Demonstration Walkthrough of Project
 
-#### 5.2.1. Create B-Tree in `SSHCreateBTree`
+
+#### 5.2.1. Wrangle the raw data file
+
+Please download the [raw SSH log
+file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing)
+(70MB) from the Google drive. Then wrangle it with your program as follows:
+
+```
+java -jar build/libs/SSHDataWrangler.jar --rawSshFile=SSH_log_raw.txt --sshFile=SSH_log.txt
+```
+
+This program assumes that the raw file and output file are both in the top level of the project
+folder.  Then compare the outout file with the wrangled file that we have provided, as follows:
+
+```
+diff SSH_log.txt  data/SSH_Files/SSH_log.txt
+```
+
+
+#### 5.2.2. Create B-Tree in `SSHCreateBTree`
 With arguments of: 
 ```bash
 java -jar build/libs/SSHCreateBTree.jar --cache=1 --degree=0 --sshFile=SSH_log.txt --type=accepted-time --size=2000 --debug=1
 ```
+
+Assumes that the wrangled log file is in the `data/SSH_Files` folder.
 
 Outputs:
 - Dump text file: `dump-accepted-ip0`
@@ -452,11 +508,13 @@ Outputs:
 | ![Dump.png](docs/Dump.png "Example Excerpt of Log File") | ![QueryFile.png](docs/Query.png "Example Excerpt of Log File") |
 
 
-#### 5.2.2. Search B-Tree in `SSHSearchBTree`
+#### 5.2.3. Search B-Tree in `SSHSearchBTree`
 With arguments of:
 ```bash
 java -jar build/libs/SSHSearchBTree.jar --cache=0 --degree=0 --btreefile=SSH_log.txt.ssh.btree.accepted-time.0 --queryfile=QUERY-accepted-time.txt --topfrequency=25 --size=10000 --debug=0
 ```
+
+Assumes that the query files are in `data/queries` folder.
 
 Outputs:
 - Search query text file: `SQUERY-accepted-ip25.txt`
@@ -465,12 +523,14 @@ Outputs:
 |----------------------------------------------------------------|
 | ![Dump.png](docs/SQueryFile.png "Example Excerpt of Log File") |
 
-#### 5.2.3. Search B-Tree Database in `SSHSearchDatabase`
+#### 5.2.4. Search B-Tree Database in `SSHSearchDatabase`
 
 With arguments of:
 ```bash
 java -jar build/libs/SSHSearchDatabase.jar --database=SSHLogDB.db --sQueryfile=SQUERY-accepted-time25.txt
 ```
+
+Assumes that the search query files are in `data/searchQueries` folder.
 
 Outputs to standard output stream:
 - The `PriorityQueue` of top keys and their frequencies
@@ -524,38 +584,41 @@ class to read/write to the B-Tree data file.  Please see the example of writing
 to a random access binary data file shown in DiskReadWrite.java in the [Disk IO
 examples](https://github.com/BoiseState/CS321-resources/tree/master/examples/disk-IO-examples)
 folder in CS321-resources repo. This example shows a complete binary search tree as an external
-data structure in a binary file on disk.  
+data structure in a binary file on disk.
 
 
 
 ## 6. Using a Cache
-We will incorporate the generic Cache class from `Project 1` to improve the performance of
-our B-Tree implementation. The size of the cache should be a command line argument. An entry
-in the cache is a `BTreeNode`. With the cache enabled command line option, the `<size>`
-needs to be specified as well as in between size: `100` and `10000` (inclusive).  Using the cache
-greatly speeds up the execution time especially when searching larger B-Trees.
+We will incorporate the generic Cache class from `Project 1` to improve the performance of our
+B-Tree implementation. The size of the cache should be a command line argument. An entry in the
+cache is a `BTreeNode`. With the cache enabled command line option, the `<size>` needs to be
+specified as well as in between size: `100` and `10000` (inclusive).  Using the cache greatly
+speeds up the execution time especially when searching larger B-Trees.
 
 ## 7. Using a Database
 
 Design a simple database to store the results (sequences and frequencies) from the B-Tree.
-We will perform an inorder tree traversal to get the information to store in the database with the 
-`<tree type>` as the table's name without the `-` (prevents SQL syntax errors). This would be done at the end of creating the SSH B-Tree. Afterwards, we 
-will create a separate search program named `SSHSearchDatabase` that uses the database instead of the 
-BTree and the top searched query list outputted by `SSHSearchBTree` to get the top frequencies of a certain B-Tree.
+We will perform an inorder tree traversal to get the information to store in the database with
+the `<tree type>` as the table's name without the `-` (prevents SQL syntax errors). This would
+be done at the end of creating the SSH B-Tree. Afterwards, we will create a separate search
+program named `SSHSearchDatabase` that uses the database instead of the BTree and the top
+searched query list outputted by `SSHSearchBTree` to get the top frequencies of a certain B-Tree.
 
 ```bash
 $ ./gradlew createJarSSHSearchDatabase
 $ java -jar build/libs/SSHSearchDatabase.jar --database=<SQLite-database-path> --queryfile=<query-file>
 ```
 
-We will use the embedded SQLite database for this project.  The SQLite database is fully
-contained in a jar file that gradle will automatically pull down for us. See the database
-example in the section below on how to use SQLite.
+We will use the embedded SQLite database for this project.  The SQLite database is fully contained
+in a jar file that gradle will automatically pull down for us. See the database example in the
+section below on how to use SQLite.
 
 ### 7.1 Analyzing the Database
 
-When searching for the top results in the database, we want to analyze the top key frequencies for patterns.  The top keys should be printed out with their 
-frequencies as demonstrated by the following segment for top 10 keys in an `accepted-time` B-Tree.
+When searching for the top results in the database, we want to analyze the top key frequencies
+for patterns.  The top keys should be printed out with their frequencies as demonstrated by
+the following segment for top 10 keys in an `accepted-time` B-Tree.
+
 ```log
 Accepted-20:15: 2
 Accepted-12:53: 2
@@ -573,7 +636,9 @@ We observe from the code segment above that the top two accepted entries occur b
 and `18:46` with all other entries mostly distributed past `11:40`.  The majority of `Accepted`
 occurrences happening between `12:00` to `19:15`.
 
-Below represents the table for analyzing a select few B-Trees for their top results in their corresponding database and the questions to answer in [`BTree-Database-Analysis.md`](BTree-Database-Analysis.md).
+Below represents the table for analyzing a select few B-Trees for their
+top results in their corresponding database and the questions to answer in
+[`BTree-Database-Analysis.md`](BTree-Database-Analysis.md).
 
 | Tree Type             | degree | cache | cache size | debug | Question:                                                                                           |
 |-----------------------|--------|-------|------------|-------|-----------------------------------------------------------------------------------------------------|
@@ -622,11 +687,11 @@ Usage:  search-btrees.sh
 Usage:  check-squeries.sh 
 ```
 
-The `create-btrees.sh` script creates all nine B-Tree types from the SSH Log file. 
-The `check-dumpfiles.sh` compares the dump files from our code to the reference dump files. 
-The `search-btrees.sh` script searches all nine B-Trees from the B-Tree files for the top 25 entries.
-The `check-squeries.sh` script compares the results of search queries from searching the B-Tree 
-to our program with the reference results.
+The `create-btrees.sh` script creates all nine B-Tree types from the SSH Log file.
+The `check-dumpfiles.sh` compares the dump files from our code to the reference dump files.
+The `search-btrees.sh` script searches all nine B-Trees from the B-Tree files for the top 25
+entries.  The `check-squeries.sh` script compares the results of search queries from searching
+the B-Tree to our program with the reference results.
 
 You can use the test scripts to run and compare results using the three test scripts as follows.
 
@@ -640,8 +705,8 @@ You can use the test scripts to run and compare results using the three test scr
 ./check-squeries.sh 
 ```
 
-The instructors will use these test scripts for the final testing of
-your project.  Start off by running tests on your machine. If you do need to run them on `onyx` please avoid as to not
+The instructors will use these test scripts for the final testing of your project.  Start off
+by running tests on your machine. If you do need to run them on `onyx` please avoid as to not
 overload the `onyx` server.
 
 ## 10. Testing in the Cloud

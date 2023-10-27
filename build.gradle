@@ -23,6 +23,30 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
+task createJarSSHDataWrangler(type: Jar) {
+    group = 'Run'
+    description = 'create build/libs/SSHDataWrangler.jar'
+
+    from(sourceSets.main.output) {
+        include "cs321/create/**"
+    }
+
+    manifest {
+        attributes 'Implementation-Title': 'SSHDataWrangler',
+                'Implementation-Version': archiveVersion,
+                'Main-Class': 'cs321.create.SSHDataWrangler'
+    }
+    archiveBaseName = 'SSHDataWrangler'
+    archiveVersion = ''
+
+    // the duplicatesStrategy is required by Gradle 7
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE //allow duplicate *.class files in the jar
+
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+
 task createJarSSHCreateBTree(type: Jar) {
     group = 'Run'
     description = 'create build/libs/SSHCreateBTree.jar'
@@ -91,6 +115,24 @@ task createJarSSHSearchDatabase(type: Jar) {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
+
+tasks.createJarSSHDataWrangler.finalizedBy('printInstructionsToRunJarSSHDataWrangler')
+
+task printInstructionsToRunJarSSHDataWrangler {
+    doLast {
+        println ''
+        println '------------------------------------------------------------'
+        println 'The SSHDataWrangler.jar was created successfully. Run:'
+        println '$ java -jar build/libs/SSHDataWrangler.jar <arguments>'
+        println '------------------------------------------------------------'
+        println ''
+    }
+
+    onlyIf {
+        tasks.createJarSSHDataWrangler.state.failure == null
+    }
+}
+
 
 tasks.createJarSSHCreateBTree.finalizedBy('printInstructionsToRunJarSSHCreateBTree')
 

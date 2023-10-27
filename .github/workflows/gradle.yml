@@ -49,6 +49,8 @@ jobs:
       # by uncommenting the next two lines
 #    - name: Run all jUnit tests with Gradle
 #      run: ./gradlew test
+    - name: Create jar SSHDataWrangler with Gradle
+      run: ./gradlew createJarSSHDataWrangler
     - name: Create jar SSHCreateBTree with Gradle
       run: ./gradlew createJarSSHCreateBTree
     - name: Create jar SSHSearchBTree with Gradle
