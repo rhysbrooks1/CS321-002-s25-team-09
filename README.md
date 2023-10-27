@@ -238,16 +238,23 @@ Digging deeper, here is a helpful video for a big picture on simple approach in 
 ## 3. Specifications
 
 ### 3.1. Input Files
-The [SSH log file](data/SSH_Files/SSH_log_UnParsed.txt) contains lots of important data pertaining to the details of an activity.  Since we only need a select few 
-keywords to use within our B-Tree keys, it is easiest to strip the file to only the necessary items. Below is a stripped version of the above file that will greatly 
-help in parsing through the log files to create the proper B-Tree keys.  
+The [raw SSH log
+file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing) (70MB)
+contains lots of important data pertaining to the details of an activity. Note that this file
+is hosted on Google drive as it is larger than files allowed on GitHub.  Since we only need
+a select few keywords to use within our B-Tree keys, it is easiest to strip the file to only
+the necessary items. Below is a stripped version of the above file that will greatly help in
+parsing through the log files to create the proper B-Tree keys.
 
 ![Stripped_log_file.png](docs/Stripped_log_file.png "Example Stripped of Log File")
 
-Many key words like `LabSZ`, `for`, `Dec`, `password`, and `sshd[xxxx]:` are removed leaving only the necessary terms for creating our B-Trees.  Here is a [demo](demo/Log-File-Parsing-Demo.md) link that provides a walkthrough on how to parse and filter through certain keywords, phrases, and terms. 
+Many key words like `LabSZ`, `for`, `Dec`, `password`, and `sshd[xxxx]:` are removed leaving only
+the necessary terms for creating our B-Trees.  Here is a [demo](demo/Log-File-Parsing-Demo.md)
+link that provides a walkthrough on how to parse and filter through certain keywords, phrases,
+and terms.
 
-Once the [raw SSH text file](data/SSH_Files/SSH_log_UnParsed.txt "Actual file to use for B-Tree") has been parsed, the file should have the below amounts
-of types that you can verify against your parsing:
+Once the raw SSH text fileo has been parsed, the file should have the below amounts of types
+that you can verify against your parsing:
 
 | Type of Activity | Line count |
 |------------------|------------|
@@ -260,7 +267,8 @@ of types that you can verify against your parsing:
 
 
 ### 3.1.1 Demo
-An example [demo](Demo/Log-File-Parsing-Demo.md "Demo") for filtering a log file is available to aid in reducing irrelevant log file information and explore Regular Expressions. 
+An example [demo](Demo/Log-File-Parsing-Demo.md "Demo") for filtering a log file is available
+to aid in reducing irrelevant log file information and explore Regular Expressions.
 
 ### 3.2. Problem
 
