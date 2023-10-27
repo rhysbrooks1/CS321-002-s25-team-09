@@ -23,20 +23,20 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
-task createJarGeneBankCreateBTree(type: Jar) {
+task createJarSSHCreateBTree(type: Jar) {
     group = 'Run'
-    description = 'create build/libs/GeneBankCreateBTree.jar'
+    description = 'create build/libs/SSHCreateBTree.jar'
 
     from(sourceSets.main.output) {
         include "cs321/create/**"
     }
 
     manifest {
-        attributes 'Implementation-Title': 'GeneBankCreateBTree',
+        attributes 'Implementation-Title': 'SSHCreateBTree',
                 'Implementation-Version': archiveVersion,
-                'Main-Class': 'cs321.create.GeneBankCreateBTree'
+                'Main-Class': 'cs321.create.SSHCreateBTree'
     }
-    archiveBaseName = 'GeneBankCreateBTree'
+    archiveBaseName = 'SSHCreateBTree'
     archiveVersion = ''
 
     // the duplicatesStrategy is required by Gradle 7
@@ -46,20 +46,20 @@ task createJarGeneBankCreateBTree(type: Jar) {
     with jar
 }
 
-task createJarGeneBankSearchBTree(type: Jar) {
+task createJarSSHSearchBTree(type: Jar) {
     group = 'Run'
-    description = 'create build/libs/GeneBankSearchBTree.jar'
+    description = 'create build/libs/SSHSearchBTree.jar'
 
     from(sourceSets.main.output) {
         include "cs321/search/**"
     }
 
     manifest {
-        attributes 'Implementation-Title': 'GeneBankSearchBTree',
+        attributes 'Implementation-Title': 'SSHSearchBTree',
                 'Implementation-Version': archiveVersion,
-                'Main-Class': 'cs321.search.GeneBankSearchBTree'
+                'Main-Class': 'cs321.search.SSHSearchBTree'
     }
-    archiveBaseName = 'GeneBankSearchBTree'
+    archiveBaseName = 'SSHSearchBTree'
     archiveVersion = ''
 
     // the duplicatesStrategy is required by Gradle 7
@@ -69,20 +69,20 @@ task createJarGeneBankSearchBTree(type: Jar) {
     with jar
 }
 
-task createJarGeneBankSearchDatabase(type: Jar) {
+task createJarSSHSearchDatabase(type: Jar) {
     group = 'Run'
-    description = 'create build/libs/GeneBankSearchDatabase.jar'
+    description = 'create build/libs/SSHSearchDatabase.jar'
 
     from(sourceSets.main.output) {
         include "cs321/search/**"
     }
 
     manifest {
-        attributes 'Implementation-Title': 'GeneBankSearchDatabase',
+        attributes 'Implementation-Title': 'SSHSearchDatabase',
                 'Implementation-Version': archiveVersion,
-                'Main-Class': 'cs321.search.GeneBankSearchDatabase'
+                'Main-Class': 'cs321.search.SSHSearchDatabase'
     }
-    archiveBaseName = 'GeneBankSearchDatabase'
+    archiveBaseName = 'SSHSearchDatabase'
     archiveVersion = ''
 
     // the duplicatesStrategy is required by Gradle 7
@@ -92,54 +92,54 @@ task createJarGeneBankSearchDatabase(type: Jar) {
     with jar
 }
 
-tasks.createJarGeneBankCreateBTree.finalizedBy('printInstructionsToRunJarGeneBankCreateBTree')
+tasks.createJarSSHCreateBTree.finalizedBy('printInstructionsToRunJarSSHCreateBTree')
 
-task printInstructionsToRunJarGeneBankCreateBTree {
+task printInstructionsToRunJarSSHCreateBTree {
     doLast {
         println ''
         println '------------------------------------------------------------'
-        println 'The GeneBankCreateBTree.jar was created successfully. Run:'
-        println '$ java -jar build/libs/GeneBankCreateBTree.jar <arguments>'
+        println 'The SSHCreateBTree.jar was created successfully. Run:'
+        println '$ java -jar build/libs/SSHCreateBTree.jar <arguments>'
         println '------------------------------------------------------------'
         println ''
     }
 
     onlyIf {
-        tasks.createJarGeneBankCreateBTree.state.failure == null
+        tasks.createJarSSHCreateBTree.state.failure == null
     }
 }
 
-tasks.createJarGeneBankSearchBTree.finalizedBy('printInstructionsToRunJarGeneBankSearchBTree')
+tasks.createJarSSHSearchBTree.finalizedBy('printInstructionsToRunJarSSHSearchBTree')
 
-task printInstructionsToRunJarGeneBankSearchBTree {
+task printInstructionsToRunJarSSHSearchBTree {
     doLast {
         println ''
         println '------------------------------------------------------------'
-        println 'The GeneBankSearchBTree.jar was created successfully. Run:'
-        println '$ java -jar build/libs/GeneBankSearchBTree.jar <arguments>'
+        println 'The SSHSearchBTree.jar was created successfully. Run:'
+        println '$ java -jar build/libs/SSHSearchBTree.jar <arguments>'
         println '------------------------------------------------------------'
         println ''
     }
 
     onlyIf {
-        tasks.createJarGeneBankSearchBTree.state.failure == null
+        tasks.createJarSSHSearchBTree.state.failure == null
     }
 }
 
-tasks.createJarGeneBankSearchDatabase.finalizedBy('printInstructionsToRunJarGeneBankSearchDatabase')
+tasks.createJarSSHSearchDatabase.finalizedBy('printInstructionsToRunJarSSHSearchDatabase')
 
-task printInstructionsToRunJarGeneBankSearchDatabase {
+task printInstructionsToRunJarSSHSearchDatabase {
     doLast {
         println ''
         println '------------------------------------------------------------'
-        println 'The GeneBankSearchDatabase.jar was created successfully. Run:'
-        println '$ java -jar build/libs/GeneBankSearchDatabase.jar <arguments>'
+        println 'The SSHSearchDatabase.jar was created successfully. Run:'
+        println '$ java -jar build/libs/SSHSearchDatabase.jar <arguments>'
         println '------------------------------------------------------------'
         println ''
     }
 
     onlyIf {
-        tasks.createJarGeneBankSearchDatabase.state.failure == null
+        tasks.createJarSSHSearchDatabase.state.failure == null
     }
 }
 

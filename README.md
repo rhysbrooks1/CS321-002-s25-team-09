@@ -302,8 +302,8 @@ The following displays what each main driver must output:
 
 | Class               | Output                                                                                                                                                                                               | 
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `SSHCreateBTree`    | - `QUERY:<tree-type>.txt`<br/>- RAF `SSH_lig.txtssh.btree<tree-type><degree>` file<br/>- `dump:<tree-type><degree>.txt` (`<debug>`=`1`) <br/>- `SSHLogDB.db` from the dump file (`<debug>`=`1`)<br/> |
-| `SSHSearchBTree`    | - `SQUERY:<tree-type><topfrequency>.txt`                                                                                                                                                             | 
+| `SSHCreateBTree`    | - `QUERY-<tree-type>.txt`<br/>- RAF `SSH_lig.txtssh.btree<tree-type><degree>` file<br/>- `dump-<tree-type><degree>.txt` (`<debug>`=`1`) <br/>- `SSHLogDB.db` from the dump file (`<debug>`=`1`)<br/> |
+| `SSHSearchBTree`    | - `SQUERY-<tree-type><topfrequency>.txt`                                                                                                                                                             | 
 | `SSHSearchDatabase` | - top `<SSH Key> <frequency>` to standard out stream                                                                                                                                                 |
 
 
@@ -411,7 +411,7 @@ that will then be searched for in the `.db` database file to a specific B-Tree d
         - `0`: Any diagnostic messages, help and status messages must be printed on standard
         error stream
 
-        - `1`: The program writes a text file named `dump:treetype.degree`, ex. `dump:accepted-ip0`, 
+        - `1`: The program writes a text file named `dump-treetype.degree`, ex. `dump-accepted-ip0`, 
       containing the SSH key and corresponding frequency in an inorder traversal, and has the following
         line format:
 
@@ -419,7 +419,7 @@ that will then be searched for in the `.db` database file to a specific B-Tree d
 <SSH Key> <frequency>
 ```
 
-The following shows a segment of the dumpfile `dumps/dump:user-ip0`. It has a total of 5294 lines!
+The following shows a segment of the dumpfile `dumps/dump-user-ip0`. It has a total of 5294 lines!
 ```bash
 huangqx-115.71.16.143 20
 huangt-183.136.169.234 2
@@ -440,13 +440,13 @@ java -jar build/libs/SSHCreateBTree.jar --cache=1 --degree=0 --sshFile=SSH_log.t
 ```
 
 Outputs:
-- Dump text file: `dump:accepted-ip0`
-- Query file: `QUERY:accepted-ip.txt`
+- Dump text file: `dump-accepted-ip0`
+- Query file: `QUERY-accepted-ip.txt`
 - B-Tree RAF file: `SSH_log.txt.ssh.btree.accepted-ip.0`
 - Table name: `acceptedip` to `SSHLogDB.db`
 
 
-| Snippet of Dump file - `dump:accepted-ip0`:              | Snippet of Query file - `QUERY:accepted-ip.txt`:               |
+| Snippet of Dump file - `dump-accepted-ip0`:              | Snippet of Query file - `QUERY-accepted-ip.txt`:               |
 |----------------------------------------------------------|----------------------------------------------------------------|
 | ![Dump.png](docs/Dump.png "Example Excerpt of Log File") | ![QueryFile.png](docs/Query.png "Example Excerpt of Log File") |
 
@@ -454,13 +454,13 @@ Outputs:
 #### 5.2.2. Search B-Tree in `SSHSearchBTree`
 With arguments of:
 ```bash
-java -jar build/libs/SSHSearchBTree.jar --cache=0 --degree=0 --btreefile=SSH_log.txt.ssh.btree.accepted-time.0 --queryfile=QUERY:accepted-time.txt --topfrequency=25 --size=10000 --debug=0
+java -jar build/libs/SSHSearchBTree.jar --cache=0 --degree=0 --btreefile=SSH_log.txt.ssh.btree.accepted-time.0 --queryfile=QUERY-accepted-time.txt --topfrequency=25 --size=10000 --debug=0
 ```
 
 Outputs:
-- Search query text file: `SQUERY:accepted-ip25.txt`
+- Search query text file: `SQUERY-accepted-ip25.txt`
 
-| SQuery file - `SQUERY:accepted-ip25.txt`:                      |
+| SQuery file - `SQUERY-accepted-ip25.txt`:                      |
 |----------------------------------------------------------------|
 | ![Dump.png](docs/SQueryFile.png "Example Excerpt of Log File") |
 
@@ -468,7 +468,7 @@ Outputs:
 
 With arguments of:
 ```bash
-java -jar build/libs/SSHSearchDatabase.jar --database=SSHLogDB.db --sQueryfile=SQUERY:accepted-time25.txt
+java -jar build/libs/SSHSearchDatabase.jar --database=SSHLogDB.db --sQueryfile=SQUERY-accepted-time25.txt
 ```
 
 Outputs to standard output stream:
