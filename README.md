@@ -563,10 +563,11 @@ Accepted-00:02: 3
 Accepted-18:46: 4
 Accepted-14:20: 5
 ```
-We observe from the code segment above that the top two accepted entries occur between `14:20` and `18:46` with all other entries mostly distributed past `11:40`.  The majority of `Accepted` 
-occurrences happening between `12:00` to `19:15`.  
+We observe from the code segment above that the top two accepted entries occur between `14:20`
+and `18:46` with all other entries mostly distributed past `11:40`.  The majority of `Accepted`
+occurrences happening between `12:00` to `19:15`.
 
-Below represents the table for analyzing a select few B-Trees for their top results in their corresponding database and the questions to answer in [`BTree-Database-Analysis.md`](Written-Work/BTree-Database-Analysis.md).
+Below represents the table for analyzing a select few B-Trees for their top results in their corresponding database and the questions to answer in [`BTree-Database-Analysis.md`](BTree-Database-Analysis.md).
 
 | Tree Type             | degree | cache | cache size | debug | Question:                                                                                           |
 |-----------------------|--------|-------|------------|-------|-----------------------------------------------------------------------------------------------------|
@@ -583,15 +584,11 @@ Below represents the table for analyzing a select few B-Trees for their top resu
 
 The following examples from the class examples repository will be useful for this project.
 
-- [Disk IO example](https://github.com/BoiseState/CS321-resources/tree/master/examples/disk-IO-examples): In
+- [Disk ReadWrite example](https://github.com/BoiseState/CS321-resources/tree/master/examples/disk-IO-examples): In
   particular, look at DiskReadWrite.java. It shows the implementation of an external binary
   search tree on disk.
 - [SQLite example](https://github.com/BoiseState/CS321-resources/tree/master/examples/SQLite): A
   quick starter example on how to set up and use SQLite.
-- [Bitwise operators
-example](https://github.com/BoiseState/CS321-resources/tree/master/examples/bitwise-operators-example):
-In particular, look at SequenceUtils.java for helpful sequence utility code. A copy of this
-has also been provided in the starter code for the project.
 
 ## 9. Test Scripts
 
