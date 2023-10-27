@@ -179,7 +179,7 @@ by a commit containing a message similar to `Implements task #3`.
 
 As a warmup exercise, each team member should create a task similar to [`task
 #2`](https://github.com/BoiseState/CS321_SSH/issues/2) and then edit the
-[`README-submission.md`](/Written-Work/README-submission.md) file with their information.
+[`README-submission.md`](README-submission.md) file with their information.
 
 Here is a sample project log from a team from a previous semester:
 [Project-Log-sample.md](https://github.com/BoiseState/CS321_/ssh/blob/master/Project-log-sample.md)
