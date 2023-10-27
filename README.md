@@ -595,8 +595,8 @@ has also been provided in the starter code for the project.
 
 ## 9. Test Scripts
 
-The data SSH Log file is provided in the folder: 
-[data/SSH_Files](https://github.com/BoiseState/CS321_SSH/tree/master/data/SSH_Files).
+The parsed data SSH Log file is provided in the folder:
+[data/SSH_Files](https://github.com/BoiseState/CS321_Cybersecurity/tree/master/data/SSH_Files).
 
 The expected dump files and query results are provided in the folders:
 [results/dumpfiles](results/dumpfiles),
@@ -675,7 +675,7 @@ Progress reports are confidential.
 ## 12. Submission
 Before submission, make sure that you:
 - that your `README-submission.md` file is complete!
-- can [compile and run the program from the command line](#compile-and-run-the-project-from-the-command-line) and obtain the expected results (just try test0.gbk)
+- can [compile and run the program from the command line](#compile-and-run-the-project-from-the-command-line) and obtain the expected results 
 - run the [test scripts](#9-test-scripts)
 - add a note in your `README-submission.md` that the team is done and then commit and push.
 
