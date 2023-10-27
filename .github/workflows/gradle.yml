@@ -13,7 +13,7 @@
 # - Java 21 (current; LTS; officially supported since Gradle 8.4)
 # - Java 22 (to be released in March 2024; not officially supported by Gradle)
 # - Java 23 (to be released in September 2024; not officially supported by Gradle)
-name: CS321 Bioinformatics CI with Gradle
+name: CS321_Cybersecurity CI with Gradle
 
 on:
   push:
@@ -49,9 +49,9 @@ jobs:
       # by uncommenting the next two lines
 #    - name: Run all jUnit tests with Gradle
 #      run: ./gradlew test
-    - name: Create jar GeneBankCreateBTree with Gradle
-      run: ./gradlew createJarGeneBankCreateBTree
-    - name: Create jar GeneBankSearchBTree with Gradle
-      run: ./gradlew createJarGeneBankSearchBTree
-    - name: Create jar GeneBankSearchDatabase with Gradle
-      run: ./gradlew createJarGeneBankSearchDatabase
+    - name: Create jar SSHCreateBTree with Gradle
+      run: ./gradlew createJarSSHCreateBTree
+    - name: Create jar SSHSearchBTree with Gradle
+      run: ./gradlew createJarSSHSearchBTree
+    - name: Create jar SSHSearchDatabase with Gradle
+      run: ./gradlew createJarSSHSearchDatabase
