@@ -10,13 +10,15 @@
 
 # Learning Objectives
 
-- Develop a complex project in a team by applying good software engineering practices such as  agile development, version control, and data persistence along with 
-testing and code instrumentation.
+- Develop a complex project in a team by applying good software engineering practices such
+as  agile development, version control, and data persistence along with testing and code
+instrumentation.
 - Demonstrate effective teamwork as a member or a leader of a team.
-- Design, implement, and evaluate a computing-based solution to a given set of computing requirements for a problem from a specific domain.
+- Design, implement, and evaluate a computing-based solution to a given set of computing
+requirements for a problem from a specific domain.
 - Learn how to implement a B-Tree external data structure on the disk.
+- Learn how to wrangle raw data using regular expression.
 - Demonstrate  how to use caching to improve performance of an application.
-- Understand how bitwise operators reduce the memory footprint of data.
 - Learn how to run an application in the cloud.
 
 # Starter Code
@@ -178,7 +180,7 @@ Here is an example of a [valid task](https://github.com/BoiseState/CS321_Cyberse
 written in engineering language that is assigned to a developer. This task should be referenced
 by a commit containing a message similar to `Implements task #3`.
 
-As a warmup exercise, each team member should create a task similar to [`task
+As a warm up exercise, each team member should create a task similar to [`task
 #2`](https://github.com/BoiseState/CS321_Cybersecurity/issues/2) and then edit the
 [`README-submission.md`](README-submission.md) file with their information.
 
@@ -264,7 +266,7 @@ parsing through the log files to create the proper B-Tree keys.
 
 Many keywords like `LabSZ`, `for`, `Dec`, `password`, and `sshd[xxxx]:` are removed leaving only
 the necessary terms for creating our B-Trees.  Here is a [demo](demo/Log-File-Parsing-Demo.md)
-link that provides a walkthrough on how to wrangle and filter through certain keywords, phrases,
+link that provides a walk-through on how to wrangle and filter through certain keywords, phrases,
 and terms.
 
 Once the raw SSH text file has been wrangled, the file should have the following amounts of types
@@ -287,12 +289,12 @@ to aid in reducing irrelevant log file information and explore Regular Expressio
 ### 3.1.2 Data Wrangling Program
 While using a text editor to wrangle the data is feasible for one file, it would be infeasible
 if you have to do that for hundreds or thousands of log files. So for this project, please 
-write java program named `SSHDataWrangler.java` to wrangle the raw SSH data file into a useful form
-as decsribed above. You can use regular experessions nuilt into Java to accomplish the task.
+write a Java program named `SSHDataWrangler.java` to wrangle the raw SSH data file into a useful form
+as described above. You can use regular expressions built into Java to accomplish the task.
 
-Note that we have include the final wrangled file so you can diff your output with the final
-form to verify the correctness. Including the warangled log file allows team members to proceed
-with other parts of the project sooner!
+Note that we have include the final wrangled file so you can `diff` your output with the final
+form to verify the correctness. Including the wrangled log file also allows team members to
+proceed with other parts of the project sooner!
 
 
 ### 3.2. Problem
@@ -351,7 +353,7 @@ call the relevant class `TreeObject` to represent the objects using the `Compara
 ## 5. Implementation
 We will create four programs:
 
-- one that **wrangles the raw SSH file** into the form suitable for ucreating BTrees.
+- one that **wrangles the raw SSH file** into the form suitable for creating BTrees.
 
 - one that **creates a B-Tree** from a given parse SSH log file and outputs a query with
 all unique values found within the SHH log file, a RAF file of the B-Tree, a dump file (if
@@ -467,7 +469,7 @@ huf-183.136.178.26 2
 ...
 ```
 
-### 5.2. Example Demonstration Walkthrough of Project
+### 5.2. Example Demonstration Walk-through of Project
 
 
 #### 5.2.1. Wrangle the raw data file
@@ -481,7 +483,7 @@ java -jar build/libs/SSHDataWrangler.jar --rawSshFile=SSH_log_raw.txt --sshFile=
 ```
 
 This program assumes that the raw file and output file are both in the top level of the project
-folder.  Then compare the outout file with the wrangled file that we have provided, as follows:
+folder.  Then compare the output file with the wrangled file that we have provided, as follows:
 
 ```
 diff SSH_log.txt  data/SSH_Files/SSH_log.txt
