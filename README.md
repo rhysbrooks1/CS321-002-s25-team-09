@@ -17,7 +17,7 @@ instrumentation.
 - Design, implement, and evaluate a computing-based solution to a given set of computing
 requirements for a problem from a specific domain.
 - Learn how to implement a B-Tree external data structure on the disk.
-- Learn how to wrangle raw data using regular expression.
+- Learn how to wrangle raw data using regular expressions.
 - Demonstrate  how to use caching to improve performance of an application.
 - Learn how to run an application in the cloud.
 
@@ -134,9 +134,9 @@ Alternatively, this project can be opened with [VSCode](https://code.visualstudi
 
 :book: See this [wiki page for detailed instructions to run this project in VSCode](https://github.com/BoiseState/CS321_Cybersecurity/wiki/Instructions-to-run-in-VSCode).
 
-## Notes for creating additional files and tests, while keeping the Gradle project structure We can
-add as many classes as we want in `src/main/java`, and gradle should build them automatically. In
-other words, we should not have to make any changes to the `build.gradle`.
+## Notes for creating additional files and tests, while keeping the Gradle project structure
+We can add as many classes as we want in `src/main/java`, and gradle should build them automatically. 
+In other words, we should not have to make any changes to the `build.gradle`.
 
 Also, we can add new test files with new tests cases in `src/test/java` and those will be run
 automatically by gradle or our IDE.
@@ -147,9 +147,10 @@ automatically by gradle or our IDE.
 The focus of this project is to learn about data structures, while working effectively in a group.
 In addition, given the small project scope, and the fixed set of requirements that are already
 defined (and will not need to be elicited with the use of a Product Owner), the team can customize
-the Scrum process learned in CS-HU 271 and focus exclusively on: - creating tasks - linking
-commits to task IDs (e.g., `Implements task #123`) - Test-Driven Development and unit testing. The
-[starter code](#starter-code) already contains a few [sample unit tests](src/test/java/cs321)
+the Scrum process learned in CS-HU 271 (or CS 208) and focus exclusively on: 
+- creating tasks 
+- linking commits to task IDs (e.g., `Implements task #123` or `Closes #123`) 
+- Test-Driven Development and unit testing. The [starter code](#starter-code) already contains a few [sample unit tests](src/test/java/cs321)
 that can be [run from the command line](#compile-and-run-the-project-from-the-command-line).
 
 ## Scrum Board
@@ -180,8 +181,8 @@ Here is an example of a [valid task](https://github.com/BoiseState/CS321_Cyberse
 written in engineering language that is assigned to a developer. This task should be referenced
 by a commit containing a message similar to `Implements task #3`.
 
-As a warm up exercise, each team member should create a task similar to [`task
-#2`](https://github.com/BoiseState/CS321_Cybersecurity/issues/2) and then edit the
+As a warm-up exercise, each team member should create a task similar to 
+[`task #2`](https://github.com/BoiseState/CS321_Cybersecurity/issues/2) and then edit the
 [`README-submission.md`](README-submission.md) file with their information.
 
 Here is a sample project log from a team from a previous semester:
@@ -265,7 +266,7 @@ parsing through the log files to create the proper B-Tree keys.
 ![Stripped_log_file.png](docs/Stripped_log_file.png "Stripped Example Log File")
 
 Many keywords like `LabSZ`, `for`, `Dec`, `password`, and `sshd[xxxx]:` are removed leaving only
-the necessary terms for creating our B-Trees.  Here is a [demo](demo/Log-File-Parsing-Demo.md)
+the necessary terms for creating our B-Trees.  Here is a [demo](demo/Log-File-Wrangling-Demo.md)
 link that provides a walk-through on how to wrangle and filter through certain keywords, phrases,
 and terms.
 
@@ -292,7 +293,7 @@ if you have to do that for hundreds or thousands of log files. So for this proje
 write a Java program named `SSHDataWrangler.java` to wrangle the raw SSH data file into a useful form
 as described above. You can use regular expressions built into Java to accomplish the task.
 
-Note that we have include the final wrangled file so you can `diff` your output with the final
+Note that we have included the final wrangled file, so you can `diff` your output with the final
 form to verify the correctness. Including the wrangled log file also allows team members to
 proceed with other parts of the project sooner!
 
@@ -373,7 +374,7 @@ The main Java classes should be named `SSHCreateBTree`, `SSHSearchBTree`, and `S
 The required arguments for the three programs are shown below:
 
 ```bash
-java -jar build/libs/SSHDataWrangler.jar --rawSshFile=>raw-ssh-file> --sshFile=<wrangled-ssh-file>
+java -jar build/libs/SSHDataWrangler.jar --rawSshFile=<raw-ssh-file> --sshFile=<wrangled-ssh-file>
 
 java -jar build/libs/SSHCreateBTree.jar --cache=<0/1> --degree=<btree-degree> --sshFile=<ssh-File> 
     --type=<tree-type> [--size=<n>]  [--debug=<0|1>]
@@ -474,18 +475,18 @@ huf-183.136.178.26 2
 
 #### 5.2.1. Wrangle the raw data file
 
-Please download the [raw SSH log
-file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing)
-(70MB) from the Google drive. Then wrangle it with your program as follows:
+Please download the
+[raw SSH log file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing)
+(70MB) from the Google Drive. Then wrangle it with your program as follows:
 
-```
+```bash
 java -jar build/libs/SSHDataWrangler.jar --rawSshFile=SSH_log_raw.txt --sshFile=SSH_log.txt
 ```
 
 This program assumes that the raw file and output file are both in the top level of the project
 folder.  Then compare the output file with the wrangled file that we have provided, as follows:
 
-```
+```bash
 diff SSH_log.txt  data/SSH_Files/SSH_log.txt
 ```
 

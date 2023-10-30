@@ -4,7 +4,7 @@ import cs321.common.ParseArgumentException;
 
 
 /**
- * The driver class for  warngling a raw SSH log file into a useful form.
+ * The driver class for wrangling a raw SSH log file into a useful form.
  *
  * @author 
  */
