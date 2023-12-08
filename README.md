@@ -225,7 +225,7 @@ a network has become compromised or is under attack. For example, security logs 
 and unsuccessful logins, application log failures, and other various activity within a server.
 Below is an example of a Secure Shell (SSH) log file tracking activity within the server:
 
-![SHH_Log_File_Example.png](docs/SHH_Log_File_Example.png "Example Excerpt of Log File")
+![SSH_Log_File_Example.png](docs/SSH_Log_File_Example.png "Example Excerpt of Log File")
 
 The above details a date and timestamp of an activity, a server using OpenSSH Daemon (sshd) hosting
 the activity, and a type of activity committed by a user's name and IP location to a specific port.
@@ -326,15 +326,15 @@ The following displays what each main driver must output:
 
 | Class               | Output                                                                                                                                                                                               | 
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `SSHCreateBTree`    | - `QUERY-<tree-type>.txt`<br/>- RAF `SSH_lig.txtssh.btree<tree-type><degree>` file<br/>- `dump-<tree-type><degree>.txt` (`<debug>`=`1`) <br/>- `SSHLogDB.db` from the dump file (`<debug>`=`1`)<br/> |
-| `SSHSearchBTree`    | - `SQUERY-<tree-type><topfrequency>.txt`                                                                                                                                                             | 
+| `SSHCreateBTree`    | - `QUERY-<tree-type>.txt`<br/>- `SSH_log.txt.ssh.btree.<tree-type>.<degree>` file<br/>- `dump-<tree-type><degree>.txt` (`<debug>`=`1`) <br/>- `SSHLogDB.db` from the dump file (`<debug>`=`1`)<br/> |
+| `SSHSearchBTree`    | - `SQUERY-<tree-type>-<topfrequency>.txt`                                                                                                                                                             | 
 | `SSHSearchDatabase` | - top `<SSH Key> <frequency>` to standard out stream                                                                                                                                                 |
 
 
 ## 4. Design Issues
 
 ### 4.1. Memory
-We could represent each SHH Log sequence as a string of that is 32 bytes long.  No value should
+We could represent each SSH Log sequence as a string of that is 32 bytes long.  No value should
 go over 32 bytes and if so, we simply truncate the sequence to just 32 bytes.
 
 ### 4.2. Key Values
@@ -356,22 +356,22 @@ We will create four programs:
 
 - one that **wrangles the raw SSH file** into the form suitable for creating BTrees.
 
-- one that **creates a B-Tree** from a given parse SSH log file and outputs a query with
-all unique values found within the SHH log file, a RAF file of the B-Tree, a dump file (if
-applicable), and a SQL Database (if applicable).
+- one that **creates a B-Tree** from a given parse SSH log file and outputs a query with all
+unique values found within the SSH log file, a Random-Access-File file of the B-Tree,
+a dump file (if applicable), and a SQL Database (if applicable).
 
 - another for **searching a specified B-Tree** for top occurring activity pairs. The search
 program assumes that the user specified the proper B-Tree and top frequency count to use to
 output the top occurring searched queries.
 
-- a final for **searching in the SQL database** for the top occurring activities pairs. This
+- a final for **searching in the SQL database** for the top occurring activity pairs. This
 database would be created as a by-product of the first program and print the top search
 queries from searching the B-Tree.
 
 The main Java classes should be named `SSHCreateBTree`, `SSHSearchBTree`, and `SSHSearchDatabase`.
 
 ### 5.1. Program Arguments
-The required arguments for the three programs are shown below:
+The required arguments for the four programs are shown below:
 
 ```bash
 java -jar build/libs/SSHDataWrangler.jar --rawSshFile=<raw-ssh-file> --sshFile=<wrangled-ssh-file>
@@ -502,7 +502,7 @@ Assumes that the wrangled log file is in the `data/SSH_Files` folder.
 Outputs:
 - Dump text file: `dump-accepted-ip0`
 - Query file: `QUERY-accepted-ip.txt`
-- B-Tree RAF file: `SSH_log.txt.ssh.btree.accepted-ip.0`
+- B-Tree Random-Access-File file: `SSH_log.txt.ssh.btree.accepted-ip.0`
 - Table name: `acceptedip` to `SSHLogDB.db`
 
 
@@ -696,7 +696,7 @@ The `search-btrees.sh` script searches all nine B-Trees from the B-Tree files fo
 entries.  The `check-squeries.sh` script compares the results of search queries from searching
 the B-Tree to our program with the reference results.
 
-You can use the test scripts to run and compare results using the three test scripts as follows.
+You can use the test scripts to run and compare results using the four test scripts as follows.
 
 ```bash
 ./gradlew createJarSSHCreateBTree
