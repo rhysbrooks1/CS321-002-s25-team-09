@@ -100,6 +100,8 @@ Run all the JUnit tests and print a summary of the results:
 $ ./gradlew test
 ```
 
+Note that if you initially run the tests, they will fail as you have not yet finished the project!
+
 Run the `main` method from `SSHCreateBTree.java` and pass the [appropriate `<arguments>`](#51-program-arguments):
 ```bash
 $ ./gradlew createJarSSHCreateBTree
