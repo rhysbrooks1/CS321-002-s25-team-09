@@ -216,26 +216,29 @@ Here is a sample project log from a team from a previous semester:
 In this assignment, we will analyze log files to better understand network observability within
 the field of Cybersecurity.  We will look and observe patterns, activities, and operations
 within a system's server and house the corresponding data using B-Trees.   The amount of data
-that we have is large and any data structure is not likely to fit in memory, hence why B-Trees
-being a good choice for the task at hand.  We will then store our findings in a database and
-analyze its results for patterns and specific activities.
+that we have can be very large and any data structure is not likely to fit in memory. Hence
+B-Trees is a good choice for the task at hand.  We will then store our findings in a database
+and analyze its results for patterns and specific activities.
 
 ## 2. Background
 Log files are textual data files that store events, messages, and processes within a
-system/network.  They log information from users and monitor IT environments.  They can detect when
-a network has become compromised or is under attack. For example, security logs check successful
-and unsuccessful logins, application log failures, and other various activity within a server.
-Below is an example of a Secure Shell (SSH) log file tracking activity within the server:
+system/network.  They log information from users and monitor server IT environments.  They can
+detect when a network has become compromised or is under attack. For example, security logs check
+successful and unsuccessful logins, application log failures, and other various activity within a
+server. Secure Shell (SSH) is one of the most common ways of accessing remote servers and in this
+project, we will use log files from a SSH server.  Below is an example of a Secure Shell (SSH)
+log file tracking activity within the server:
 
 ![SSH_Log_File_Example.png](docs/SSH_Log_File_Example.png "Example Excerpt of Log File")
 
-The above details a date and timestamp of an activity, a server using OpenSSH Daemon (sshd) hosting
-the activity, and a type of activity committed by a user's name and IP location to a specific port.
+Each line shows a date and timestamp of an activity, the name of the server running the OpenSSH
+Daemon (sshd) (with a process id), and the type of action followed by the user's name, IP address,
+port number and SSH protocol version.
 
 We can see that there are multiple occurrences of failed passwords, accepted passwords, and
-invalid users through a quick scan of the log file.  Upon closer look we can see that the block
-of failed passwords happened within milliseconds, indicating that a non-human entity was hitting
-the server multiple times within the 0.1 seconds!
+invalid users through a quick scan of the log file.  Upon closer look we can see that the
+block of failed passwords happened within seconds, indicating that possibly a non-human entity
+(automated script or an AI agent) was hitting the server multiple times!
 
 The above log file sample is part of a larger [raw SSH log
 file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing)
@@ -244,7 +247,7 @@ types of log files but the one we will focus on for this project comes from
 [Zenodo-Loghub](https://zenodo.org/record/3227177#.ZEc9T-zMI-Q) dataset.
 
 
-Digging deeper, here is a helpful video for a big picture on simple approach in analyzing
+Digging deeper, here is a helpful video for the big picture on a simple approach in analyzing
 log files for specific patterns and attacks: [Basic Approach: Analyzing Files Log For Attacks
 (2021)](https://www.youtube.com/watch?v=-T6oue5E4KQ)
 
@@ -291,8 +294,8 @@ to aid in reducing irrelevant log file information and explore Regular Expressio
 
 ### 3.1.2 Data Wrangling Program
 While using a text editor to wrangle the data is feasible for one file, it would be infeasible
-if you have to do that for hundreds or thousands of log files. So for this project, please 
-write a Java program named `SSHDataWrangler.java` to wrangle the raw SSH data file into a useful form
+if you have to do that for hundreds or thousands of log files. So for this project, please write
+a Java program named `SSHDataWrangler.java` to wrangle the raw SSH data file into a useful form
 as described above. You can use regular expressions built into Java to accomplish the task.
 
 Note that we have included the final wrangled file, so you can `diff` your output with the final
@@ -366,11 +369,11 @@ a dump file (if applicable), and a SQL Database (if applicable).
 program assumes that the user specified the proper B-Tree and top frequency count to use to
 output the top occurring searched queries.
 
-- a final for **searching in the SQL database** for the top occurring activity pairs. This
+- a final one for **searching in the SQL database** for the top occurring activity pairs. This
 database would be created as a by-product of the first program and print the top search
 queries from searching the B-Tree.
 
-The main Java classes should be named `SSHCreateBTree`, `SSHSearchBTree`, and `SSHSearchDatabase`.
+The main Java classes should be named `SSHDataWrangler`, `SSHCreateBTree`, `SSHSearchBTree`, and `SSHSearchDatabase`.
 
 ### 5.1. Program Arguments
 The required arguments for the four programs are shown below:
@@ -424,8 +427,8 @@ one per line and must align with the corresponding B-Tree file of the same type.
 `10`,`25`, or `50` values.  Note B-Tree type: `accepted-ip` does not have enough values for
 `50` top values (i.e., total unique values for `accepted-ip` is `42`).
 
-- `[<size>]` is an integer between `100` and `10000` (inclusive) that represents the maximum
-number of `BTreeNode` objects that can be stored in the memory cache
+- `[<size>]` is an optional argument, which is an integer between `100` and `10000` (inclusive)
+that represents the maximum number of `BTreeNode` objects that can be stored in the memory cache
 
 - `<database>` the path to the SQL database created after B-Tree creation for a specific B-Tree
 type. The name of the database file should be `SSHLogDB.db`

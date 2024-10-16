@@ -57,13 +57,15 @@ We then need to adjust some setting within the Text Editor to ease the parsing p
 <hr/>
 
 ## Step 3: Remove Basic Words
-Open [SSH_Log_Demo.txt](demo_data/SSH_Log_Demo.txt) in the Text Editor and remove simple words using the `replace`.  Be aware of whitespace and case sensitivity of words
-when removing the following words:
+Open [SSH_Log_Demo.txt](demo_data/SSH_Log_Demo.txt) in the Text Editor and remove simple words
+using the `replace`.  Be aware of whitespace and case sensitivity of words when removing the
+following words:
+
 - `pm`
 - `SSHD`
 - `---`
 - `password` 
-- `from` & `for` 
+- `from` and `for` 
 - `invalid user`
 - `user`
 - `failed - POSSIBLE BREAK-IN ATTEMPT!` 
