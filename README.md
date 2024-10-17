@@ -266,8 +266,8 @@ file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp
 contains lots of important data pertaining to the details of an activity. Note that this file
 is hosted on Google Drive as it is larger than files allowed on GitHub.  Since we only need
 a select few keywords to use within our B-Tree keys, it is easiest to strip the file to only
-the necessary items. Below is a stripped version of the above file that will greatly help in
-parsing through the log files to create the proper B-Tree keys.
+the necessary items. Below is a snippet from a stripped version of the above file that will
+greatly help in parsing through the log files to create the proper B-Tree keys.
 
 ![Stripped_log_file.png](docs/Stripped_log_file.png "Stripped Example Log File")
 
@@ -306,13 +306,14 @@ proceed with other parts of the project sooner!
 
 ### 3.2. Problem
 
-The motivation for the problem is to analyze the frequency of certain activities and patterns
-within the log files; whether that be most commonly accepted passwords at certain IPs, commonly
-failed passwords at specific times of the day, or what common user's IPs are.
+Now that we have data wrangling out of the way, the motivation for the main problem is to
+analyze the frequency of certain activities and patterns within the log files; whether that be
+most commonly accepted passwords at certain IPs, commonly failed passwords at specific times
+of the day, or what common user's IPs are.
 
-For the given log file, we want to convert its different activity types into various B-Trees to
-better analyze specific types of operations, i.e. we will make 9 total B-Trees with a certain
-category of extracted data from the log file.
+For the given log file, we want to convert its different activity types into various B-Trees
+to better analyze specific types of operations. We will make a total of **nine** B-Trees with
+a certain category of extracted data from the log file.
 
 The following are the types of B-Trees that will be created:
 - Accepted IPs
@@ -362,40 +363,42 @@ We will create four programs:
 
 - one that **wrangles the raw SSH file** into the form suitable for creating BTrees.
 
-- one that **creates a B-Tree** from a given parse SSH log file and outputs a query with all
-unique values found within the SSH log file, a Random-Access-File file of the B-Tree,
+- one that **creates a B-Tree** from a given wrangled SSH log file and outputs a query with all
+unique values found within the SSH log file as a Random-Access-File file of the B-Tree,
 a dump file (if applicable), and a SQL Database (if applicable).
 
 - another for **searching a specified B-Tree** for top occurring activity pairs. The search
 program assumes that the user specified the proper B-Tree and top frequency count to use to
 output the top occurring searched queries.
 
-- a final one for **searching in the SQL database** for the top occurring activity pairs. This
-database would be created as a by-product of the first program and print the top search
-queries from searching the B-Tree.
+- and a final one for **searching in the SQL database** for the top occurring activity
+pairs. This database would be created as a by-product of the first program and contains the
+top search queries from searching the B-Tree.
 
-The main Java classes should be named `SSHDataWrangler`, `SSHCreateBTree`, `SSHSearchBTree`, and `SSHSearchDatabase`.
+The main Java classes should be named `SSHDataWrangler`, `SSHCreateBTree`, `SSHSearchBTree`,
+and `SSHSearchDatabase`.
 
 ### 5.1. Program Arguments
 The required arguments for the four programs are shown below:
 
 ```bash
 java -jar build/libs/SSHDataWrangler.jar --rawSshFile=<raw-ssh-file> \
---sshFile=<wrangled-ssh-file>
+      --sshFile=<wrangled-ssh-file>
 
 java -jar build/libs/SSHCreateBTree.jar --cache=<0/1> --degree=<btree-degree> \
---sshFile=<ssh-File> --type=<tree-type> [--cacheSize=<n>]  [--debug=<0|1>]
+          --sshFile=<ssh-File> --type=<tree-type> [--cacheSize=<n>]  [--debug=<0|1>]
 
 
 java -jar build/libs/SSHSearchBTree.jar --cache=<0/1> --degree=<btree-degree> \
---btreefile=<btree-file> --queryfile=<query-file> --topfrequency=<10/25/50> \
-[--cacheSize=<n>]  [--debug=<0|1>]
+          --btreefile=<btree-file> --queryfile=<query-file> --topfrequency=<10/25/50> \
+          [--cacheSize=<n>]  [--debug=<0|1>]
 
 java -jar build/libs/SSHSearchDatabase.jar --database=<sqlite-database-path> \
---searchqueryfile=<search-query-file>
+          --searchqueryfile=<search-query-file>
 ```
 
-**Note that the arguments can be provided in any order.**
+**Note that the arguments can be provided in any order.** The backslash represents that the command
+is displayed on multiple lines but we would type it in one line (without the backslash).
 
 - `<cache>` specifies whether the program should use cache (value `1`) or
 no cache (value `0`); if the value is `1`, the `<cacheSize>` has to be specified
