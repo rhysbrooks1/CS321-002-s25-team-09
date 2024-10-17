@@ -250,7 +250,7 @@ types of log files but the one we will focus on for this project comes from
 
 To dig deeper, here is a helpful video for the big picture on a simple approach in analyzing
 log files for specific patterns and attacks: [Basic Approach: Analyzing Files Log For Attacks
-(2021)](https://www.youtube.com/watch?v=-T6oue5E4KQ){:target="_blank"}[9m]
+(2021)](https://www.youtube.com/watch?v=-T6oue5E4KQ)[9m]
 
 
 ## 3. Specifications
