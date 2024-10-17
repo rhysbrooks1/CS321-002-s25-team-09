@@ -654,9 +654,9 @@ We observe from the code segment above that the top two accepted entries occur b
 and `18:46` with all other entries mostly distributed past `11:40`.  The majority of `Accepted`
 occurrences happened between `12:00` to `19:15`.
 
-Below represents the table for analyzing a select few B-Trees for their
-top results in their corresponding database and the questions to answer in
-[`BTree-Database-Analysis.md`](BTree-Database-Analysis.md).
+Below represents the table for analyzing a select few B-Trees for their top
+results in their corresponding database and the questions to answer in a file named
+[`BTree-Database-Analysis.md`](BTree-Database-Analysis.md) that you will add to your project.
 
 | Tree Type             | degree | cache | cacheSize | debug | Question:                                                                                           |
 |-----------------------|--------|-------|------------|-------|-----------------------------------------------------------------------------------------------------|
