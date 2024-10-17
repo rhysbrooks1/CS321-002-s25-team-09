@@ -16,10 +16,11 @@ instrumentation.
 - Demonstrate effective teamwork as a member or a leader of a team.
 - Design, implement, and evaluate a computing-based solution to a given set of computing
 requirements for a problem from a specific domain.
+- Learn how to wrangle raw data using regular expressions.
 - Learn how to implement a B-Tree external data structure on the disk.
 - Learn how to wrangle raw data using regular expressions.
 - Demonstrate  how to use caching to improve performance of an application.
-- Learn how to run an application in the cloud.
+- Demonstrate how to run an application in the cloud.
 
 # Starter Code
 This repository contains:
@@ -213,21 +214,21 @@ Here is a sample project log from a team from a previous semester:
 <hr/>
 
 ## 1. Introduction
-In this assignment, we will analyze log files to better understand network observability within
-the field of Cybersecurity.  We will look and observe patterns, activities, and operations
-within a system's server and house the corresponding data using B-Trees.   The amount of data
-that we have can be very large and any data structure is not likely to fit in memory. Hence
-B-Trees is a good choice for the task at hand.  We will then store our findings in a database
-and analyze its results for patterns and specific activities.
+In this Cybersecurity assignment, we will analyze log files to better understand patterns in
+the network traffic.  We will look and analyze patterns, activities, and operations within a
+system's server and house the corresponding data using B-Trees.   The amount of data that we
+have can be very large and any data structure is not likely to fit in memory. Hence B-Trees
+is a good choice for the task at hand.  We will then store our findings in a SQL database and
+analyze its results for patterns and specific activities.
 
 ## 2. Background
 Log files are textual data files that store events, messages, and processes within a
-system/network.  They log information from users and monitor server IT environments.  They can
+system and/or network.  They log information from users and monitor server IT environments.  They can
 detect when a network has become compromised or is under attack. For example, security logs check
 successful and unsuccessful logins, application log failures, and other various activity within a
 server. Secure Shell (SSH) is one of the most common ways of accessing remote servers and in this
 project, we will use log files from a SSH server.  Below is an example of a Secure Shell (SSH)
-log file tracking activity within the server:
+log file that is tracking activity within the server:
 
 ![SSH_Log_File_Example.png](docs/SSH_Log_File_Example.png "Example Excerpt of Log File")
 
@@ -235,10 +236,10 @@ Each line shows a date and timestamp of an activity, the name of the server runn
 Daemon (sshd) (with a process id), and the type of action followed by the user's name, IP address,
 port number and SSH protocol version.
 
-We can see that there are multiple occurrences of failed passwords, accepted passwords, and
-invalid users through a quick scan of the log file.  Upon closer look we can see that the
-block of failed passwords happened within seconds, indicating that possibly a non-human entity
-(automated script or an AI agent) was hitting the server multiple times!
+With a quick scan of the log file, we can see that there are multiple occurrences of failed
+passwords, accepted passwords, and invalid users.  Upon closer look we can see that the block of
+failed passwords happened within seconds, indicating that possibly a non-human entity (automated
+script or an AI agent) was hitting the server multiple times!
 
 The above log file sample is part of a larger [raw SSH log
 file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing)
@@ -247,9 +248,9 @@ types of log files but the one we will focus on for this project comes from
 [Zenodo-Loghub](https://zenodo.org/record/3227177#.ZEc9T-zMI-Q) dataset.
 
 
-Digging deeper, here is a helpful video for the big picture on a simple approach in analyzing
+To dig deeper, here is a helpful video for the big picture on a simple approach in analyzing
 log files for specific patterns and attacks: [Basic Approach: Analyzing Files Log For Attacks
-(2021)](https://www.youtube.com/watch?v=-T6oue5E4KQ)
+(2021)](https://www.youtube.com/watch?v=-T6oue5E4KQ){:target=")blank"}[9m]
 
 
 ## 3. Specifications
@@ -379,24 +380,25 @@ The main Java classes should be named `SSHDataWrangler`, `SSHCreateBTree`, `SSHS
 The required arguments for the four programs are shown below:
 
 ```bash
-java -jar build/libs/SSHDataWrangler.jar --rawSshFile=<raw-ssh-file> --sshFile=<wrangled-ssh-file>
+java -jar build/libs/SSHDataWrangler.jar --rawSshFile=<raw-ssh-file> \
+--sshFile=<wrangled-ssh-file>
 
-java -jar build/libs/SSHCreateBTree.jar --cache=<0/1> --degree=<btree-degree> --sshFile=<ssh-File> 
-    --type=<tree-type> [--size=<n>]  [--debug=<0|1>]
+java -jar build/libs/SSHCreateBTree.jar --cache=<0/1> --degree=<btree-degree> \
+--sshFile=<ssh-File> --type=<tree-type> [--cacheSize=<n>]  [--debug=<0|1>]
 
 
-java -jar build/libs/SSHSearchBTree.jar --cache=<0/1> --degree=<btree-degree> 
-  --btreefile=<btree-file> --queryfile=<query-file> --topfrequency=<10/25/50> 
-  [--size=<n>]  [--debug=<0|1>]
+java -jar build/libs/SSHSearchBTree.jar --cache=<0/1> --degree=<btree-degree> \
+--btreefile=<btree-file> --queryfile=<query-file> --topfrequency=<10/25/50> \
+[--cacheSize=<n>]  [--debug=<0|1>]
 
-java -jar build/libs/SSHSearchDatabase.jar --database=<sqlite-database-path> 
-      --searchqueryfile=<search-query-file>
+java -jar build/libs/SSHSearchDatabase.jar --database=<sqlite-database-path> \
+--searchqueryfile=<search-query-file>
 ```
 
 **Note that the arguments can be provided in any order.**
 
 - `<cache>` specifies whether the program should use cache (value `1`) or
-no cache (value `0`); if the value is `1`, the `<size>` has to be specified
+no cache (value `0`); if the value is `1`, the `<cacheSize>` has to be specified
 
 - `<degree>` is the degree to be used for the B-Tree. If the user specifies `0`, then our
 program should choose the optimum degree based on a disk block size of `4096` bytes and the
@@ -427,7 +429,7 @@ one per line and must align with the corresponding B-Tree file of the same type.
 `10`,`25`, or `50` values.  Note B-Tree type: `accepted-ip` does not have enough values for
 `50` top values (i.e., total unique values for `accepted-ip` is `42`).
 
-- `[<size>]` is an optional argument, which is an integer between `100` and `10000` (inclusive)
+- `[<cacheSize>]` is an optional argument, which is an integer between `100` and `10000` (inclusive)
 that represents the maximum number of `BTreeNode` objects that can be stored in the memory cache
 
 - `<database>` the path to the SQL database created after B-Tree creation for a specific B-Tree
@@ -499,7 +501,7 @@ diff SSH_log.txt  data/SSH_Files/SSH_log.txt
 #### 5.2.2. Create B-Tree in `SSHCreateBTree`
 With arguments of: 
 ```bash
-java -jar build/libs/SSHCreateBTree.jar --cache=1 --degree=0 --sshFile=SSH_log.txt --type=accepted-time --size=2000 --debug=1
+java -jar build/libs/SSHCreateBTree.jar --cache=1 --degree=0 --sshFile=SSH_log.txt --type=accepted-time --cacheSize=2000 --debug=1
 ```
 
 Assumes that the wrangled log file is in the `data/SSH_Files` folder.
@@ -519,7 +521,7 @@ Outputs:
 #### 5.2.3. Search B-Tree in `SSHSearchBTree`
 With arguments of:
 ```bash
-java -jar build/libs/SSHSearchBTree.jar --cache=0 --degree=0 --btreefile=SSH_log.txt.ssh.btree.accepted-time.0 --queryfile=QUERY-accepted-time.txt --topfrequency=25 --size=10000 --debug=0
+java -jar build/libs/SSHSearchBTree.jar --cache=0 --degree=0 --btreefile=SSH_log.txt.ssh.btree.accepted-time.0 --queryfile=QUERY-accepted-time.txt --topfrequency=25 --cacheSize=10000 --debug=0
 ```
 
 Assumes that the query files are in `data/queries` folder.
@@ -555,7 +557,7 @@ Write the root node to disk file only at the end of the program and read it in w
 starts up. In addition, our program can only hold a few nodes in memory. In other words,
 we can only use a few BTreeNode variables (including the root) in our program (e.g., root,
 parent, current, child, temporary node for split). However, if the cache is enabled, we can
-store `<cache-size>` `BTreeNode` objects in the cache.
+store `<cacheSize>` `BTreeNode` objects in the cache.
 
 #### 5.3.2. Metadata storage
 We need to store some metadata about the B-Tree on disk. For example, we can store the degree
@@ -597,11 +599,11 @@ data structure in a binary file on disk.
 
 
 ## 6. Using a Cache
-We will incorporate the generic Cache class from `Project 1` to improve the performance of our
-B-Tree implementation. The size of the cache should be a command line argument. An entry in the
-cache is a `BTreeNode`. With the cache enabled command line option, the `<size>` needs to be
-specified as well as in between size: `100` and `10000` (inclusive).  Using the cache greatly
-speeds up the execution time especially when searching larger B-Trees.
+We will incorporate the generic Cache class from `Project 1` to improve the performance of
+our B-Tree implementation. The size of the cache should be a command line argument. An entry
+in the cache is a `BTreeNode`. With the cache enabled command line option, the `<cacheSize>`
+needs to be specified as between `100` and `10000` (inclusive).  Using the cache greatly speeds
+up the execution time especially when searching larger B-Trees.
 
 ## 7. Using a Database
 
@@ -648,14 +650,14 @@ Below represents the table for analyzing a select few B-Trees for their
 top results in their corresponding database and the questions to answer in
 [`BTree-Database-Analysis.md`](BTree-Database-Analysis.md).
 
-| Tree Type             | degree | cache | cache size | debug | Question:                                                                                           |
+| Tree Type             | degree | cache | cacheSize | debug | Question:                                                                                           |
 |-----------------------|--------|-------|------------|-------|-----------------------------------------------------------------------------------------------------|
 | `accepted-ip`         | 100    | yes   | 10000      | 1     | What is the most common first three IP digits in the top 10 entries? (`137` at three times)         |
 | `invalid-time`        | 100    | yes   | 10000      | 1     | What is the range (highest-lowest) of the top 25 entries? (`55`-`42`=`13`)                          |
 | `failed-ip`           | 100    | yes   | 10000      | 1     | What is the first three digits of the top 2 entries of 50 total entries? (`183`)                    |
 | `reverseaddress-ip`   | 100    | yes   | 10000      | 1     | Is the top entry `reverse` or `Address` type in the top 25 entries? (`reverse`)                     |
-| `reverseaddress-time` | 100    | yes   | 10000      | 1     | Which hour was the most predominate for a reverse break in attempt in the top 25 entries? (`11:00`) |
-| `user-ip`             | 100    | yes   | 10000      | 1     | What is the predominate user in the top 25 entries? (`root`)                                        |
+| `reverseaddress-time` | 100    | yes   | 10000      | 1     | Which hour was the most predominant for a reverse break in attempt in the top 25 entries? (`11:00`) |
+| `user-ip`             | 100    | yes   | 10000      | 1     | What is the predominant user in the top 25 entries? (`root`)                                        |
 
 
 
