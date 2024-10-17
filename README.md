@@ -267,7 +267,7 @@ contains lots of important data pertaining to the details of an activity. Note t
 is hosted on Google Drive as it is larger than files allowed on GitHub.  Since we only need
 a select few keywords to use within our B-Tree keys, it is easiest to strip the file to only
 the necessary items. Below is a snippet from a stripped version of the above file that will
-greatly help in parsing through the log files to create the proper B-Tree keys.
+one help in parsing through the log files to create the proper B-Tree keys.
 
 ![Stripped_log_file.png](docs/Stripped_log_file.png "Stripped Example Log File")
 
@@ -383,7 +383,7 @@ The required arguments for the four programs are shown below:
 
 ```bash
 java -jar build/libs/SSHDataWrangler.jar --rawSshFile=<raw-ssh-file> \
-      --sshFile=<wrangled-ssh-file>
+          --sshFile=<wrangled-ssh-file>
 
 java -jar build/libs/SSHCreateBTree.jar --cache=<0/1> --degree=<btree-degree> \
           --sshFile=<ssh-File> --type=<tree-type> [--cacheSize=<n>]  [--debug=<0|1>]
@@ -429,7 +429,7 @@ that will then be searched for in the specified B-Tree file of the same type. Th
 one per line and must align with the corresponding B-Tree file of the same type.
 
 - `<topfrequency>` is the most frequent occurring keys within a B-Tree.  Gets either the top
-`10`,`25`, or `50` values.  Note B-Tree type: `accepted-ip` does not have enough values for
+`10`,`25`, or `50` values.  Note that the B-Tree type: `accepted-ip` does not have enough values for
 `50` top values (i.e., total unique values for `accepted-ip` is `42`).
 
 - `[<cacheSize>]` is an optional argument, which is an integer between `100` and `10000` (inclusive)
@@ -497,14 +497,15 @@ This program assumes that the raw file and output file are both in the top level
 folder.  Then compare the output file with the wrangled file that we have provided, as follows:
 
 ```bash
-diff SSH_log.txt  data/SSH_Files/SSH_log.txt
+diff SSH_log.txt data/SSH_Files/SSH_log.txt
 ```
 
 
-#### 5.2.2. Create B-Tree in `SSHCreateBTree`
+#### 5.2.2. Create one B-Tree using `SSHCreateBTree`
 With arguments of: 
 ```bash
-java -jar build/libs/SSHCreateBTree.jar --cache=1 --degree=0 --sshFile=SSH_log.txt --type=accepted-time --cacheSize=2000 --debug=1
+java -jar build/libs/SSHCreateBTree.jar --cache=1 --degree=0 --sshFile=SSH_log.txt \
+          --type=accepted-time --cacheSize=2000 --debug=1
 ```
 
 Assumes that the wrangled log file is in the `data/SSH_Files` folder.
@@ -524,7 +525,10 @@ Outputs:
 #### 5.2.3. Search B-Tree in `SSHSearchBTree`
 With arguments of:
 ```bash
-java -jar build/libs/SSHSearchBTree.jar --cache=0 --degree=0 --btreefile=SSH_log.txt.ssh.btree.accepted-time.0 --queryfile=QUERY-accepted-time.txt --topfrequency=25 --cacheSize=10000 --debug=0
+java -jar build/libs/SSHSearchBTree.jar --cache=0 --degree=0 \    
+          --btreefile=SSH_log.txt.ssh.btree.accepted-time.0 \
+          --queryfile=QUERY-accepted-time.txt \
+          --topfrequency=25 --cacheSize=10000 --debug=0
 ```
 
 Assumes that the query files are in `data/queries` folder.
@@ -540,7 +544,8 @@ Outputs:
 
 With arguments of:
 ```bash
-java -jar build/libs/SSHSearchDatabase.jar --database=SSHLogDB.db --sQueryfile=SQUERY-accepted-time25.txt
+java -jar build/libs/SSHSearchDatabase.jar --database=SSHLogDB.db \
+          --sQueryfile=SQUERY-accepted-time25.txt
 ```
 
 Assumes that the search query files are in `data/searchQueries` folder.
@@ -584,7 +589,7 @@ laid out one after the other. A new node is added to the end of the file.
 
 - We will read/write one BTreeNode at a time. If the degree `<t>` is small, this would be
 inefficient. To improve efficient, we should set the degree `<t>` to an **optimum** value such
-that a BTreeNode fits one disk block (we are using 4096 bytes for the disk block size) as close
+that a BTreeNode fits one disk block (we are using 4096 bytes for the disk block size) as full
 as possible with some empty padding space at the end (if needed).
 
 - We will store the byte offset of a node on disk as the child pointers in the BTreeNodes. Note
@@ -610,7 +615,7 @@ up the execution time especially when searching larger B-Trees.
 
 ## 7. Using a Database
 
-Design a simple database to store the results (sequences and frequencies) from the B-Tree.
+Design a simple database to store the results (key values and frequencies) from the B-Tree.
 We will perform an inorder tree traversal to get the information to store in the database with
 the `<tree type>` as the table's name without the `-` (prevents SQL syntax errors). This would
 be done at the end of creating the SSH B-Tree. Afterwards, we will create a separate search
@@ -647,7 +652,7 @@ Accepted-14:20: 5
 
 We observe from the code segment above that the top two accepted entries occur between `14:20`
 and `18:46` with all other entries mostly distributed past `11:40`.  The majority of `Accepted`
-occurrences happening between `12:00` to `19:15`.
+occurrences happened between `12:00` to `19:15`.
 
 Below represents the table for analyzing a select few B-Trees for their
 top results in their corresponding database and the questions to answer in
@@ -711,6 +716,7 @@ You can use the test scripts to run and compare results using the four test scri
 ```bash
 ./gradlew createJarSSHCreateBTree
 ./gradlew createJarSSHSearchBTree
+./gradlew createJarSSHSearchDatabase
 
 ./create-btrees.sh
 ./check-dumpfiles.sh
@@ -719,14 +725,13 @@ You can use the test scripts to run and compare results using the four test scri
 ```
 
 The instructors will use these test scripts for the final testing of your project.  Start off
-by running tests on your machine. If you do need to run them on `onyx` please avoid as to not
-overload the `onyx` server.
+by running tests on your machine. 
 
 ## 10. Testing in the Cloud
 
-We will set up [Amazon AWS](https://aws.amazon.com/) accounts for each student so that you can run
-larger tests in the cloud. **Running our tests on AWS is required, so we can all get experience
-using the cloud.** :cloud: :smiley:
+We will set up [Amazon AWS](https://aws.amazon.com/) accounts for each student so that you can
+run larger tests in the cloud. **Running our tests on AWS is required, so we can all get some
+more experience using the cloud.** :cloud: :smiley:
 
 Please see the [AWS
 notes](https://docs.google.com/document/d/1v5a0XlzaNyi63TXXKP4BQsPIdJt4Zkxn2lZofVP8qqw/edit?usp=sharing)
