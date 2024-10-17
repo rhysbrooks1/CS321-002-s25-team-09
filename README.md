@@ -665,7 +665,7 @@ results in their corresponding database and the questions to answer in a file na
 | `failed-ip`           | 100    | yes   | 10000      | 1     | What is the first three digits of the top 2 entries of 50 total entries? (`183`)                    |
 | `reverseaddress-ip`   | 100    | yes   | 10000      | 1     | Is the top entry `reverse` or `Address` type in the top 25 entries? (`reverse`)                     |
 | `reverseaddress-time` | 100    | yes   | 10000      | 1     | Which hour was the most predominant for a reverse break in attempt in the top 25 entries? (`11:00`) |
-| `user-ip`             | 100    | yes   | 10000      | 1     | What is the predominant user in the top 25 entries? (`root`)                                        |
+| `user-ip`             | 100    | yes   | 10000      | 1     | Who is the predominant user in the top 25 entries? (`root`)                                        |
 
 
 
