@@ -243,14 +243,14 @@ script or an AI agent) was hitting the server multiple times!
 
 The above log file sample is part of a larger [raw SSH log
 file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing)
-that will be used for our SSH log file parsing and analysis.  There are many
+that forms the basis for our SSH log file parsing and analysis.  There are many
 types of log files but the one we will focus on for this project comes from
 [Zenodo-Loghub](https://zenodo.org/record/3227177#.ZEc9T-zMI-Q) dataset.
 
 
-To dig deeper, here is a helpful video for the big picture on a simple approach in analyzing
-log files for specific patterns and attacks: [Basic Approach: Analyzing Files Log For Attacks
-(2021)](https://www.youtube.com/watch?v=-T6oue5E4KQ)[9m]
+To get the big picture,  please watch the following helpful video that shows a simple approach
+for analyzing log files for specific patterns and attacks: [Basic Approach: Analyzing Files
+Log For Attacks (2021)](https://www.youtube.com/watch?v=-T6oue5E4KQ)[9m]
 
 
 ## 3. Specifications
@@ -264,17 +264,15 @@ a variety of downstream purposes such as analytics.
 The [raw SSH log
 file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing) (70MB)
 contains lots of important data pertaining to the details of an activity. Note that this file
-is hosted on Google Drive as it is larger than files allowed on GitHub.  Since we only need
-a select few keywords to use within our B-Tree keys, it is easiest to strip the file to only
-the necessary items. Below is a snippet from a stripped version of the above file that will
-one help in parsing through the log files to create the proper B-Tree keys.
+is hosted on Google Drive as it is larger than files allowed on GitHub.  Since we only need a
+select few keywords to use within our B-Tree keys, it is easiest to strip the file to only the
+necessary items. Below is a snippet from a stripped version of the above log file that will be
+used to create the proper B-Trees.
 
 ![Stripped_log_file.png](docs/Stripped_log_file.png "Stripped Example Log File")
 
-Many keywords like `LabSZ`, `for`, `Dec`, `password`, and `sshd[xxxx]:` are removed leaving only
-the necessary terms for creating our B-Trees.  Here is a [demo](demo/Log-File-Wrangling-Demo.md)
-link that provides a walk-through on how to wrangle and filter through certain keywords, phrases,
-and terms.
+Many keywords like `LabSZ`, `for`, `Dec`, `password`, and `sshd[xxxx]:` were removed, leaving only
+the necessary information for creating our B-Trees.  
 
 Once the raw SSH text file has been wrangled, the file should have the following amounts of types
 that you can verify against your reduced data file:
@@ -290,21 +288,36 @@ that you can verify against your reduced data file:
 
 
 ### 3.1.1 Demo
-An example [demo](demo/Log-File-Wrangling-Demo.md) for wrangling a log file is available
-to aid in reducing irrelevant log file information and explore Regular Expressions. 
+Here is a [demo](demo/Log-File-Wrangling-Demo.md) that provides a walk-through on how to wrangle
+and filter through certain keywords, phrases, and terms. It is important for you to review this
+to understand the process we used to simplfy the raw log file into the simplified version we
+use to build the B-Trees.
 
-### 3.1.2 Data Wrangling Program
+The conversion process uses regular expressions, which are a powerful technique for pattern 
+matching in text files. regula expressions are widely available in most programming languages 
+as well as in the Bash shell. 
+
+
+### 3.1.2 Data Wrangling Program (Extra Credit)
 While using a text editor to wrangle the data is feasible for one file, it would be infeasible
 if you have to do that for hundreds or thousands of log files. So for this project, please write
 a Java program named `SSHDataWrangler.java` to wrangle the raw SSH data file into a useful form
 as described above. You can use regular expressions built into Java to accomplish the task.
 
-Note that we have included the final wrangled file, so you can `diff` your output with the final
-form to verify the correctness. Including the wrangled log file also allows team members to
-proceed with other parts of the project sooner!
+See this
+[tutorial](https://www.vogella.com/tutorials/JavaRegularExpressions/article.html) for how to
+use regular expressions in Java.
+
+Note that we have included the final wrangled file (under the folder `data/SSH_Files`), so you
+can `diff` your output with the final form to verify the correctness.
+
+Please note that this part is **extra credit** so you can skip it and simply use the simplified
+SSH log file that we have provided as part of the repository. Including the wrangled log file also
+allows team members to proceed with other parts of the project sooner even if you do want to
+attempt the extra credit!
 
 
-### 3.2. Problem
+### 3.2. The Main Problem
 
 Now that we have data wrangling out of the way, the motivation for the main problem is to
 analyze the frequency of certain activities and patterns within the log files; whether that be
@@ -329,20 +342,13 @@ The following are the types of B-Trees that will be created:
 Once we have each B-Tree for each type of activity, we will then search the B-Trees for the
 top frequencies within each category and display those frequencies from searching an SQL database.
 
-The following displays what each main driver must output:
-
-| Class               | Output                                                                                                                                                                                               | 
-|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `SSHCreateBTree`    | - `QUERY-<tree-type>.txt`<br/>- `SSH_log.txt.ssh.btree.<tree-type>.<degree>` file<br/>- `dump-<tree-type><degree>.txt` (`<debug>`=`1`) <br/>- `SSHLogDB.db` from the dump file (`<debug>`=`1`)<br/> |
-| `SSHSearchBTree`    | - `SQUERY-<tree-type>-<topfrequency>.txt`                                                                                                                                                             | 
-| `SSHSearchDatabase` | - top `<SSH Key> <frequency>` to standard out stream                                                                                                                                                 |
 
 
 ## 4. Design Issues
 
 ### 4.1. Memory
-We could represent each SSH Log sequence as a string of that is 32 bytes long.  No value should
-go over 32 bytes and if so, we simply truncate the sequence to just 32 bytes.
+We can represent each SSH Log sequence as a string of that is 32 characters long (which takes 64 bytes).  No value should
+go over 32 characters and if so, we simply truncate the sequence to just 32 characters.
 
 ### 4.2. Key Values
 Note that the key values will be the two variables of that B-Tree's type concatenated with a dash (`-`)
@@ -358,25 +364,28 @@ We will need a `BTree` class as well as a `BTreeNode` class. The objects that we
 B-Tree will be similar to the objects we stored in the previous `Hashtable` assignment. You should
 call the relevant class `TreeObject` to represent the objects using the `Comparable` interface.
 
+### 4.4 Priority Queues
+
+TBD
+
 ## 5. Implementation
-We will create four programs:
+We will create three (or four, if doing the extra credit part) programs:
 
-- one that **wrangles the raw SSH file** into the form suitable for creating BTrees.
+- `SSHDataWrangler.java` (*Optional -- Extra Credit*)  to **wrangle the raw SSH file** into the
+form suitable for creating BTrees.
 
-- one that **creates a B-Tree** from a given wrangled SSH log file and outputs a query with all
-unique values found within the SSH log file as a Random-Access-File file of the B-Tree,
+- `SSHCreateBTree.java`: to **create a B-Tree** from a given wrangled SSH log file and outputs a query
+with all unique values found within the SSH log file as a Random-Access-File file of the B-Tree,
 a dump file (if applicable), and a SQL Database (if applicable).
 
-- another for **searching a specified B-Tree** for top occurring activity pairs. The search
-program assumes that the user specified the proper B-Tree and top frequency count to use to
-output the top occurring searched queries.
+- `SSHSearchBTree.java` for **searching a specified B-Tree** for top occurring activity pairs. The
+search program assumes that the user specified the proper B-Tree and top frequency count to
+use to output the top occurring searched queries.
 
-- and a final one for **searching in the SQL database** for the top occurring activity
-pairs. This database would be created as a by-product of the first program and contains the
-top search queries from searching the B-Tree.
+- `SSHSearchDatabase.java` to **search in the SQL database** for the top occurring activity
+pairs. This database would be created as a by-product of the `SSHCreateBTree.java` program and
+contains the top search queries from searching the B-Tree.
 
-The main Java classes should be named `SSHDataWrangler`, `SSHCreateBTree`, `SSHSearchBTree`,
-and `SSHSearchDatabase`.
 
 ### 5.1. Program Arguments
 The required arguments for the four programs are shown below:
@@ -480,10 +489,18 @@ huf-183.136.178.26 2
 ...
 ```
 
-### 5.2. Example Demonstration Walk-through of Project
+The following displays what each main driver must output:
+
+| Class               | Output                                                                                                                                                                                               | 
+|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `SSHCreateBTree`    | - `QUERY-<tree-type>.txt`<br/>- `SSH_log.txt.ssh.btree.<tree-type>.<degree>` file<br/>- `dump-<tree-type><degree>.txt` (`<debug>`=`1`) <br/>- `SSHLogDB.db` from the dump file (`<debug>`=`1`)<br/> |
+| `SSHSearchBTree`    | - `SQUERY-<tree-type>-<topfrequency>.txt`                                                                                                                                                             | 
+| `SSHSearchDatabase` | - top `<SSH Key> <frequency>` to standard out stream                                                                                                                                                 |
+
+### 5.2. Example Demonstration of Project
 
 
-#### 5.2.1. Wrangle the raw data file
+#### 5.2.1. (Optional: Extra Credit) Wrangle the raw data file
 
 Please download the
 [raw SSH log file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing)
