@@ -287,22 +287,32 @@ that you can verify against your reduced data file:
 | Totals:          | 194,324    |
 
 
-### 3.1.1 Demo
-Here is a [demo](demo/Log-File-Wrangling-Demo.md) that provides a walk-through on how to wrangle
-and filter through certain keywords, phrases, and terms. It is important for you to review this
-to understand the process we used to simplfy the raw log file into the simplified version we
-use to build the B-Trees.
+Note that we have already done this for you and provided the wrangled log file (in the subfolder
+`data/SSH_Files`) for you to use.  However, it is important for you to review the process we
+used to simplify the raw log file into the simplified version we use to build the B-Trees for
+a a few reasons.
 
-The conversion process uses regular expressions, which are a powerful technique for pattern 
-matching in text files. regula expressions are widely available in most programming languages 
-as well as in the Bash shell. 
+- If you want to do the extra credit part where you write a Java data wrangler class.
+- To understand how real life projects in cybersecurity, data science, and artificial intelligence
+  often require complex data wrangling.
+- To be exposed to a new way of dealing with complex pattern matching in text.
+
+### 3.1.1 Demo
+Here is a [demo](demo/Log-File-Wrangling-Demo.md) that provides a walk-through of using a text
+editor to wrangle and filter through certain keywords, phrases, and terms.
+
+The conversion process uses [regular
+expressions](https://en.wikipedia.org/wiki/Regular_expression), which are a powerful technique
+for pattern matching in text files. Regular expressions are widely available in most programming
+languages as well as in the Bash shell.
 
 
 ### 3.1.2 Data Wrangling Program (Extra Credit)
 While using a text editor to wrangle the data is feasible for one file, it would be infeasible
-if you have to do that for hundreds or thousands of log files. So for this project, please write
-a Java program named `SSHDataWrangler.java` to wrangle the raw SSH data file into a useful form
-as described above. You can use regular expressions built into Java to accomplish the task.
+if you have to do that for hundreds or thousands of log files. So for extra credit for this
+project, please write a Java program named `SSHDataWrangler.java` to wrangle the raw SSH data
+file into a useful form as described above. You will use regular expressions built into Java to
+accomplish the task.
 
 See this
 [tutorial](https://www.vogella.com/tutorials/JavaRegularExpressions/article.html) for how to
