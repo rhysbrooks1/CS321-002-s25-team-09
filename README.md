@@ -267,7 +267,7 @@ contains lots of important data pertaining to the details of an activity. Note t
 is hosted on Google Drive as it is larger than files allowed on GitHub.  Since we only need a
 select few keywords to use within our B-Tree keys, it is easiest to strip the file to only the
 necessary items. Below is a snippet from a stripped version of the above log file that will be
-used to create the proper B-Trees.
+used to create the appropriate B-Trees.
 
 ![Stripped_log_file.png](docs/Stripped_log_file.png "Stripped Example Log File")
 
@@ -357,8 +357,8 @@ top frequencies within each category and display those frequencies from searchin
 ## 4. Design Issues
 
 ### 4.1. Memory
-We can represent each SSH Log sequence as a string of that is 32 characters long (which takes 64 bytes).  No value should
-go over 32 characters and if so, we simply truncate the sequence to just 32 characters.
+We can represent each SSH Log sequence as a string of 32 characters long (which requires 64 bytes).  No value should
+go over 32 characters and if it does, then we simply truncate the sequence to just 32 characters.
 
 ### 4.2. Key Values
 Note that the key values will be the two variables of that B-Tree's type concatenated with a dash (`-`)
@@ -370,9 +370,10 @@ Examples:
 - `xiawei-115.71.16.143`
 
 ### 4.3. Class Design
-We will need a `BTree` class as well as a `BTreeNode` class. The objects that we store in the
-B-Tree will be similar to the objects we stored in the previous `Hashtable` assignment. You should
-call the relevant class `TreeObject` to represent the objects using the `Comparable` interface.
+We will need a `BTree` class as well as a `BTreeNode` class. The `BTreeNode` class may be an inner
+class in the main `BTree` class. The objects that we store in the B-Tree will be similar to the
+objects we stored in the previous `Hashtable` assignment. You should call the relevant class
+`TreeObject` to represent the objects using the `Comparable` interface.
 
 ### 4.4 Priority Queues
 
@@ -389,7 +390,7 @@ with all unique values found within the SSH log file as a Random-Access-File fil
 a dump file (if applicable), and a SQL Database (if applicable).
 
 - `SSHSearchBTree.java` for **searching a specified B-Tree** for top occurring activity pairs. The
-search program assumes that the user specified the proper B-Tree and top frequency count to
+search program assumes that the user specified the appropriate B-Tree and top frequency count to
 use to output the top occurring searched queries.
 
 - `SSHSearchDatabase.java` to **search in the SQL database** for the top occurring activity
@@ -486,7 +487,7 @@ output search query.
 <SSH Key> <frequency>
 ```
 
-The following shows a segment of the dumpfile `dumps/dump-user-ip0`. It has a total of 5294 lines.
+The following shows a segment of the dumpfile `dumps/dump-user-ip0` (it has a total of 5294 lines).
 ```log
 huangqx-115.71.16.143 20
 huangt-183.136.169.234 2
@@ -517,7 +518,8 @@ Please download the
 (70MB) from the Google Drive. Then wrangle it with your program as follows:
 
 ```bash
-java -jar build/libs/SSHDataWrangler.jar --rawSshFile=SSH_log_raw.txt --sshFile=SSH_log.txt
+java -jar build/libs/SSHDataWrangler.jar --rawSshFile=SSH_log_raw.txt \
+          --sshFile=SSH_log.txt
 ```
 
 This program assumes that the raw file and output file are both in the top level of the project
@@ -529,7 +531,7 @@ diff SSH_log.txt data/SSH_Files/SSH_log.txt
 
 
 #### 5.2.2. Create one B-Tree using `SSHCreateBTree`
-With arguments of: 
+Using the following command: 
 ```bash
 java -jar build/libs/SSHCreateBTree.jar --cache=1 --degree=0 --sshFile=SSH_log.txt \
           --type=accepted-time --cacheSize=2000 --debug=1
