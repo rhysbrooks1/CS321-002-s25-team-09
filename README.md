@@ -248,9 +248,9 @@ types of log files but the one we will focus on for this project comes from
 [Zenodo-Loghub](https://zenodo.org/record/3227177#.ZEc9T-zMI-Q) dataset.
 
 
-To get the big picture,  please watch the following helpful video that shows a simple approach
-for analyzing log files for specific patterns and attacks: [Basic Approach: Analyzing Files
-Log For Attacks (2021)](https://www.youtube.com/watch?v=-T6oue5E4KQ)[9m]
+To get the big picture of log file analysis,  please watch the following helpful video that shows
+a simple approach for analyzing log files for specific patterns and attacks: [Basic Approach:
+Analyzing Files Log For Attacks (2021)](https://www.youtube.com/watch?v=-T6oue5E4KQ)[9m]
 
 
 ## 3. Specifications
@@ -348,6 +348,8 @@ The following are the types of B-Trees that will be created:
 - Reverse & Address IPs
 - Reverse & Address timestamps
 - User's name and their IPs
+
+[Example BTrees](docs/CyberSec-Btrees.jpg)
 
 Once we have each B-Tree for each type of activity, we will then search the B-Trees for the
 top frequencies within each category and display those frequencies from searching an SQL database.
@@ -710,7 +712,7 @@ The following examples from the class examples repository will be useful for thi
 
 ## 9. Test Scripts
 
-The parsed data SSH Log file is provided in the folder:
+The wrangled SSH Log file is provided in the folder:
 [data/SSH_Files](https://github.com/BoiseState/CS321_Cybersecurity/tree/master/data/SSH_Files).
 
 The expected dump files and query results are provided in the folders:

@@ -2,8 +2,9 @@
 ## Team 3
 <hr/>
 
-Below represents a table for analyzing a few select B-Trees and their top `SQUERY` results from their corresponding database tables. 
-Please answer the following questions in the table with the specified parameters for B-Tree creation:
+The table below shows the results of analyzing a few select B-Trees and their top `SQUERY`
+results from their corresponding database tables.  Please answer the following questions in
+the table with the specified parameters for B-Tree creation:
 
 <hr/>
 
