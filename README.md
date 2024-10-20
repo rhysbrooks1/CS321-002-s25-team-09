@@ -338,22 +338,24 @@ For the given log file, we want to convert its different activity types into var
 to better analyze specific types of operations. We will make a total of **nine** B-Trees with
 a certain category of extracted data from the log file.
 
-The following are the types of B-Trees that will be created:
-- Accepted IPs
-- Accepted timestamps
-- Failed IPs
-- Failed timestamps
-- Invalid IPs
-- Invalid timestamps
-- Reverse & Address IPs
-- Reverse & Address timestamps
-- User's name and their IPs
+The following are the types of B-Trees that will be created (the key value will be a combination of
+the two fields that are used in each BTree):
+- Accepted IPs (`accepted-ip`: Accepted log entry along with its IP)
+- Accepted timestamps (`accepted-timestamp`: Accepted log entry along with its timestamp)
+- Failed IPs (`failed-ip`: Failed log entry along with its IP)
+- Failed timestamps (`failed-timestamp`: Failed log entry along with its timestamp)
+- Invalid IPs (`invalid-ip`: Invalid log entry along with its IP)
+- Invalid timestamps (`invalid-timestamp`: Invalid log entry along with its timestamp)
+- Reverse & Address IPs (`reverseaddress-ip`: Reverse or Address log entry along with its IP)
+- Reverse & Address timestamps (`reverseaddress-timestamp`: Reverse or Address log entry along with its timestamp)
+- User's name and their IPs (`user-ip`: User name and IP from all log entries)
 
 ![CyberSec-BTrees.jpg](docs/CyberSec-Btrees.jpg "Cybersecurity BTree examples")
 
-Once we have each B-Tree for each type of activity, we will then search the B-Trees for the
-top frequencies within each category and display those frequencies from searching an SQL database.
-
+Once we have a B-Tree for each type of activity, we will then search the B-Trees for the
+top frequencies within each category and display those key values along with the frequencies. We
+will also traverse the tree and put the results in a SQL database to make it easier for an analyst
+to examine the data.
 
 
 ## 4. Design Issues
