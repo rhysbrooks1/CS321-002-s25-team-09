@@ -349,7 +349,7 @@ The following are the types of B-Trees that will be created:
 - Reverse & Address timestamps
 - User's name and their IPs
 
-[Example BTrees](docs/CyberSec-Btrees.jpg)
+![CyberSec-BTrees.jpg](docs/CyberSec-Btrees.jpg "Cybersecurity BTree examples")
 
 Once we have each B-Tree for each type of activity, we will then search the B-Trees for the
 top frequencies within each category and display those frequencies from searching an SQL database.
