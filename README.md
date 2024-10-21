@@ -470,7 +470,7 @@ provide a top frequency count to use to output just the top occurring searched q
 
 - `SSHSearchDatabase.java`: to **search in the SQL database** for the top occurring key values along
 with their frequencies. This database would be created as a by-product of the `SSHCreateBTree.java`
-program and contains all the keys from an inorder traversal of the BTree.
+program and contains all the keys from an inorder traversal for each BTree.
 
 
 ### 5.1. Program Arguments
@@ -487,7 +487,7 @@ java -jar build/libs/SSHSearchBTree.jar --cache=<0/1> --degree=<btree-degree> \
           --btree-file=<btree-filename> --query-file=<query-fileaname> [--top-frequency=<10/25/50>] \
           [--cache-size=<n>]  [--debug=<0|1>]
 
-java -jar build/libs/SSHSearchDatabase.jar --database=<sqlite-database-path> \
+java -jar build/libs/SSHSearchDatabase.jar --type=<tree-type> --database=<sqlite-database-path> \
           --top-frequency=<10/25/50>
 ```
 
@@ -866,8 +866,12 @@ You can use the test scripts to run and compare results using the four test scri
 
 ./create-btrees.sh
 ./check-dumpfiles.sh
+
 ./search-btrees.sh
-./check-squeries.sh 
+./check-btree-search.sh 
+
+./search-db.sh
+./check-db-search.sh
 ```
 
 The instructors will use these test scripts for the final testing of your project.  Start off
