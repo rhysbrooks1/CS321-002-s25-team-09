@@ -214,26 +214,50 @@ Here is a sample project log from a team from a previous semester:
 <hr/>
 
 ## 1. Introduction
-In this Cybersecurity assignment, we will analyze log files to better understand patterns in
-the network traffic.  We will look and analyze patterns, activities, and operations within a
-system's server and house the corresponding data using B-Trees.   The amount of data that we
-have can be very large and any data structure is not likely to fit in memory. Hence B-Trees
+In this Cybersecurity assignment, we will analyze server log files to better understand patterns
+in the network traffic.  We will look and analyze patterns, activities, and operations within
+a system's server and house the corresponding data using B-Trees.   The amount of data that
+we have can be very large and any data structure is not likely to fit in memory. Hence B-Trees
 is a good choice for the task at hand.  We will then store our findings in a SQL database and
 analyze its results for patterns and specific activities.
 
 ## 2. Background
-Log files are textual data files that store events, messages, and processes within a
-system and/or network.  They log information from users and monitor server IT environments.  They can
-detect when a network has become compromised or is under attack. For example, security logs check
-successful and unsuccessful logins, application log failures, and other various activity within a
-server. Secure Shell (SSH) is one of the most common ways of accessing remote servers and in this
-project, we will use log files from a SSH server.  Below is an example of a Secure Shell (SSH)
-log file that is tracking activity within the server:
+
+If you are not familiar with internet, IP addresses, servers and clients, please watch [this short
+video](https://www.youtube.com/watch?v=5o8CwafCxnU&ab_channel=Code.org)(7m) to give you background
+that should be sufficient for this project.
+
+Log files are text files that store events, messages, and processes within a system and/or network.
+They log information from users and are used to monitor server environments.  They can detect
+when a network has become compromised or is under attack. For example, security logs check
+successful and unsuccessful logins, application log failures, and other various activity within
+a server. Secure Shell (SSH) is one of the most common ways of accessing remote servers and in
+this project, we will use log files from a SSH server.  Below is an example of a Secure Shell
+(SSH) log file that is tracking activity within the server:
+
+```
+Dec 12 18:46:17 LabSZ sshd[31166]: Accepted password for suyuxin from 218.18.43.243 port 9480 ssh2
+Dec 12 18:58:24 LabSZ sshd[31243]: Invalid user zouzhi from 115.71.16.143
+Dec 12 18:58:26 LabSZ sshd[31243]: Failed password for invalid user zouzhi from 115.71.16.143 port 38790 ssh2
+Dec 12 18:59:41 LabSZ sshd[31246]: Invalid user admin from 223.155.239.92
+Dec 12 18:59:43 LabSZ sshd[31246]: Failed password for invalid user admin from 223.155.239.92 port 55156 ssh2
+Dec 12 18:59:45 LabSZ sshd[31246]: Failed password for invalid user admin from 223.155.239.92 port 55156 ssh2
+Dec 12 18:59:47 LabSZ sshd[31246]: Failed password for invalid user admin from 223.155.239.92 port 55156 ssh2
+Dec 12 18:59:48 LabSZ sshd[31246]: Failed password for invalid user admin from 223.155.239.92 port 55156 ssh2
+Dec 12 18:59:53 LabSZ sshd[31246]: Failed password for invalid user admin from 223.155.239.92 port 55156 ssh2
+Dec 12 19:16:22 LabSZ sshd[31264]: Invalid user support from 103.79.141.173
+Dec 12 19:20:39 LabSZ sshd[31269]: Accepted password for curi from 14.17.22.31 port 5154 ssh2
+Dec 12 19:20:39 LabSZ sshd[31275]: Accepted password for curi from 14.17.22.31 port 5158 ssh2
+Dec 12 19:23:51 LabSZ sshd[31474]: Invalid user xiawei from 115.71.16.143
+Dec 12 19:23:53 LabSZ sshd[31474]: Failed password for invalid user xiawei from 115.71.16.143 port 54132 ssh2
+Dec 12 19:31:09 LabSZ sshd[31479]: reverse mapping checking getaddrinfo for 190-174-14-217.speedy.com.ar [190.174.14.217] failed - POSSIBLE BREAK-IN ATTEMPT!
+Dec 12 21:02:41 LabSZ sshd[31596]: Address 123.16.30.186 maps to static.vnpt.vn, but this does not map back to the address - POSSIBLE BREAK-IN ATTEMPT!
+```
 
 ![SSH_Log_File_Example.png](docs/SSH_Log_File_Example.png "Example Excerpt of Log File")
 
 Each line shows a date and timestamp of an activity, the name of the server running the OpenSSH
-Daemon (sshd) (with a process id), and the type of action followed by the user's name, IP address,
+Daemon (sshd) (with its process id), and the type of action followed by the user's name, IP address,
 port number and SSH protocol version.
 
 With a quick scan of the log file, we can see that there are multiple occurrences of failed
@@ -286,7 +310,7 @@ that you can verify against your reduced data file:
 | reverse          | 18,909     |
 | Totals:          | 194,324    |
 
-
+)
 Note that we have already done this for you and provided the wrangled log file (in the subfolder
 `data/SSH_Files`) for you to use.  However, it is important for you to review the process we
 used to simplify the raw log file into the simplified version we use to build the B-Trees for
@@ -381,7 +405,11 @@ objects we stored in the previous `Hashtable` assignment. You should call the re
 
 ### 4.4 Priority Queues
 
-TBD
+In order to find the top `k` keys (by frequency), we will need a priority queue in the search
+programs. This is because the BTree is sorted by the key value and not by their frequencies. We
+created out own priority queue in Project 2, but for  this project we will use the [Priority
+Queue](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/PriorityQueue.html)
+class available fram the standard library in Java.
 
 ## 5. Implementation
 We will create three (or four, if doing the extra credit part) programs:
