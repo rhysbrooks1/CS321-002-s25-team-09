@@ -617,10 +617,34 @@ Outputs:
 - Dump text file: `dump-accepted-ip.0.txt`
 - Table name: `acceptedip` to `SSHLogDB.db`
 
+See below for a snipper of the dmp file  `dump-accepted-ip.0.txt`: 
 
-| Snippet of Dump file - `dump-accepted-ip.0.txt`:              |
+| Key | Frequency |
 |----------------------------------------------------------|
-| ![Dump.png](docs/Dump.png "Example Excerpt of Log File") | 
+|Accepted-137.189.206.152 |  1 |
+|Accepted-137.189.206.243 |  1 |
+|Accepted-137.189.207.18  |  1 |
+|Accepted-137.189.207.28  |  1 |
+|Accepted-137.189.240.159 |  1 |
+|Accepted-137.189.241.19  |  2 |
+|Accepted-137.189.241.248 | 11 |
+|Accepted-137.189.88.215  | 12 |
+|Accepted-137.189.90.232  | 10 |
+|Accepted-14.17.22.31     |  4 |
+|Accepted-183.11.36.159   |  2 |
+|Accepted-183.11.39.245   |  1 |
+|Accepted-183.11.69.89    |  2 |
+|Accepted-183.62.156.108  |  5 |
+|Accepted-203.218.70.64   |  2 |
+|Accepted-218.17.80.182   |  7 |
+|Accepted-218.18.42.17    |  5 |
+|Accepted-218.18.43.243   |  1 |
+|Accepted-222.125.40.98   |  5 |
+|Accepted-222.240.177.42  |  7 |
+|Accepted-61.187.54.9     | 12 |
+|Accepted-67.160.100.130  |  1 |
+|Accepted-73.239.249.49   |  1 |
+
 
 
 #### 5.2.3. Search BTree in `SSHSearchBTree`
