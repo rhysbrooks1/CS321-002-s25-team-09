@@ -577,9 +577,7 @@ The following displays what each main driver must output:
 
 | Class               | Output                                                                                                                                                                                               | 
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `SSHCreateBTree`    | - `SSH_log.txt.ssh.btree.<type>.<degree>` file (in the current folder)<br/>
-                        - appropriately named table in `SSHLogDB.db` (database is in current folder) <br/>
-                        - `dump-<type>.<degree>.txt` (in the current folder)   if `<debug>`=`1` <br/> |
+| `SSHCreateBTree`    | - `SSH_log.txt.ssh.btree.<type>.<degree>` file (in the current folder)<br/>- appropriately named table in `SSHLogDB.db` (database is in current folder) <br/>- `dump-<type>.<degree>.txt` (in the current folder)   if `<debug>`=`1` <br/> |
 | `SSHSearchBTree`    | -  Output for the queries to standard out  |    
 | `SSHSearchDatabase` | - top `<SSH Key> <frequency>` to standard out |
 
