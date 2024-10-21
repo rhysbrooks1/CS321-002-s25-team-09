@@ -329,8 +329,7 @@ used to create the appropriate B-Trees.
 Many keywords like `LabSZ`, `for`, `Dec`, `password`, and `sshd[xxxx]:` were removed, leaving only
 the necessary information for creating our B-Trees.  
 
-Once the raw SSH text file has been wrangled, the file should have the following amounts of types
-that you can verify against your reduced data file:
+Once the raw SSH text file has been wrangled, the file should have the following amounts of types.
 
 | Type of Activity | Line count |
 |------------------|------------|
@@ -341,7 +340,7 @@ that you can verify against your reduced data file:
 | reverse          | 18,909     |
 | Totals:          | 194,324    |
 
-)
+
 Note that we have already done this for you and provided the wrangled log file (in the subfolder
 `data/SSH_Files`) for you to use.  However, it is important for you to review the process we
 used to simplify the raw log file into the simplified version we use to build the B-Trees for
@@ -405,26 +404,36 @@ the two fields that are used in each BTree):
 - Reverse & Address timestamps (`reverseaddress-timestamp`: Reverse or Address log entry along with its timestamp)
 - User's name and their IPs (`user-ip`: User name and IP from all log entries)
 
+See below for a visual of the nine types of BTrees.
+
 ![CyberSec-BTrees.jpg](docs/CyberSec-Btrees.jpg "Cybersecurity BTree examples")
 
-Once we have a B-Tree for each type of activity, we will then search the B-Trees for the
-top frequencies within each category and display those key values along with the frequencies. We
-will also traverse the tree and put the results in a SQL database to make it easier for an analyst
-to examine the data.
+Basically, each BTree has the key values along with their frequencies (the number of duplicates).
+Once we have a B-Tree for each type of activity, we will then search the BTrees for the top
+frequencies within each category and display those key values along with the frequencies. We
+will also traverse the tree and put the results in a SQL database to make it easier for an
+analyst to examine the data. We will also add a feature to dump the BTree into a dumpfile for
+testing purposes.
 
 
 ## 4. Design Issues
 
 ### 4.1. Memory
-We can represent each SSH Log sequence as a string of 32 characters long (which requires 64 bytes).  No value should
-go over 32 characters and if it does, then we simply truncate the sequence to just 32 characters.
+We can represent each SSH Log sequence (from the stripped log file)  as a string of 32 characters
+long (which requires 64 bytes).  No value should go over 32 characters but if it does, then we
+simply truncate the sequence to just the first 32 characters.
 
-### 4.2. Key Values
+##`# 4.2. Key Values
 Note that the key values will be the two variables of that B-Tree's type concatenated with a dash (`-`)
 
 Examples:
+- `Accepted-137.189.241.278`
 - `Accepted-20:48`
+- `Failed-122.224.69.34`
+- `Failed-21:47`
 - `Invalid-103.99.0.122`
+- `Invalid-21:47`
+- `reverse-123.16.30.186`
 - `Address-123.16.30.186`
 - `xiawei-115.71.16.143`
 
@@ -438,9 +447,9 @@ objects we stored in the previous `Hashtable` assignment. You should call the re
 
 In order to find the top `k` keys (by frequency), we will need a priority queue in the search
 programs. This is because the BTree is sorted by the key value and not by their frequencies. We
-created out own priority queue in Project 2, but for  this project we will use the [Priority
+created our own priority queue in Project 2, but for  this project we will use the [Priority
 Queue](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/PriorityQueue.html)
-class available fram the standard library in Java.
+class available from the standard library in Java.
 
 ## 5. Implementation
 We will create three (or four, if doing the extra credit part) programs:
@@ -458,7 +467,7 @@ use to output the top occurring searched queries.
 
 - `SSHSearchDatabase.java` to **search in the SQL database** for the top occurring activity
 pairs. This database would be created as a by-product of the `SSHCreateBTree.java` program and
-contains the top search queries from searching the B-Tree.
+contains all the keys from  a traversal of the B-Tree.
 
 
 ### 5.1. Program Arguments
@@ -470,7 +479,6 @@ java -jar build/libs/SSHDataWrangler.jar --rawSshFile=<raw-ssh-file> \
 
 java -jar build/libs/SSHCreateBTree.jar --cache=<0/1> --degree=<btree-degree> \
           --sshFile=<ssh-File> --type=<tree-type> [--cacheSize=<n>]  [--debug=<0|1>]
-
 
 java -jar build/libs/SSHSearchBTree.jar --cache=<0/1> --degree=<btree-degree> \
           --btreefile=<btree-file> --queryfile=<query-file> --topfrequency=<10/25/50> \
@@ -511,9 +519,10 @@ size of our B-Tree node on disk
 that will then be searched for in the specified B-Tree file of the same type. The strings are
 one per line and must align with the corresponding B-Tree file of the same type.
 
-- `<topfrequency>` is the most frequent occurring keys within a B-Tree.  Gets either the top
-`10`,`25`, or `50` values.  Note that the B-Tree type: `accepted-ip` does not have enough values for
-`50` top values (i.e., total unique values for `accepted-ip` is `42`).
+- `<topfrequency>` is the most frequent occurring keys within a B-Tree (from the specified
+query file).  Gets either the top `10`,`25`, or `50` values.  Note that the B-Tree type:
+`accepted-ip` does not have enough values for `50` top values (i.e., total unique values for
+`accepted-ip` is `42`).
 
 - `[<cacheSize>]` is an optional argument, which is an integer between `100` and `10000` (inclusive)
 that represents the maximum number of `BTreeNode` objects that can be stored in the memory cache
@@ -535,7 +544,8 @@ output search query.
         - `0`: The output of the queries should be printed on the standard output stream. Any
         diagnostic messages, help and status messages must be printed on the standard error stream
 
-		- `1`: The program displays more verbose messages. For example, it prints the `PriorityQueue`'s contents upon completion.
+		- `1`: The program displays more verbose messages. For example, it prints the
+		`PriorityQueue`'s contents upon completion.
 
     - It must support at least the following values for `SSHCreateBTree`:
 
