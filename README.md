@@ -637,8 +637,8 @@ Assumes that the query files are in `data/queries` folder.
 Outputs:
 - Query output file: `QUERY-accepted-ip.0.txt`
 
-| Query output file - `QUERY-accepted-ip.0.txt`:                      |
-|----------------------------------------------------------------|
+| Key                     |  Frequency |
+|--------------------------------------------------|------------|
 |Accepted-111.222.107.90  |25 |
 |Accepted-119.137.63.195  |14 |
 |Accepted-137.189.88.215  |12 |
