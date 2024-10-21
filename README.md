@@ -16,7 +16,6 @@ instrumentation.
 - Demonstrate effective teamwork as a member or a leader of a team.
 - Design, implement, and evaluate a computing-based solution to a given set of computing
 requirements for a problem from a specific domain.
-- Learn how to wrangle raw data using regular expressions.
 - Learn how to implement a BTree external data structure on the disk.
 - Learn how to wrangle raw data using regular expressions.
 - Demonstrate  how to use caching to improve performance of an application.
@@ -448,27 +447,29 @@ In order to find the top `k` keys (by frequency), we will need a priority queue 
 programs. This is because the BTree is sorted by the key value and not by their frequencies. We
 created our own priority queue in Project 2, but for  this project we will use the [Priority
 Queue](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/PriorityQueue.html)
-class available from the standard library in Java. The Priority Queue will have the frequency as its
-primary key and the BTree key as its secondary key (so the `compareTo` will use frequency first and
-then the BTree key next to ensure stable sorting).
+class available from the standard library in Java. 
+
+The Priority Queue will have the frequency as its primary key and the BTree key as its secondary
+key (so the `compareTo` will use frequency first and then the BTree key next to ensure stable
+sorting). This allows us to compare output against the expected output.
 
 ## 5. Implementation
 We will create three (or four, if doing the extra credit part) programs:
 
-- `SSHDataWrangler.java` (*Optional -- Extra Credit*)  to **wrangle the raw SSH file** into the
+- `SSHDataWrangler.java`: (*Optional -- Extra Credit*)  to **wrangle the raw SSH file** into the
 form suitable for creating BTrees.
 
-- `SSHCreateBTree.java`: to **create a BTree** from a given wrangled SSH log file and outputs a query
-with all unique values found within the SSH log file as a Random-Access-File file of the BTree,
-a dump file (if applicable), and a SQL database (if applicable).
+- `SSHCreateBTree.java`: to **create a BTree** from a given wrangled SSH log file and outputs
+a query with all unique values found within the SSH log file as a Random-Access-File file of
+the BTree, a dump file (if debug option is on), and as a table into a SQL database.
 
-- `SSHSearchBTree.java` for **searching a specified BTree** for top occurring activity pairs. The
-search program assumes that the user specified the appropriate BTree and top frequency count to
-use to output the top occurring searched queries.
+- `SSHSearchBTree.java`: for **searching a specified BTree** for the given activity pairs
+(key values). The search program assumes that the user specified the appropriate BTree. Optionally,
+the user can provide a top frequency count to use to output just the top occurring searched queries.  
 
-- `SSHSearchDatabase.java` to **search in the SQL database** for the top occurring activity
-pairs. This database would be created as a by-product of the `SSHCreateBTree.java` program and
-contains all the keys from  a traversal of the BTree.
+- `SSHSearchDatabase.java`: to **search in the SQL database** for the top occurring key values along
+with their frequencies. This database would be created as a by-product of the `SSHCreateBTree.java`
+program and contains all the keys from a traversal of the BTree.
 
 
 ### 5.1. Program Arguments
