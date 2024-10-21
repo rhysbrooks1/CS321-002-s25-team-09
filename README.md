@@ -235,9 +235,9 @@ system. The SSH server tracks all access by writing the relevant information to 
 Log files are text files that store events, messages, and processes within a system and/or network.
 They log information from users and are used to monitor server environments.  They can detect
 when a network has become compromised or is under attack. For example, security logs check
-successful and unsuccessful logins, application log failures, and other various activity within
-a server. Secure Shell (SSH) is one of the most common ways of accessing remote servers and in
-this project, we will use log files from a SSH server.  Below is an example of a Secure Shell 
+successful and unsuccessful logins, application log failures, and other various activity within a
+server. Secure Shell (SSH) is one of the most common ways of accessing remote servers. Therefore,
+in this project we will use log files from a SSH server.  Below is an example of a Secure Shell
 log file that is tracking activity within the server:
 
 ```
@@ -304,8 +304,8 @@ file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp
 contains lots of important data pertaining to the details of an activity. Note that this file
 is hosted on Google Drive as it is larger than files allowed on GitHub.  Since we only need a
 select few keywords to use within our BTree keys, it is easiest to strip the file to only the
-necessary items. Below is a snippet from a stripped version of the above log file that will be
-used to create the appropriate BTrees.
+necessary items. Below is the stripped version of the snippet from the log file (shown in the
+previous section) that will be appropriate for creating our BTrees.
 
 ```
 12/12 18:46:17 Accepted suyuxin 218.18.43.243
@@ -341,15 +341,15 @@ Once the raw SSH text file has been wrangled, the file should have the following
 | Total:          | 194,324    |
 
 
-Note that we have already done this for you and provided the wrangled log file (in the subfolder
-`data/SSH_Files`) for you to use.  However, it is important for you to review the process we
-used to simplify the raw log file into the simplified version we use to build the BTrees for
-a a few reasons.
+Note that we have already done this for you and provided the wrangled log file
+(`data/SSH_Files/SSH_log.txt`) for you to use.  However, it is important for you to review the
+process we used to simplify the raw log file into the simplified version we use to build the
+BTrees for a a few reasons.
 
 - If you want to do the extra credit part where you write a Java data wrangler class.
 - To understand how real life projects in cybersecurity, data science, and artificial intelligence
   often require complex data wrangling.
-- To be exposed to a new way of dealing with complex pattern matching in text.
+- To be exposed to using regula expressions in dealing with complex pattern matching in text.
 
 ### 3.1.1 Demo
 Here is a [demo](demo/Log-File-Wrangling-Demo.md) that provides a walk-through of using a text
@@ -363,9 +363,9 @@ languages as well as in the Bash shell.
 
 ### 3.1.2 Data Wrangling Program (Extra Credit)
 While using a text editor to wrangle the data is feasible for one file, it would be infeasible
-if you have to do that for hundreds or thousands of log files. So for extra credit for this
+if we have to do that for hundreds or thousands of log files. So for extra credit for this
 project, please write a Java program named `SSHDataWrangler.java` to wrangle the raw SSH data
-file into a useful form as described above. You will use regular expressions built into Java to
+file into a useful form as described above. We will use regular expressions built into Java to
 accomplish the task.
 
 See this
@@ -380,7 +380,6 @@ SSH log file that we have provided as part of the repository. Including the wran
 allows team members to proceed with other parts of the project sooner even if you do want to
 attempt the extra credit!
 
-
 ### 3.2. The Main Problem
 
 Now that we have data wrangling out of the way, the motivation for the main problem is to
@@ -388,21 +387,21 @@ analyze the frequency of certain activities and patterns within the log files; w
 most commonly accepted passwords at certain IPs, commonly failed passwords at specific times
 of the day, or what common user's IPs are.
 
-For the given log file, we want to convert its different activity types into various BTrees
-to better analyze specific types of operations. We will make a total of **nine** BTrees with
+For the given log file, we want to convert its different activity types into various BTrees to
+better analyze specific types of operations. We will make a total of **nine** BTrees, each with
 a certain category of extracted data from the log file.
 
 The following are the types of BTrees that will be created (the key value will be a combination of
 the two fields that are used in each BTree):
-- Accepted IPs (`accepted-ip`: Accepted log entry along with its IP)
+- Accepted IPs (`accepted-ip`: Accepted log entry along with its IP address)
 - Accepted timestamps (`accepted-timestamp`: Accepted log entry along with its timestamp)
-- Failed IPs (`failed-ip`: Failed log entry along with its IP)
+- Failed IPs (`failed-ip`: Failed log entry along with its IP address)
 - Failed timestamps (`failed-timestamp`: Failed log entry along with its timestamp)
-- Invalid IPs (`invalid-ip`: Invalid log entry along with its IP)
+- Invalid IPs (`invalid-ip`: Invalid log entry along with its IP address)
 - Invalid timestamps (`invalid-timestamp`: Invalid log entry along with its timestamp)
-- Reverse & Address IPs (`reverseaddress-ip`: Reverse or Address log entry along with its IP)
+- Reverse & Address IPs (`reverseaddress-ip`: Reverse or Address log entry along with its IP address)
 - Reverse & Address timestamps (`reverseaddress-timestamp`: Reverse or Address log entry along with its timestamp)
-- User's name and their IPs (`user-ip`: User name and IP from all log entries)
+- User's name and their IPs (`user-ip`: User name and IP address from all log entries)
 
 See below for a visual of the nine types of BTrees.
 
@@ -423,7 +422,7 @@ We can represent each SSH Log sequence (from the stripped log file)  as a string
 long (which requires 64 bytes).  No value should go over 32 characters but if it does, then we
 simply truncate the sequence to just the first 32 characters.
 
-##`# 4.2. Key Values
+### 4.2. Key Values
 Note that the key values will be the two variables of that BTree's type concatenated with a dash (`-`)
 
 Examples:
@@ -438,10 +437,10 @@ Examples:
 - `xiawei-115.71.16.143`
 
 ### 4.3. Class Design
-We will need a `BTree` class as well as a `BTreeNode` class. The `BTreeNode` class may be an inner
-class in the main `BTree` class. The objects that we store in the BTree will be similar to the
-objects we stored in the previous `Hashtable` assignment. You should call the relevant class
-`TreeObject` to represent the objects using the `Comparable` interface.
+We will need a `BTree` class as well as a `BTreeNode` class. The `BTreeNode` class may be an
+inner class in the main `BTree` class. The objects that we store in the BTree will be similar
+to the objects we stored in the previous `Hashtable` assignment. You should call the relevant
+class `TreeObject` to represent the objects using the `Comparable` interface.
 
 ### 4.4 Priority Queues
 
@@ -706,19 +705,18 @@ folder in CS321-resources repo. This example shows a complete binary search tree
 data structure in a binary file on disk.
 
 
-
 ## 6. Using a Cache
-We will incorporate the generic Cache class from `Project 1` to improve the performance of
-our BTree implementation. The size of the cache should be a command line argument. An entry
-in the cache is a `BTreeNode`. With the cache enabled command line option, the `<cacheSize>`
-needs to be specified as between `100` and `10000` (inclusive).  Using the cache greatly speeds
-up the execution time especially when searching larger BTrees.
+We will incorporate the generic Cache class from `Project 1` to improve the performance of our
+BTree implementation. The size of the cache should be a command line argument. An entry in the
+cache is a `BTreeNode`. With the cache enabled command line option, the `<cacheSize>` needs to
+be specified as between `100` and `10000` (inclusive).  Using the cache greatly speeds up the
+execution time especially when searching larger BTrees.
 
 ## 7. Using a Database
 
 Design a simple database to store the results (key values and frequencies) from the BTree.
 We will perform an inorder tree traversal to get the information to store in the database with
-the `<tree type>` as the table's name without the `-` (prevents SQL syntax errors). This would
+the `<tree type>` as the table's name without the `-` (to prevent SQL syntax errors). This would
 be done at the end of creating the SSH BTree. Afterwards, we will create a separate search
 program named `SSHSearchDatabase` that uses the database instead of the BTree and the top
 searched query list outputted by `SSHSearchBTree` to get the top frequencies of a certain BTree.
@@ -739,16 +737,16 @@ for patterns.  The top keys should be printed out with their frequencies as demo
 the following segment for top 10 keys in an `accepted-time` BTree.
 
 ```log
-Accepted-20:15: 2
-Accepted-12:53: 2
-Accepted-19:11: 2
-Accepted-19:20: 2
-Accepted-11:40: 2
-Accepted-19:22: 2
+Accepted-14:20: 5
+Accepted-18:46: 4
 Accepted-15:45: 3
 Accepted-00:02: 3
-Accepted-18:46: 4
-Accepted-14:20: 5
+Accepted-20:15: 2
+Accepted-19:22: 2
+Accepted-19:20: 2
+Accepted-19:11: 2
+Accepted-12:53: 2
+Accepted-11:40: 2
 ```
 
 We observe from the code segment above that the top two accepted entries occur between `14:20`
