@@ -17,7 +17,7 @@ instrumentation.
 - Design, implement, and evaluate a computing-based solution to a given set of computing
 requirements for a problem from a specific domain.
 - Learn how to wrangle raw data using regular expressions.
-- Learn how to implement a B-Tree external data structure on the disk.
+- Learn how to implement a BTree external data structure on the disk.
 - Learn how to wrangle raw data using regular expressions.
 - Demonstrate  how to use caching to improve performance of an application.
 - Demonstrate how to run an application in the cloud.
@@ -216,8 +216,8 @@ Here is a sample project log from a team from a previous semester:
 ## 1. Introduction
 In this Cybersecurity assignment, we will analyze server log files to better understand patterns
 in the network traffic.  We will look and analyze patterns, activities, and operations within
-a system's server and house the corresponding data using B-Trees.   The amount of data that
-we have can be very large and any data structure is not likely to fit in memory. Hence B-Trees
+a system's server and house the corresponding data using BTrees.   The amount of data that
+we have can be very large and any data structure is not likely to fit in memory. Hence BTrees
 is a good choice for the task at hand.  We will then store our findings in a SQL database and
 analyze its results for patterns and specific activities.
 
@@ -225,20 +225,20 @@ analyze its results for patterns and specific activities.
 
 If you are not familiar with internet, IP addresses, servers and clients, please watch [this
 short video](https://www.youtube.com/watch?v=5o8CwafCxnU&ab_channel=Code.org)[7m] to give you
-sufficient background that for this project. If you are nt familiar with using SSH (Secure Shell),
+sufficient background that for this project. If you are not familiar with using SSH (Secure Shell),
 watch [this short video](https://www.youtube.com/watch?v=zlv9dI-9g1U&ab_channel=KarolCholewa)[2m]
 to see how it is useful.
 
-A ssh client connects to a ssh server software running on a remote system to get acess to that
-system. The ssh server tracks all access by writing the relevant information to a log file.
+A SSH client connects to a SSH server software running on a remote system to get acess to that
+system. The SSH server tracks all access by writing the relevant information to a log file.
 
 Log files are text files that store events, messages, and processes within a system and/or network.
 They log information from users and are used to monitor server environments.  They can detect
 when a network has become compromised or is under attack. For example, security logs check
 successful and unsuccessful logins, application log failures, and other various activity within
 a server. Secure Shell (SSH) is one of the most common ways of accessing remote servers and in
-this project, we will use log files from a SSH server.  Below is an example of a Secure Shell
-(SSH) log file that is tracking activity within the server:
+this project, we will use log files from a SSH server.  Below is an example of a Secure Shell 
+log file that is tracking activity within the server:
 
 ```
 Dec 12 18:46:17 LabSZ sshd[31166]: Accepted password for suyuxin from 218.18.43.243 port 9480 ssh2
@@ -303,9 +303,9 @@ The [raw SSH log
 file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing) (70MB)
 contains lots of important data pertaining to the details of an activity. Note that this file
 is hosted on Google Drive as it is larger than files allowed on GitHub.  Since we only need a
-select few keywords to use within our B-Tree keys, it is easiest to strip the file to only the
+select few keywords to use within our BTree keys, it is easiest to strip the file to only the
 necessary items. Below is a snippet from a stripped version of the above log file that will be
-used to create the appropriate B-Trees.
+used to create the appropriate BTrees.
 
 ```
 12/12 18:46:17 Accepted suyuxin 218.18.43.243
@@ -327,7 +327,7 @@ used to create the appropriate B-Trees.
 ```
 
 Many keywords like `LabSZ`, `for`, `Dec`, `password`, and `sshd[xxxx]:` were removed, leaving only
-the necessary information for creating our B-Trees.  
+the necessary information for creating our BTrees.  
 
 Once the raw SSH text file has been wrangled, the file should have the following amounts of types.
 
@@ -338,12 +338,12 @@ Once the raw SSH text file has been wrangled, the file should have the following
 | Failed           | 160,572    |
 | Invalid          | 14,165     |
 | reverse          | 18,909     |
-| Totals:          | 194,324    |
+| Total:          | 194,324    |
 
 
 Note that we have already done this for you and provided the wrangled log file (in the subfolder
 `data/SSH_Files`) for you to use.  However, it is important for you to review the process we
-used to simplify the raw log file into the simplified version we use to build the B-Trees for
+used to simplify the raw log file into the simplified version we use to build the BTrees for
 a a few reasons.
 
 - If you want to do the extra credit part where you write a Java data wrangler class.
@@ -388,11 +388,11 @@ analyze the frequency of certain activities and patterns within the log files; w
 most commonly accepted passwords at certain IPs, commonly failed passwords at specific times
 of the day, or what common user's IPs are.
 
-For the given log file, we want to convert its different activity types into various B-Trees
-to better analyze specific types of operations. We will make a total of **nine** B-Trees with
+For the given log file, we want to convert its different activity types into various BTrees
+to better analyze specific types of operations. We will make a total of **nine** BTrees with
 a certain category of extracted data from the log file.
 
-The following are the types of B-Trees that will be created (the key value will be a combination of
+The following are the types of BTrees that will be created (the key value will be a combination of
 the two fields that are used in each BTree):
 - Accepted IPs (`accepted-ip`: Accepted log entry along with its IP)
 - Accepted timestamps (`accepted-timestamp`: Accepted log entry along with its timestamp)
@@ -409,7 +409,7 @@ See below for a visual of the nine types of BTrees.
 ![CyberSec-BTrees.jpg](docs/CyberSec-Btrees.jpg "Cybersecurity BTree examples")
 
 Basically, each BTree has the key values along with their frequencies (the number of duplicates).
-Once we have a B-Tree for each type of activity, we will then search the BTrees for the top
+Once we have a BTree for each type of activity, we will then search the BTrees for the top
 frequencies within each category and display those key values along with the frequencies. We
 will also traverse the tree and put the results in a SQL database to make it easier for an
 analyst to examine the data. We will also add a feature to dump the BTree into a dumpfile for
@@ -424,7 +424,7 @@ long (which requires 64 bytes).  No value should go over 32 characters but if it
 simply truncate the sequence to just the first 32 characters.
 
 ##`# 4.2. Key Values
-Note that the key values will be the two variables of that B-Tree's type concatenated with a dash (`-`)
+Note that the key values will be the two variables of that BTree's type concatenated with a dash (`-`)
 
 Examples:
 - `Accepted-137.189.241.278`
@@ -439,7 +439,7 @@ Examples:
 
 ### 4.3. Class Design
 We will need a `BTree` class as well as a `BTreeNode` class. The `BTreeNode` class may be an inner
-class in the main `BTree` class. The objects that we store in the B-Tree will be similar to the
+class in the main `BTree` class. The objects that we store in the BTree will be similar to the
 objects we stored in the previous `Hashtable` assignment. You should call the relevant class
 `TreeObject` to represent the objects using the `Comparable` interface.
 
@@ -457,17 +457,17 @@ We will create three (or four, if doing the extra credit part) programs:
 - `SSHDataWrangler.java` (*Optional -- Extra Credit*)  to **wrangle the raw SSH file** into the
 form suitable for creating BTrees.
 
-- `SSHCreateBTree.java`: to **create a B-Tree** from a given wrangled SSH log file and outputs a query
-with all unique values found within the SSH log file as a Random-Access-File file of the B-Tree,
+- `SSHCreateBTree.java`: to **create a BTree** from a given wrangled SSH log file and outputs a query
+with all unique values found within the SSH log file as a Random-Access-File file of the BTree,
 a dump file (if applicable), and a SQL Database (if applicable).
 
-- `SSHSearchBTree.java` for **searching a specified B-Tree** for top occurring activity pairs. The
-search program assumes that the user specified the appropriate B-Tree and top frequency count to
+- `SSHSearchBTree.java` for **searching a specified BTree** for top occurring activity pairs. The
+search program assumes that the user specified the appropriate BTree and top frequency count to
 use to output the top occurring searched queries.
 
 - `SSHSearchDatabase.java` to **search in the SQL database** for the top occurring activity
 pairs. This database would be created as a by-product of the `SSHCreateBTree.java` program and
-contains all the keys from  a traversal of the B-Tree.
+contains all the keys from  a traversal of the BTree.
 
 
 ### 5.1. Program Arguments
@@ -494,15 +494,15 @@ is displayed on multiple lines but we would type it in one line (without the bac
 - `<cache>` specifies whether the program should use cache (value `1`) or
 no cache (value `0`); if the value is `1`, the `<cacheSize>` has to be specified
 
-- `<degree>` is the degree to be used for the B-Tree. If the user specifies `0`, then our
+- `<degree>` is the degree to be used for the BTree. If the user specifies `0`, then our
 program should choose the optimum degree based on a disk block size of `4096` bytes and the
-size of our B-Tree node on disk
+size of our BTree node on disk
 
 - `<rawSshFile>` is the input `.txt` file containing the raw SSH log file
 
 - `<sshFile>` is the input `.txt` file containing the wrangled SSH log file
 
-- `<type>` is the type of B-Tree used and is one of nine options:
+- `<type>` is the type of BTree used and is one of nine options:
   - `accepted-ip`
   - `accepted-time`
   - `invalid-ip`
@@ -513,27 +513,27 @@ size of our B-Tree node on disk
   - `reverseaddress-time`
   - `user-ip`
 
-- `<btreefile>` is the name of the B-Tree file generated by the `SSHCreateBTree` program
+- `<btreefile>` is the name of the BTree file generated by the `SSHCreateBTree` program
 
 - `<queryfile>` contains the same SSH key pairs type (e.g., `Accepted-20:48` and `Accepted-21:32`)
-that will then be searched for in the specified B-Tree file of the same type. The strings are
-one per line and must align with the corresponding B-Tree file of the same type.
+that will then be searched for in the specified BTree file of the same type. The strings are
+one per line and must align with the corresponding BTree file of the same type.
 
-- `<topfrequency>` is the most frequent occurring keys within a B-Tree (from the specified
-query file).  Gets either the top `10`,`25`, or `50` values.  Note that the B-Tree type:
+- `<topfrequency>` is the most frequent occurring keys within a BTree (from the specified
+query file).  Gets either the top `10`,`25`, or `50` values.  Note that the BTree type:
 `accepted-ip` does not have enough values for `50` top values (i.e., total unique values for
 `accepted-ip` is `42`).
 
 - `[<cacheSize>]` is an optional argument, which is an integer between `100` and `10000` (inclusive)
 that represents the maximum number of `BTreeNode` objects that can be stored in the memory cache
 
-- `<database>` the path to the SQL database created after B-Tree creation for a specific B-Tree
+- `<database>` the path to the SQL database created after BTree creation for a specific BTree
 type. The name of the database file should be `SSHLogDB.db`
 
 - `<searchqueryfile>` contains the same **top** SSH key pairs type (ex. `Accepted-20:48` and
-`Accepted-21:32`) that will then be searched for in the `.db` database file to a specific B-Tree
+`Accepted-21:32`) that will then be searched for in the `.db` database file to a specific BTree
 database of the same type. The strings are one per line and must align with the corresponding
-`.db` B-Tree file of the same type outputted by SSHCreateBTree.  These files are to contain either
+`.db` BTree file of the same type outputted by SSHCreateBTree.  These files are to contain either
 `10`/`25`/`50` top keys depending on the specified `<topfrequency>` of the `SSHCreateBTree`
 output search query.
 
@@ -577,7 +577,7 @@ The following displays what each main driver must output:
 
 | Class               | Output                                                                                                                                                                                               | 
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `SSHCreateBTree`    | - `QUERY-<tree-type>.txt`<br/>- `SSH_log.txt.ssh.btree.<tree-type>.<degree>` file<br/>- `dump-<tree-type><degree>.txt` (`<debug>`=`1`) <br/>- `SSHLogDB.db` from the dump file (`<debug>`=`1`)<br/> |
+| `SSHCreateBTree`    | - `SSH_log.txt.ssh.btree.<tree-type>.<degree>` file<br/>- `dump-<tree-type><degree>.txt` (`<debug>`=`1`) <br/>- `SSHLogDB.db` from the dump file (`<debug>`=`1`)<br/> |
 | `SSHSearchBTree`    | - `SQUERY-<tree-type>-<topfrequency>.txt`                                                                                                                                                             | 
 | `SSHSearchDatabase` | - top `<SSH Key> <frequency>` to standard out stream                                                                                                                                                 |
 
@@ -603,7 +603,7 @@ diff SSH_log.txt data/SSH_Files/SSH_log.txt
 ```
 
 
-#### 5.2.2. Create one B-Tree using `SSHCreateBTree`
+#### 5.2.2. Create one BTree using `SSHCreateBTree`
 Using the following command: 
 ```bash
 java -jar build/libs/SSHCreateBTree.jar --cache=1 --degree=0 --sshFile=SSH_log.txt \
@@ -614,8 +614,7 @@ Assumes that the wrangled log file is in the `data/SSH_Files` folder.
 
 Outputs:
 - Dump text file: `dump-accepted-ip0`
-- Query file: `QUERY-accepted-ip.txt`
-- B-Tree Random-Access-File file: `SSH_log.txt.ssh.btree.accepted-ip.0`
+- BTree Random-Access-File file: `SSH_log.txt.ssh.btree.accepted-ip.0`
 - Table name: `acceptedip` to `SSHLogDB.db`
 
 
@@ -624,7 +623,7 @@ Outputs:
 | ![Dump.png](docs/Dump.png "Example Excerpt of Log File") | ![QueryFile.png](docs/Query.png "Example Excerpt of Log File") |
 
 
-#### 5.2.3. Search B-Tree in `SSHSearchBTree`
+#### 5.2.3. Search BTree in `SSHSearchBTree`
 With arguments of:
 ```bash
 java -jar build/libs/SSHSearchBTree.jar --cache=0 --degree=0 \    
@@ -642,7 +641,7 @@ Outputs:
 |----------------------------------------------------------------|
 | ![Dump.png](docs/SQueryFile.png "Example Excerpt of Log File") |
 
-#### 5.2.4. Search B-Tree Database in `SSHSearchDatabase`
+#### 5.2.4. Search BTree Database in `SSHSearchDatabase`
 
 With arguments of:
 ```bash
@@ -670,21 +669,21 @@ parent, current, child, temporary node for split). However, if the cache is enab
 store `<cacheSize>` `BTreeNode` objects in the cache.
 
 #### 5.3.2. Metadata storage
-We need to store some metadata about the B-Tree on disk. For example, we can store the degree
+We need to store some metadata about the BTree on disk. For example, we can store the degree
 of the tree, the byte offset of the root node (so we can find it), the number of nodes, and other
-information. This information should be stored at the beginning of the B-Tree file. We read the
-metadata when we open the B-Tree file, and we write it back (as it may have changed) when we close
-the B-Tree file at the end of the program.
+information. This information should be stored at the beginning of the BTree file. We read the
+metadata when we open the BTree file, and we write it back (as it may have changed) when we close
+the BTree file at the end of the program.
 
-#### 5.3.3. Layout of the B-Tree in the binary file 
+#### 5.3.3. Layout of the BTree in the binary file 
 
-The B-Tree is stored as a binary file on disk. This is the most efficient and compact way to
-store the B-Tree data structure, so it persists beyond the program. While it is possible to
-store the B-Tree as a text file, it will lead to severe slowdown in the runtime.
+The BTree is stored as a binary file on disk. This is the most efficient and compact way to
+store the BTree data structure, so it persists beyond the program. While it is possible to
+store the BTree as a text file, it will lead to severe slowdown in the runtime.
 
-The B-Tree data file will have an initial metadata section. The metadata section should contain
+The BTree data file will have an initial metadata section. The metadata section should contain
 at least the byte offset of the root node. It may also optionally contain the degree of the
-B-Tree and the number of nodes.  After the metadata, the rest of the file consists of BTreeNodes
+BTree and the number of nodes.  After the metadata, the rest of the file consists of BTreeNodes
 laid out one after the other. A new node is added to the end of the file.
 
 #### 5.3.4 Reading and Writing Nodes
@@ -697,10 +696,10 @@ as possible with some empty padding space at the end (if needed).
 - We will store the byte offset of a node on disk as the child pointers in the BTreeNodes. Note
 that we never need real child pointers in memory.
 
-- We will use RandomAccessFile  and FileChannel classes to read/write to the B-Tree
+- We will use RandomAccessFile  and FileChannel classes to read/write to the BTree
 data file. This allows us to quickly set the file cursor to anywhere in the file
 in O(1) time using the `position(long pos)` method. We will use the ByteBuffer
-class to read/write to the B-Tree data file.  Please see the example of writing
+class to read/write to the BTree data file.  Please see the example of writing
 to a random access binary data file shown in DiskReadWrite.java in the [Disk IO
 examples](https://github.com/BoiseState/CS321-resources/tree/master/examples/disk-IO-examples)
 folder in CS321-resources repo. This example shows a complete binary search tree as an external
@@ -710,19 +709,19 @@ data structure in a binary file on disk.
 
 ## 6. Using a Cache
 We will incorporate the generic Cache class from `Project 1` to improve the performance of
-our B-Tree implementation. The size of the cache should be a command line argument. An entry
+our BTree implementation. The size of the cache should be a command line argument. An entry
 in the cache is a `BTreeNode`. With the cache enabled command line option, the `<cacheSize>`
 needs to be specified as between `100` and `10000` (inclusive).  Using the cache greatly speeds
-up the execution time especially when searching larger B-Trees.
+up the execution time especially when searching larger BTrees.
 
 ## 7. Using a Database
 
-Design a simple database to store the results (key values and frequencies) from the B-Tree.
+Design a simple database to store the results (key values and frequencies) from the BTree.
 We will perform an inorder tree traversal to get the information to store in the database with
 the `<tree type>` as the table's name without the `-` (prevents SQL syntax errors). This would
-be done at the end of creating the SSH B-Tree. Afterwards, we will create a separate search
+be done at the end of creating the SSH BTree. Afterwards, we will create a separate search
 program named `SSHSearchDatabase` that uses the database instead of the BTree and the top
-searched query list outputted by `SSHSearchBTree` to get the top frequencies of a certain B-Tree.
+searched query list outputted by `SSHSearchBTree` to get the top frequencies of a certain BTree.
 
 ```bash
 $ ./gradlew createJarSSHSearchDatabase
@@ -737,7 +736,7 @@ section below on how to use SQLite.
 
 When searching for the top results in the database, we want to analyze the top key frequencies
 for patterns.  The top keys should be printed out with their frequencies as demonstrated by
-the following segment for top 10 keys in an `accepted-time` B-Tree.
+the following segment for top 10 keys in an `accepted-time` BTree.
 
 ```log
 Accepted-20:15: 2
@@ -756,7 +755,7 @@ We observe from the code segment above that the top two accepted entries occur b
 and `18:46` with all other entries mostly distributed past `11:40`.  The majority of `Accepted`
 occurrences happened between `12:00` to `19:15`.
 
-Below represents the table for analyzing a select few B-Trees for their top
+Below represents the table for analyzing a select few BTrees for their top
 results in their corresponding database and the questions to answer in a file named
 [`BTree-Database-Analysis.md`](BTree-Database-Analysis.md) that you will add to your project.
 
@@ -807,11 +806,11 @@ Usage:  search-btrees.sh
 Usage:  check-squeries.sh 
 ```
 
-The `create-btrees.sh` script creates all nine B-Tree types from the SSH Log file.
+The `create-btrees.sh` script creates all nine BTree types from the SSH Log file.
 The `check-dumpfiles.sh` compares the dump files from our code to the reference dump files.
-The `search-btrees.sh` script searches all nine B-Trees from the B-Tree files for the top 25
+The `search-btrees.sh` script searches all nine BTrees from the BTree files for the top 25
 entries.  The `check-squeries.sh` script compares the results of search queries from searching
-the B-Tree to our program with the reference results.
+the BTree to our program with the reference results.
 
 You can use the test scripts to run and compare results using the four test scripts as follows.
 
