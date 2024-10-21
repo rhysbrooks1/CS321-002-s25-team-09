@@ -250,8 +250,10 @@ Dec 12 19:20:39 LabSZ sshd[31269]: Accepted password for curi from 14.17.22.31 p
 Dec 12 19:20:39 LabSZ sshd[31275]: Accepted password for curi from 14.17.22.31 port 5158 ssh2
 Dec 12 19:23:51 LabSZ sshd[31474]: Invalid user xiawei from 115.71.16.143
 Dec 12 19:23:53 LabSZ sshd[31474]: Failed password for invalid user xiawei from 115.71.16.143 port 54132 ssh2
-Dec 12 19:31:09 LabSZ sshd[31479]: reverse mapping checking getaddrinfo for 190-174-14-217.speedy.com.ar [190.174.14.217] failed - POSSIBLE BREAK-IN ATTEMPT!
-Dec 12 21:02:41 LabSZ sshd[31596]: Address 123.16.30.186 maps to static.vnpt.vn, but this does not map back to the address - POSSIBLE BREAK-IN ATTEMPT!
+Dec 12 19:31:09 LabSZ sshd[31479]: reverse mapping checking getaddrinfo for 190-174-14-217.speedy.com.ar 
+                                   [190.174.14.217] failed - POSSIBLE BREAK-IN ATTEMPT!
+Dec 12 21:02:41 LabSZ sshd[31596]: Address 123.16.30.186 maps to static.vnpt.vn, but this does not map back 
+                                   to the address - POSSIBLE BREAK-IN ATTEMPT!
 ```
 
 ![SSH_Log_File_Example.png](docs/SSH_Log_File_Example.png "Example Excerpt of Log File")
