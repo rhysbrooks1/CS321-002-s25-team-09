@@ -688,7 +688,6 @@ Outputs:
 |Accepted-137.189.241.19  |2 |
 |Accepted-183.11.36.159   |2 |
 |Accepted-183.11.69.89    |2 |
-|----------------------------------------------------------------|
 
 #### 5.2.4. Search BTree Database in `SSHSearchDatabase`
 
