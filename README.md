@@ -399,8 +399,8 @@ the two fields that are used in each BTree):
 - Failed timestamps (`failed-timestamp`: Failed log entry along with its timestamp)
 - Invalid IPs (`invalid-ip`: Invalid log entry along with its IP address)
 - Invalid timestamps (`invalid-timestamp`: Invalid log entry along with its timestamp)
-- Reverse & Address IPs (`reverseaddress-ip`: Reverse or Address log entry along with its IP address)
-- Reverse & Address timestamps (`reverseaddress-timestamp`: Reverse or Address log entry along with its timestamp)
+- Reverse or Address IPs (`reverseaddress-ip`: Reverse or Address log entry along with its IP address)
+- Reverse or Address timestamps (`reverseaddress-timestamp`: Reverse or Address log entry along with its timestamp)
 - User's name and their IPs (`user-ip`: User name and IP address from all log entries)
 
 See below for a visual of the nine types of BTrees.
