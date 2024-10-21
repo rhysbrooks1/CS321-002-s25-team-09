@@ -223,9 +223,14 @@ analyze its results for patterns and specific activities.
 
 ## 2. Background
 
-If you are not familiar with internet, IP addresses, servers and clients, please watch [this short
-video](https://www.youtube.com/watch?v=5o8CwafCxnU&ab_channel=Code.org)(7m) to give you background
-that should be sufficient for this project.
+If you are not familiar with internet, IP addresses, servers and clients, please watch [this
+short video](https://www.youtube.com/watch?v=5o8CwafCxnU&ab_channel=Code.org)[7m] to give you
+sufficient background that for this project. If you are nt familiar with using SSH (Secure Shell),
+watch [this short video](https://www.youtube.com/watch?v=zlv9dI-9g1U&ab_channel=KarolCholewa)[2m]
+to see how it is useful.
+
+A ssh client connects to a ssh server software running on a remote system to get acess to that
+system. The ssh server tracks all access by writing the relevant information to a log file.
 
 Log files are text files that store events, messages, and processes within a system and/or network.
 They log information from users and are used to monitor server environments.  They can detect
@@ -256,21 +261,28 @@ Dec 12 21:02:41 LabSZ sshd[31596]: Address 123.16.30.186 maps to static.vnpt.vn,
                                    to the address - POSSIBLE BREAK-IN ATTEMPT!
 ```
 
-![SSH_Log_File_Example.png](docs/SSH_Log_File_Example.png "Example Excerpt of Log File")
-
 Each line shows a date and timestamp of an activity, the name of the server running the OpenSSH
 Daemon (sshd) (with its process id), and the type of action followed by the user's name, IP address,
 port number and SSH protocol version.
 
-With a quick scan of the log file, we can see that there are multiple occurrences of failed
+Note that the above example shows five types of actions denoted by the starting phrases:
+`Accepted`, `Failed`, `Invalid`, `reverse`, or `Address`. Note that the last two types of
+entries are the same for our analysis as they are both the same type of break-in attempts.
+The full log file has a few other types of entries but those are not useful for our analysis.
+
+With a quick scan of the above sample, we can see that there are multiple occurrences of failed
 passwords, accepted passwords, and invalid users.  Upon closer look we can see that the block of
 failed passwords happened within seconds, indicating that possibly a non-human entity (automated
 script or an AI agent) was hitting the server multiple times!
 
 The above log file sample is part of a larger [raw SSH log
-file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing)
-that forms the basis for our SSH log file parsing and analysis.  There are many
-types of log files but the one we will focus on for this project comes from
+file](https://drive.google.com/file/d/1JL-reDAedKBnw7jiz6iAaSxUwz6BwZil/view?usp=sharing) that
+forms the basis for our SSH log file parsing and analysis. The raw file has 653781 lines, which
+barely covers one month of logging at one server. Imagine how much larger this data would be
+if we were looking at data for one year for a few hundred servers! You may download this file
+and poke around in it.
+
+There are many types of log files but the one we will focus on for this project comes from
 [Zenodo-Loghub](https://zenodo.org/record/3227177#.ZEc9T-zMI-Q) dataset.
 
 
@@ -295,7 +307,24 @@ select few keywords to use within our B-Tree keys, it is easiest to strip the fi
 necessary items. Below is a snippet from a stripped version of the above log file that will be
 used to create the appropriate B-Trees.
 
-![Stripped_log_file.png](docs/Stripped_log_file.png "Stripped Example Log File")
+```
+12/12 18:46:17 Accepted suyuxin 218.18.43.243
+12/12 18:58:24 Invalid zouzhi 115.71.16.143
+12/12 18:58:26 Failed zouzhi 115.71.16.143 
+12/12 18:59:41 Invalid admin 223.155.239.92
+12/12 18:59:43 Failed admin 223.155.239.92
+12/12 18:59:45 Failed admin 223.155.239.92
+12/12 18:59:47 Failed admin 223.155.239.92
+12/12 18:59:48 Failed admin 223.155.239.92
+12/12 18:59:53 Failed admin 223.155.239.92
+12/12 19:16:22 Invalid support 103.79.141.173
+12/12 19:20:39 Accepted curi 14.17.22.31
+12/12 19:20:39 Accepted curi 14.17.22.31 
+12/12 19:23:51 Invalid xiawei 115.71.16.143
+12/12 19:23:53 Failed xiawei 115.71.16.143 
+12/12 19:31:09 reverse 190.174.14.217
+12/12 21:02:41 Address 123.16.30.186
+```
 
 Many keywords like `LabSZ`, `for`, `Dec`, `password`, and `sshd[xxxx]:` were removed, leaving only
 the necessary information for creating our B-Trees.  
