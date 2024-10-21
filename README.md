@@ -225,7 +225,7 @@ analyze its results for patterns and specific activities.
 
 If you are not familiar with internet, IP addresses, servers and clients, please watch [this
 short video](https://www.youtube.com/watch?v=5o8CwafCxnU&ab_channel=Code.org)[7m] to give you
-sufficient background that for this project. If you are not familiar with using SSH (Secure Shell),
+sufficient background for this project. If you are not familiar with using SSH (Secure Shell),
 watch [this short video](https://www.youtube.com/watch?v=zlv9dI-9g1U&ab_channel=KarolCholewa)[2m]
 to see how it is useful.
 
@@ -344,7 +344,7 @@ Once the raw SSH text file has been wrangled, the file should have the following
 Note that we have already done this for you and provided the wrangled log file
 (`data/SSH_Files/SSH_log.txt`) for you to use.  However, it is important for you to review the
 process we used to simplify the raw log file into the simplified version we use to build the
-BTrees for a a few reasons.
+BTrees for a few reasons.
 
 - If you want to do the extra credit part where you write a Java data wrangler class.
 - To understand how real life projects in cybersecurity, data science, and artificial intelligence
@@ -410,8 +410,8 @@ See below for a visual of the nine types of BTrees.
 Basically, each BTree has the key values along with their frequencies (the number of duplicates).
 Once we have a BTree for each type of activity, we will then search the BTrees for the top
 frequencies within each category and display those key values along with the frequencies. We
-will also traverse the tree and put the results in a SQL database to make it easier for an
-analyst to examine the data. We will also add a feature to dump the BTree into a dumpfile for
+will also traverse each tree and put the results into a SQL database to make it easier for an
+analyst to examine the data. We will also add a feature to dump each BTree into a dumpfile for
 testing purposes.
 
 
@@ -539,23 +539,22 @@ type. The name of the database file should be `SSHLogDB.db`
         - `0`: The output of the queries should be printed on the standard output stream. Any
         diagnostic messages, help and status messages must be printed on the standard error stream
 
-		- `1`: The program displays more verbose messages. For example, it prints the
-		`PriorityQueue`'s contents upon completion.
+		- `1`: The program displays more verbose messages as decided by the team.
 
     - It must support at least the following values for `SSHCreateBTree`:
 
         - `0`: Any diagnostic messages, help and status messages must be printed on standard
         error stream
 
-        - `1`: The program writes a text file named `dump-treetype.degree`,
-        ex. `dump-accepted-ip0`, containing the SSH key and corresponding frequency in an
+        - `1`: The program writes a text file named `dump-treetype.degree.txt`,
+        ex. `dump-accepted-ip.0.txt`, containing the SSH key and corresponding frequency in an
         inorder traversal, and has the following line format:
 
 ```log
 <SSH Key> <frequency>
 ```
 
-The following shows a segment of the dumpfile `dumps/dump-user-ip0` (it has a total of 5294 lines).
+The following shows a segment of the dumpfile `dumps/dump-user-ip.0.txt` (it has a total of 5294 lines).
 ```log
 huangqx-115.71.16.143 20
 huangt-183.136.169.234 2
@@ -572,8 +571,8 @@ The following displays what each main driver must output:
 
 | Class               | Output                                                                                                                                                                                               | 
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `SSHCreateBTree`    | - `SSH_log.txt.ssh.btree.<tree-type>.<degree>` file<br/>- `dump-<tree-type><degree>.txt` (`<debug>`=`1`) <br/>- `SSHLogDB.db` from the dump file (`<debug>`=`1`)<br/> |
-| `SSHSearchBTree`    | - `SQUERY-<tree-type>-<top-frequency>.txt`                                                                                                                                                             | 
+| `SSHCreateBTree`    | - `SSH_log.txt.ssh.btree.<tree-type>.<degree>` file<br/>- appropriate table in `SSHLogDB.db` <br/>- `dump-<tree-type>.<degree>.txt` (`<debug>`=`1`) <br/> |
+| `SSHSearchBTree`    | -  Output for the queries to standard out  |    
 | `SSHSearchDatabase` | - top `<SSH Key> <frequency>` to standard out stream                                                                                                                                                 |
 
 ### 5.2. Example Demonstration of Project
@@ -608,12 +607,12 @@ java -jar build/libs/SSHCreateBTree.jar --cache=1 --degree=0 --sshFile=SSH_log.t
 Assumes that the wrangled log file is in the `data/SSH_Files` folder.
 
 Outputs:
-- Dump text file: `dump-accepted-ip0`
+- Dump text file: `dump-accepted-ip.0.txt`
 - BTree Random-Access-File file: `SSH_log.txt.ssh.btree.accepted-ip.0`
 - Table name: `acceptedip` to `SSHLogDB.db`
 
 
-| Snippet of Dump file - `dump-accepted-ip0`:              |
+| Snippet of Dump file - `dump-accepted-ip.0.txt`:              |
 |----------------------------------------------------------|
 | ![Dump.png](docs/Dump.png "Example Excerpt of Log File") | 
 
