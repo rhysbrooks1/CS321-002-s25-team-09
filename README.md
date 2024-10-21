@@ -613,8 +613,8 @@ java -jar build/libs/SSHCreateBTree.jar --cache=1 --degree=0 --sshFile=SSH_log.t
 Assumes that the wrangled log file is in the `data/SSH_Files` folder.
 
 Outputs:
-- Dump text file: `dump-accepted-ip.0.txt`
 - BTree Random-Access-File file: `SSH_log.txt.ssh.btree.accepted-ip.0`
+- Dump text file: `dump-accepted-ip.0.txt`
 - Table name: `acceptedip` to `SSHLogDB.db`
 
 
@@ -635,11 +635,36 @@ java -jar build/libs/SSHSearchBTree.jar --cache=0 --degree=0 \
 Assumes that the query files are in `data/queries` folder.
 
 Outputs:
-- Search query text file: `SQUERY-accepted-ip25.txt`
+- Query output file: `QUERY-accepted-ip.0.txt`
 
-| SQuery file - `SQUERY-accepted-ip25.txt`:                      |
+| Query output file - `QUERY-accepted-ip.0.txt`:                      |
 |----------------------------------------------------------------|
-| ![Dump.png](docs/SQueryFile.png "Example Excerpt of Log File") |
+|Accepted-111.222.107.90  |25 |
+|Accepted-119.137.63.195  |14 |
+|Accepted-137.189.88.215  |12 |
+|Accepted-61.187.54.9     |12 |
+|Accepted-137.189.241.248 |11 |
+|Accepted-137.189.90.232  |10 |
+|Accepted-119.137.62.123  |9 |
+|Accepted-218.17.80.182   |7 |
+|Accepted-222.240.177.42  |7 |
+|Accepted-113.116.236.34  |6 |
+|Accepted-123.255.103.142 |5 |
+|Accepted-123.255.103.215 |5 |
+|Accepted-183.62.156.108  |5 |
+|Accepted-218.18.42.17    |5 |
+|Accepted-222.125.40.98   |5 |
+|Accepted-14.17.22.31     |4 |
+|Accepted-112.96.173.55   |3 |
+|Accepted-112.96.33.40    |3 |
+|Accepted-137.189.204.253 |3 |
+|Accepted-113.118.187.34  |2 |
+|Accepted-113.99.127.215  |2 |
+|Accepted-137.189.205.44  |2 |
+|Accepted-137.189.241.19  |2 |
+|Accepted-183.11.36.159   |2 |
+|Accepted-183.11.69.89    |2 |
+|----------------------------------------------------------------|
 
 #### 5.2.4. Search BTree Database in `SSHSearchDatabase`
 
