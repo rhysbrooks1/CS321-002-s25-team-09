@@ -218,8 +218,8 @@ In this Cybersecurity assignment, we will analyze server log files to better und
 in the network traffic.  We will look and analyze patterns, activities, and operations within
 a system's server and house the corresponding data using BTrees.   The amount of data that
 we have can be very large and any data structure is not likely to fit in memory. Hence BTrees
-is a good choice for the task at hand.  We will then store our findings in a SQL database and
-analyze its results for patterns and specific activities.
+is a good choice for the task at hand.  We will then store our findings fromthe various BTrees
+into a single SQL database and analyze its results for patterns and specific activities.
 
 ## 2. Background
 
@@ -448,7 +448,9 @@ In order to find the top `k` keys (by frequency), we will need a priority queue 
 programs. This is because the BTree is sorted by the key value and not by their frequencies. We
 created our own priority queue in Project 2, but for  this project we will use the [Priority
 Queue](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/PriorityQueue.html)
-class available from the standard library in Java.
+class available from the standard library in Java. The Priority Queue will have the frequency as its
+primary key and the BTree key as its secondary key (so the `compareTo` will use frequency first and
+then the BTree key next to ensure stable sorting).
 
 ## 5. Implementation
 We will create three (or four, if doing the extra credit part) programs:
@@ -458,7 +460,7 @@ form suitable for creating BTrees.
 
 - `SSHCreateBTree.java`: to **create a BTree** from a given wrangled SSH log file and outputs a query
 with all unique values found within the SSH log file as a Random-Access-File file of the BTree,
-a dump file (if applicable), and a SQL Database (if applicable).
+a dump file (if applicable), and a SQL database (if applicable).
 
 - `SSHSearchBTree.java` for **searching a specified BTree** for top occurring activity pairs. The
 search program assumes that the user specified the appropriate BTree and top frequency count to
