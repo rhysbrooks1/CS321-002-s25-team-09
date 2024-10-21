@@ -617,7 +617,7 @@ Outputs:
 - Dump text file: `dump-accepted-ip.0.txt`
 - Table name: `acceptedip` to `SSHLogDB.db`
 
-See below for a snippey of the dmp file  `dump-accepted-ip.0.txt`: 
+See below for a snippet of the dmp file  `dump-accepted-ip.0.txt`: 
 
 | Key | Frequency |
 |-------------------------|--------------------------------|
