@@ -480,11 +480,11 @@ java -jar build/libs/SSHCreateBTree.jar --cache=<0/1> --degree=<btree-degree> \
           --sshFile=<ssh-File> --type=<tree-type> [--cacheSize=<n>]  [--debug=<0|1>]
 
 java -jar build/libs/SSHSearchBTree.jar --cache=<0/1> --degree=<btree-degree> \
-          --btreefile=<btree-file> --queryfile=<query-file> --topfrequency=<10/25/50> \
+          --btreefile=<btree-file> --queryfile=<query-file> [--top-frequency=<10/25/50>] \
           [--cacheSize=<n>]  [--debug=<0|1>]
 
 java -jar build/libs/SSHSearchDatabase.jar --database=<sqlite-database-path> \
-          --searchqueryfile=<search-query-file>
+          --top-frequency=<10/25/50>
 ```
 
 **Note that the arguments can be provided in any order.** The backslash represents that the command
@@ -518,10 +518,12 @@ size of our BTree node on disk
 that will then be searched for in the specified BTree file of the same type. The strings are
 one per line and must align with the corresponding BTree file of the same type.
 
-- `<topfrequency>` is the most frequent occurring keys within a BTree (from the specified
-query file).  Gets either the top `10`,`25`, or `50` values.  Note that the BTree type:
-`accepted-ip` does not have enough values for `50` top values (i.e., total unique values for
-`accepted-ip` is `42`).
+- `<top-frequency>` is the most frequently occurring keys within a BTree type.  Gets either the top
+`10`,`25`, or `50` values.  Note that the BTree type: `accepted-ip` does not have enough values
+for `50` top values (i.e., total unique values for `accepted-ip` is `42`). For `SSHSearchBTree`, the
+top-frequency is an optional argument. If it is not specified, then we simply retunr the search for
+all keys in the `<query-file>`. Otherwise, we return the search for the top `<top-frequency>` keys
+among the ones specified in the `<query-file>`.
 
 - `[<cacheSize>]` is an optional argument, which is an integer between `100` and `10000` (inclusive)
 that represents the maximum number of `BTreeNode` objects that can be stored in the memory cache
@@ -529,12 +531,6 @@ that represents the maximum number of `BTreeNode` objects that can be stored in 
 - `<database>` the path to the SQL database created after BTree creation for a specific BTree
 type. The name of the database file should be `SSHLogDB.db`
 
-- `<searchqueryfile>` contains the same **top** SSH key pairs type (ex. `Accepted-20:48` and
-`Accepted-21:32`) that will then be searched for in the `.db` database file to a specific BTree
-database of the same type. The strings are one per line and must align with the corresponding
-`.db` BTree file of the same type outputted by SSHCreateBTree.  These files are to contain either
-`10`/`25`/`50` top keys depending on the specified `<topfrequency>` of the `SSHCreateBTree`
-output search query.
 
 - `[<debug>]` is an optional argument with a default value of zero
 
@@ -577,7 +573,7 @@ The following displays what each main driver must output:
 | Class               | Output                                                                                                                                                                                               | 
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `SSHCreateBTree`    | - `SSH_log.txt.ssh.btree.<tree-type>.<degree>` file<br/>- `dump-<tree-type><degree>.txt` (`<debug>`=`1`) <br/>- `SSHLogDB.db` from the dump file (`<debug>`=`1`)<br/> |
-| `SSHSearchBTree`    | - `SQUERY-<tree-type>-<topfrequency>.txt`                                                                                                                                                             | 
+| `SSHSearchBTree`    | - `SQUERY-<tree-type>-<top-frequency>.txt`                                                                                                                                                             | 
 | `SSHSearchDatabase` | - top `<SSH Key> <frequency>` to standard out stream                                                                                                                                                 |
 
 ### 5.2. Example Demonstration of Project
@@ -628,7 +624,7 @@ With arguments of:
 java -jar build/libs/SSHSearchBTree.jar --cache=0 --degree=0 \    
           --btreefile=SSH_log.txt.ssh.btree.accepted-time.0 \
           --queryfile=QUERY-accepted-time.txt \
-          --topfrequency=25 --cacheSize=10000 --debug=0
+          --top-frequency=25 --cacheSize=10000 --debug=0
 ```
 
 Assumes that the query files are in `data/queries` folder.
