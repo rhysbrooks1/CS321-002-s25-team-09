@@ -229,7 +229,7 @@ sufficient background that for this project. If you are not familiar with using 
 watch [this short video](https://www.youtube.com/watch?v=zlv9dI-9g1U&ab_channel=KarolCholewa)[2m]
 to see how it is useful.
 
-A SSH client connects to a SSH server software running on a remote system to get acess to that
+A SSH client connects to a SSH server software running on a remote system to get access to that
 system. The SSH server tracks all access by writing the relevant information to a log file.
 
 Log files are text files that store events, messages, and processes within a system and/or network.
@@ -349,7 +349,7 @@ BTrees for a a few reasons.
 - If you want to do the extra credit part where you write a Java data wrangler class.
 - To understand how real life projects in cybersecurity, data science, and artificial intelligence
   often require complex data wrangling.
-- To be exposed to using regula expressions in dealing with complex pattern matching in text.
+- To be exposed to using regular expressions in dealing with complex pattern matching in text.
 
 ### 3.1.1 Demo
 Here is a [demo](demo/Log-File-Wrangling-Demo.md) that provides a walk-through of using a text
@@ -521,7 +521,7 @@ one per line and must align with the corresponding BTree file of the same type.
 - `<top-frequency>` is the most frequently occurring keys within a BTree type.  Gets either the top
 `10`,`25`, or `50` values.  Note that the BTree type: `accepted-ip` does not have enough values
 for `50` top values (i.e., total unique values for `accepted-ip` is `42`). For `SSHSearchBTree`, the
-top-frequency is an optional argument. If it is not specified, then we simply retunr the search for
+top-frequency is an optional argument. If it is not specified, then we simply return the search for
 all keys in the `<query-file>`. Otherwise, we return the search for the top `<top-frequency>` keys
 among the ones specified in the `<query-file>`.
 
@@ -613,9 +613,9 @@ Outputs:
 - Table name: `acceptedip` to `SSHLogDB.db`
 
 
-| Snippet of Dump file - `dump-accepted-ip0`:              | Snippet of Query file - `QUERY-accepted-ip.txt`:               |
-|----------------------------------------------------------|----------------------------------------------------------------|
-| ![Dump.png](docs/Dump.png "Example Excerpt of Log File") | ![QueryFile.png](docs/Query.png "Example Excerpt of Log File") |
+| Snippet of Dump file - `dump-accepted-ip0`:              |
+|----------------------------------------------------------|
+| ![Dump.png](docs/Dump.png "Example Excerpt of Log File") | 
 
 
 #### 5.2.3. Search BTree in `SSHSearchBTree`
