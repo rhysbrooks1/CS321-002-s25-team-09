@@ -114,6 +114,11 @@ $ ./gradlew createJarSSHSearchBTree
 $ java -jar build/libs/SSHSearchBTree.jar <arguments>
 ```
 
+Run the `main` method from `SSHSearchDatabase.java` and pass the [appropriate `<arguments>`](#51-program-arguments):
+```bash
+$ ./gradlew createJarSSHSearchDatabase
+$ java -jar build/libs/SSHSearchDatabase.jar <arguments>
+```
 
 ## Run the project from an IDE: IntelliJ IDEA, VSCode or Eclipse
 ### Eclipse
