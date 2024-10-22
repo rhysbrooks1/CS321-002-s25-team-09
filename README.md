@@ -216,7 +216,7 @@ Here is a sample project log from a team from a previous semester:
 In this Cybersecurity assignment, we will analyze server log files to better understand patterns in
 the network traffic. For example, this can help us determine what locations do attacks most often
 originate from, what times are the most common for attacks, among other possible insights. We
-will look and analyze patterns, activities, and operations within a system's server and then
+will look for and analyze patterns, activities, and operations within a server's log and then
 store the corresponding data using multiple BTrees (separate BTrees for different patterns).
 
 The amount of data that we have can be very large and any data structure is not likely to fit in
@@ -290,8 +290,9 @@ There are many types of log files but the one we will focus on for this project 
 
 
 To get the big picture of log file analysis,  please watch the following helpful video that shows
-a simple approach for analyzing log files for specific patterns and attacks: [Basic Approach:
-Analyzing Files Log For Attacks (2021)](https://www.youtube.com/watch?v=-T6oue5E4KQ)[9m]
+how to use Linux command line tools for analyzing log files for specific patterns and attacks: [Basic Approach:
+Analyzing Log Files For Attacks](https://www.youtube.com/watch?v=L2BFDyYknIg&ab_channel=Hackpens)[15m]
+(yes, this is an time-warped advertisement for CS153 :-))
 
 
 ## 3. Specifications
