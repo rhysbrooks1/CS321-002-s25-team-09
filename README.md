@@ -709,7 +709,7 @@ java -jar build/libs/SSHSearchDatabase.jar --database=SSHLogDB.db \
 Outputs to standard output stream:
 
 | Key | Frequency                            |
-|--------------------------------------------------------------|
+|---------------|----------------------------|
 |Accepted-14:20 | 5 |
 |Accepted-18:46 | 4 |
 |Accepted-00:02 | 3 |
