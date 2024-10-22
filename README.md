@@ -898,18 +898,20 @@ run and compare results using the four test scripts as follows.
 
 The `create-btrees.sh` script creates all nine BTree types from the SSH Log file. As a side effect,
 it also creates the dump files and the SQL database that contains tables for each of the nine types
-of key values.
+of key values. The script will move your BTrees, dump files to the appropriate subfolder in the
+folder `output` in the repo.
 
 The `check-dump-files.sh` compares the dump files from our code to the reference dump files.
 
-The `search-btrees.sh` script searches all nine BTrees from the BTree files for all the  key values
-found in the nine BTrees as well as just the top 25 entries.  
+The `search-btrees.sh` script searches all nine BTrees from the BTree files for all the  key
+values found in the nine BTrees as well as just the top 25 entries.  The script will store your
+output to the subfolder `btree-search` under the `output` folder.
 
 The `check-btree-search.sh` script compares the results of search queries from searching
 the BTree to the reference results.
 
-The `search-db.sh` script searches the database for the top 25 entries for each of the key
-value types.
+The `search-db.sh` script searches the database for the top 25 entries for each of the key value
+types.  The script will store your output to the subfolder `db-search` under the `output` folder.
 
 The `check-db-search.sh` script compares the results from the database to the reference results.
 
@@ -949,6 +951,7 @@ Progress reports are confidential.
 
 ## 12. Submission
 Before submission, make sure that you:
+- `BTree-Database-Analysis.md` is complete
 - that your `README-submission.md` file is complete!
 - can [compile and run the program from the command line](#compile-and-run-the-project-from-the-command-line) and obtain the expected results 
 - run the [test scripts](#9-test-scripts)
