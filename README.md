@@ -872,6 +872,25 @@ Four test scripts are provided at the top-level of the project (for integration 
 compare your results to the results files mentioned above.
 
 ```bash
+
+
+The `check-btree-search.sh` script compares the results of search queries from searching
+the BTree to the reference results.
+
+The `search-db.sh` script searches the database for the top 25 entries for each of the key
+value types.
+
+The `check-db-search.sh` script compares the results from the database to the reference results.
+
+
+You can use the test scripts to run and compare results using the four test scripts as follows.
+
+```bash
+
+./gradlew createJarSSHCreateBTree
+./gradlew createJarSSHSearchBTree
+./gradlew createJarSSHSearchDatabase
+
 ./create-btrees.sh 
 ./check-dump-files.sh 
 
@@ -900,26 +919,8 @@ value types.
 
 The `check-db-search.sh` script compares the results from the database to the reference results.
 
-
-You can use the test scripts to run and compare results using the four test scripts as follows.
-
-```bash
-./gradlew createJarSSHCreateBTree
-./gradlew createJarSSHSearchBTree
-./gradlew createJarSSHSearchDatabase
-
-./create-btrees.sh
-./check-dumpfiles.sh
-
-./search-btrees.sh
-./check-btree-search.sh 
-
-./search-db.sh
-./check-db-search.sh
-```
-
-The instructors will use these test scripts for the final testing of your project.  Start off
-by running tests on your machine. 
+The instructors will also use these test scripts for the final testing of your project.  Start off
+by running the tests on your machine. 
 
 ## 10. Testing in the Cloud
 
