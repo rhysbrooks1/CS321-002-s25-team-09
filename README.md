@@ -289,11 +289,15 @@ There are many types of log files but the one we will focus on for this project 
 [Zenodo-Loghub](https://zenodo.org/record/3227177#.ZEc9T-zMI-Q) dataset.
 
 
-To get the big picture of log file analysis,  please watch the following
+To get a feel for log file analysis,  please watch the following
 helpful video that shows how to use Linux command line tools for analyzing
 log files for specific patterns and attacks: 
 [Analyzing Log Files For Attacks](https://www.youtube.com/watch?v=L2BFDyYknIg&ab_channel=Hackpens)[15m] 
 (yes, this is an time-warped advertisement for CS153 :-))
+
+However, the approach shown in video will be slow if we had hundreds of large log files.
+Writing a custom program that not only processes the log files but converts them into a data
+structure (and database) allows us to do faster analysis.
 
 
 ## 3. Specifications
