@@ -873,26 +873,21 @@ compare your results to the results files mentioned above.
 
 ```bash
 ./create-btrees.sh 
-Usage:  create-btrees.sh
-
-./check-dumpfiles.sh 
-Usage:  check-dump-files.sh
+./check-dump-files.sh 
 
 ./search-btrees.sh 
-Usage:  search-btrees.sh
-
 ./check-btree-search.sh 
-Usage:  check-squeries.sh 
 
 ./search-db.sh
 ./check-db-search.sh
+
 ```
 
 The `create-btrees.sh` script creates all nine BTree types from the SSH Log file. As a side effect,
 it also creates the dump files and the SQL database that contains tables for each of the nine types
 of key values.
 
-The `check-dumpfiles.sh` compares the dump files from our code to the reference dump files.
+The `check-dump-files.sh` compares the dump files from our code to the reference dump files.
 
 The `search-btrees.sh` script searches all nine BTrees from the BTree files for all the  key values
 found in the nine BTrees as well as just the top 25 entries.  
@@ -900,7 +895,7 @@ found in the nine BTrees as well as just the top 25 entries.
 The `check-btree-search.sh` script compares the results of search queries from searching
 the BTree to the reference results.
 
-The `search-db-search.sh` script searches the database for the top 25 entries for each of the key
+The `search-db.sh` script searches the database for the top 25 entries for each of the key
 value types.
 
 The `check-db-search.sh` script compares the results from the database to the reference results.
