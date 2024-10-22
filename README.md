@@ -868,25 +868,11 @@ The expected dump files and query results are provided in the folders:
 [results/btree-search](results/btree-search)
 [results/db-search](results/db-search)
 
-Four test scripts are provided at the top-level of the project (for integration testing). These
-compare your results to the results files mentioned above.
+Six test scripts are provided at the top-level of the project (for integration testing). These
+compare your results to the results files mentioned above.  You can use the test scripts to
+run and compare results using the four test scripts as follows.
 
 ```bash
-
-
-The `check-btree-search.sh` script compares the results of search queries from searching
-the BTree to the reference results.
-
-The `search-db.sh` script searches the database for the top 25 entries for each of the key
-value types.
-
-The `check-db-search.sh` script compares the results from the database to the reference results.
-
-
-You can use the test scripts to run and compare results using the four test scripts as follows.
-
-```bash
-
 ./gradlew createJarSSHCreateBTree
 ./gradlew createJarSSHSearchBTree
 ./gradlew createJarSSHSearchDatabase
