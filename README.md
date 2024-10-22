@@ -213,12 +213,16 @@ Here is a sample project log from a team from a previous semester:
 <hr/>
 
 ## 1. Introduction
-In this Cybersecurity assignment, we will analyze server log files to better understand patterns
-in the network traffic.  We will look and analyze patterns, activities, and operations within
-a system's server and house the corresponding data using BTrees.   The amount of data that
-we have can be very large and any data structure is not likely to fit in memory. Hence BTrees
-is a good choice for the task at hand.  We will then store our findings fromthe various BTrees
-into a single SQL database and analyze its results for patterns and specific activities.
+In this Cybersecurity assignment, we will analyze server log files to better understand patterns in
+the network traffic. For example, this can help us determine what locations do attacks most often
+originate from, what times are the most common for attacks, among other possible insights. We
+will look and analyze patterns, activities, and operations within a system's server and then
+store the corresponding data using multiple BTrees (separate BTrees for different patterns).
+
+The amount of data that we have can be very large and any data structure is not likely to fit in
+memory. Hence, BTrees are a good choice for the task at hand.  We will then store our findings
+from the various BTrees into a single SQL database and analyze its results for patterns and
+specific activities.
 
 ## 2. Background
 
