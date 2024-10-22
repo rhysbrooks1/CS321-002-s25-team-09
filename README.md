@@ -289,9 +289,10 @@ There are many types of log files but the one we will focus on for this project 
 [Zenodo-Loghub](https://zenodo.org/record/3227177#.ZEc9T-zMI-Q) dataset.
 
 
-To get the big picture of log file analysis,  please watch the following helpful video that shows
-how to use Linux command line tools for analyzing log files for specific patterns and attacks: [Basic Approach:
-Analyzing Log Files For Attacks](https://www.youtube.com/watch?v=L2BFDyYknIg&ab_channel=Hackpens)[15m]
+To get the big picture of log file analysis,  please watch the following
+helpful video that shows how to use Linux command line tools for analyzing
+log files for specific patterns and attacks: 
+[Analyzing Log Files For Attacks](https://www.youtube.com/watch?v=L2BFDyYknIg&ab_channel=Hackpens)[15m] 
 (yes, this is an time-warped advertisement for CS153 :-))
 
 
@@ -584,7 +585,7 @@ The following displays what each main driver must output:
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `SSHCreateBTree`    | - `SSH_log.txt.ssh.btree.<type>.<degree>` file (in the current folder)<br/>- appropriately named table in `SSHLogDB.db` (database is in current folder) <br/>- `dump-<type>.<degree>.txt` (in the current folder)   if `<debug>`=`1` <br/> |
 | `SSHSearchBTree`    | -  Output for the queries to standard out  |    
-| `SSHSearchDatabase` | - top `<SSH Key> <frequency>` to standard out |
+| `SSHSearchDatabase` | - top 10/25/50 `<SSH Key> <frequency>` to standard out |
 
 ### 5.2. Example Demonstration of Project
 
@@ -607,6 +608,7 @@ folder.  Then compare the output file with the wrangled file that we have provid
 diff SSH_log.txt data/SSH_Files/SSH_log.txt
 ```
 
+If it matches, there is no output (good news is no news).
 
 #### 5.2.2. Create one BTree using `SSHCreateBTree`
 Using the following command: 
@@ -665,6 +667,7 @@ Assumes that the query files are in `data/queries` folder.
 
 Outputs:
 - Query output file: `QUERY-accepted-ip.0.txt`
+- Note that the outut is forted first by the frequency and then alphabetically by the key.
 
 | Key                     |  Frequency |
 |--------------------------------------------------|------------|
@@ -699,15 +702,38 @@ Outputs:
 With arguments of:
 ```bash
 java -jar build/libs/SSHSearchDatabase.jar --database=SSHLogDB.db \
-          --top-frequency=25 
+          --type=accepted-time --top-frequency=25 
 ```
-
 
 Outputs to standard output stream:
 
-| Prints to standard output stream:                            |
+| Key | Frequency                            |
 |--------------------------------------------------------------|
-| ![Dump.png](docs/DataBase.png "Example Excerpt of Log File") |
+|Accepted-14:20 | 5 |
+|Accepted-18:46 | 4 |
+|Accepted-00:02 | 3 |
+|Accepted-15:45 | 3 |
+|Accepted-09:17 | 2 |
+|Accepted-09:21 | 2 |
+|Accepted-09:22 | 2 |
+|Accepted-10:39 | 2 |
+|Accepted-11:40 | 2 |
+|Accepted-12:53 | 2 |
+|Accepted-14:42 | 2 |
+|Accepted-15:16 | 2 |
+|Accepted-16:14 | 2 |
+|Accepted-17:00 | 2 |
+|Accepted-18:03 | 2 |
+|Accepted-19:11 | 2 |
+|Accepted-19:20 | 2 |
+|Accepted-19:22 | 2 |
+|Accepted-19:26 | 2 |
+|Accepted-20:15 | 2 |
+|Accepted-00:03 | 1 |
+|Accepted-00:11 | 1 |
+|Accepted-00:17 | 1 |
+|Accepted-00:22 | 1 |
+|Accepted-00:43 | 1 |
 
 
 ### 5.3. Additional Implementation Remarks
@@ -775,7 +801,8 @@ searched query list outputted by `SSHSearchBTree` to get the top frequencies of 
 
 ```bash
 $ ./gradlew createJarSSHSearchDatabase
-$ java -jar build/libs/SSHSearchDatabase.jar --database=<SQLite-database-path> --top-frequency=<10/25/50>
+$ java -jar build/libs/SSHSearchDatabase.jar --type=<tree-type> --database=<SQLite-database-path> \
+            --top-frequency=<10/25/50>
 ```
 
 We will use the embedded SQLite database for this project.  The SQLite database is fully contained
@@ -836,8 +863,9 @@ The wrangled SSH Log file is provided in the folder:
 [data/SSH_Files](https://github.com/BoiseState/CS321_Cybersecurity/tree/master/data/SSH_Files).
 
 The expected dump files and query results are provided in the folders:
-[results/dumpfiles](results/dumpfiles),
-[results/squery-results](results/squery-results)
+[results/dump-files](results/dump-files),
+[results/btree-search](results/btree-search)
+[results/db-search](results/db-search)
 
 Four test scripts are provided at the top-level of the project (for integration testing). These
 compare your results to the results files mentioned above.
@@ -847,20 +875,35 @@ compare your results to the results files mentioned above.
 Usage:  create-btrees.sh
 
 ./check-dumpfiles.sh 
-Usage:  check-dumpfiles.sh
+Usage:  check-dump-files.sh
 
 ./search-btrees.sh 
 Usage:  search-btrees.sh
 
-./check-squeries.sh 
+./check-btree-search.sh 
 Usage:  check-squeries.sh 
+
+./search-db.sh
+./check-db-search.sh
 ```
 
-The `create-btrees.sh` script creates all nine BTree types from the SSH Log file.
+The `create-btrees.sh` script creates all nine BTree types from the SSH Log file. As a side effect,
+it also creates the dump files and the SQL database that contains tables for each of the nine types
+of key values.
+
 The `check-dumpfiles.sh` compares the dump files from our code to the reference dump files.
-The `search-btrees.sh` script searches all nine BTrees from the BTree files for the top 25
-entries.  The `check-squeries.sh` script compares the results of search queries from searching
-the BTree to our program with the reference results.
+
+The `search-btrees.sh` script searches all nine BTrees from the BTree files for all the  key values
+found in the nine BTrees as well as just the top 25 entries.  
+
+The `check-btree-search.sh` script compares the results of search queries from searching
+the BTree to the reference results.
+
+The `search-db-search.sh` script searches the database for the top 25 entries for each of the key
+value types.
+
+The `check-db-search.sh` script compares the results from the database to the reference results.
+
 
 You can use the test scripts to run and compare results using the four test scripts as follows.
 
