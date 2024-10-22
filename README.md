@@ -950,11 +950,11 @@ It is expected that each team should have at least one meeting every week.
 Progress reports are confidential.
 
 ## 12. Submission
-Before submission, make sure that you:
+Before submission, make sure that:
 - `BTree-Database-Analysis.md` is complete
-- that your `README-submission.md` file is complete!
-- can [compile and run the program from the command line](#compile-and-run-the-project-from-the-command-line) and obtain the expected results 
-- run the [test scripts](#9-test-scripts)
-- add a note in your `README-submission.md` that the team is done and then commit and push.
+- `README-submission.md` file is complete!
+- you can [compile and run the program from the command line](#compile-and-run-the-project-from-the-command-line) and obtain the expected results 
+- you run the [test scripts](#9-test-scripts)
+- to add a note in your `README-submission.md` that the team is done and then commit and push.
 
 Make sure the [instructor and the teaching assistant(s) have access to the repository](#one-time-team-setup).
