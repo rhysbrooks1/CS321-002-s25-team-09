@@ -8,9 +8,11 @@
 | TBD       | TBD        | TBD              |
 
 # Test Results
-How many of the dumpfiles matched (using the check-dumpfiles.sh script)?
+How many of the dumpfiles matched (using the check-dump-files.sh script)?
 
-How many of the query files results matched (using the check-squeries.sh script)?
+How many of the query files results matched (using the check-btree-search.sh script)?
+
+How many of the query files results matched (using the check-db-search.sh script)?
 
 
 # AWS Notes
