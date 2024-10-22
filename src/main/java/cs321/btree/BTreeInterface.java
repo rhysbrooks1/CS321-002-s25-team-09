@@ -44,7 +44,7 @@ public interface BTreeInterface {
      * following the B-Tree insertion algorithm.
      *
      * @param obj
-     *            A TreeObject representing a DNA string
+     *            A TreeObject representing a DNA string.
      *
      */
     void insert(TreeObject obj) throws IOException;
@@ -52,10 +52,20 @@ public interface BTreeInterface {
     /**
      * Print out all objects in the given BTree in an inorder traversal to a file.
      *
-     * @param out PrintWriter object representing output
+     * @param out PrintWriter object representing output.
      */
     void dumpToFile(PrintWriter out) throws IOException;
 
+    /**
+     * Dump out all objects in the given BTree in an inorder traversal to a table in the database.
+     *
+     * If the provided database already exists, then the table is added. If the table already exists,
+     * then the table is replaced.
+     *
+     * @param dbName String referring to the name of the database.
+     * @param tableName String referring to the table of the database.
+     */
+    void dumpToDatabase(String dbName, String tableName) throws IOException;
 
     /**
      * Searches for a sequence in the given BTree.
