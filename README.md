@@ -293,7 +293,7 @@ To get a feel for log file analysis,  please watch the following
 helpful video that shows how to use Linux command line tools for analyzing
 log files for specific patterns and attacks: 
 [Analyzing Log Files For Attacks](https://www.youtube.com/watch?v=L2BFDyYknIg&ab_channel=Hackpens)[15m] 
-(yes, this is an time-warped advertisement for CS153 :-))
+(yes, this is a time-warped advertisement for CS153 :-))
 
 However, the approach shown in video will be slow if we had hundreds of large log files.
 Writing a custom program that not only processes the log files but converts them into a data
@@ -492,7 +492,8 @@ java -jar build/libs/SSHDataWrangler.jar --rawSshFile=<raw-ssh-file> \
           --sshFile=<wrangled-ssh-file>
 
 java -jar build/libs/SSHCreateBTree.jar --cache=<0/1> --degree=<btree-degree> \
-          --sshFile=<ssh-File> --type=<tree-type> [--cache-size=<n>]  [--debug=<0|1>]
+          --sshFile=<ssh-File> --type=<tree-type> [--cache-size=<n>] \
+          --database=<yes/no> [--debug=<0|1>]
 
 java -jar build/libs/SSHSearchBTree.jar --cache=<0/1> --degree=<btree-degree> \
           --btree-file=<btree-filename> --query-file=<query-fileaname> \
@@ -534,6 +535,9 @@ size of our BTree node on disk
 - `<query-file>` contains the same SSH key pairs type (e.g., `Accepted-20:48` and `Accepted-21:32`)
 that will then be searched for in the specified BTree file of the same type. The strings are
 one per line and must align with the corresponding BTree file of the same type
+
+- `<database>` allows the user to specify whether to create/add to `SSHLogDB.db` from the
+  `SSHCreateBTree` program
 
 - `<top-frequency>` is the most frequently occurring keys within a BTree type.  Gets either the top
 `10`,`25`, or `50` values.  Note that the BTree type: `accepted-ip` does not have enough values
@@ -619,7 +623,7 @@ If it matches, there is no output (good news is no news).
 Using the following command: 
 ```bash
 java -jar build/libs/SSHCreateBTree.jar --cache=1 --degree=0 --sshFile=SSH_log.txt \
-          --type=accepted-time --cache-size=2000 --debug=1
+          --type=accepted-time --database=yes --cache-size=2000 --debug=1
 ```
 
 Assumes that the wrangled log file is in the `data/SSH_Files` folder.
@@ -672,7 +676,7 @@ Assumes that the query files are in `data/queries` folder.
 
 Outputs:
 - Query output file: `QUERY-accepted-ip.0.txt`
-- Note that the outut is forted first by the frequency and then alphabetically by the key.
+- Note that the outut is sorted first by the frequency and then alphabetically by the key.
 
 | Key                     |  Frequency |
 |--------------------------------------------------|------------|
@@ -841,14 +845,14 @@ Below represents the table for analyzing a select few BTrees for their top
 results in their corresponding database and the questions to answer in a file named
 [`BTree-Database-Analysis.md`](BTree-Database-Analysis.md) that you will add to your project.
 
-| Tree Type             | degree | cache | cache-size | debug | Question:                                                                                           |
-|-----------------------|--------|-------|------------|-------|-----------------------------------------------------------------------------------------------------|
-| `accepted-ip`         | 100    | yes   | 10000      | 1     | What is the most common first three IP digits in the top 10 entries? (`137` at three times)         |
-| `invalid-time`        | 100    | yes   | 10000      | 1     | What is the range (highest-lowest) of the top 25 entries? (`55`-`42`=`13`)                          |
-| `failed-ip`           | 100    | yes   | 10000      | 1     | What is the first three digits of the top 2 entries of 50 total entries? (`183`)                    |
-| `reverseaddress-ip`   | 100    | yes   | 10000      | 1     | Is the top entry `reverse` or `Address` type in the top 25 entries? (`reverse`)                     |
-| `reverseaddress-time` | 100    | yes   | 10000      | 1     | Which hour was the most predominant for a reverse break in attempt in the top 25 entries? (`11:00`) |
-| `user-ip`             | 100    | yes   | 10000      | 1     | Who is the predominant user in the top 25 entries? (`root`)                                        |
+| Tree Type             | degree | Question:                                                                                           |
+|-----------------------|--------|-------------------------------------------------------------------------|
+| `accepted-ip`         | 100    | What is the most common first three IP digits in the top 10 entries? (`137` at three times)         |
+| `invalid-time`        | 100    | What is the range (highest-lowest) of the top 25 entries? (`55`-`42`=`13`)                          |
+| `failed-ip`           | 100    | What is the first three digits of the top 2 entries of 50 total entries? (`183`)                    |
+| `reverseaddress-ip`   | 100    | Is the top entry `reverse` or `Address` type in the top 25 entries? (`reverse`)                     |
+| `reverseaddress-time` | 100    | Which hour was the most predominant for a reverse break in attempt in the top 25 entries? (`11:00`) |
+| `user-ip`             | 100    | Who is the predominant user in the top 25 entries? (`root`)                    |
 
 
 
