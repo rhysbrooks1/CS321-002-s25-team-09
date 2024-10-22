@@ -529,14 +529,14 @@ size of our BTree node on disk
 
 - `<query-file>` contains the same SSH key pairs type (e.g., `Accepted-20:48` and `Accepted-21:32`)
 that will then be searched for in the specified BTree file of the same type. The strings are
-one per line and must align with the corresponding BTree file of the same type.
+one per line and must align with the corresponding BTree file of the same type
 
 - `<top-frequency>` is the most frequently occurring keys within a BTree type.  Gets either the top
 `10`,`25`, or `50` values.  Note that the BTree type: `accepted-ip` does not have enough values
 for `50` top values (i.e., total unique values for `accepted-ip` is `42`). For `SSHSearchBTree`, the
 top-frequency is an optional argument. If it is not specified, then we simply return the search for
 all keys in the `<query-file>`. Otherwise, we return the search for the top `<top-frequency>` keys
-among the ones specified in the `<query-file>`.
+among the ones specified in the `<query-file>`
 
 - `[<cache-size>]` is an optional argument, which is an integer between `100` and `10000` (inclusive)
 that represents the maximum number of `BTreeNode` objects that can be stored in the memory cache
@@ -552,7 +552,7 @@ type. The name of the database file should be `SSHLogDB.db`
         - `0`: The output of the queries should be printed on the standard output stream. Any
         diagnostic messages, help and status messages must be printed on the standard error stream
 
-		- `1`: The program displays more verbose messages as decided by the team.
+		- `1`: The program displays more verbose messages as decided by the team
 
     - It must support at least the following values for `SSHCreateBTree`:
 
