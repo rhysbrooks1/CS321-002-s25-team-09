@@ -491,11 +491,11 @@ java -jar build/libs/SSHCreateBTree.jar --cache=<0/1> --degree=<btree-degree> \
           --sshFile=<ssh-File> --type=<tree-type> [--cache-size=<n>]  [--debug=<0|1>]
 
 java -jar build/libs/SSHSearchBTree.jar --cache=<0/1> --degree=<btree-degree> \
-          --btree-file=<btree-filename> --query-file=<query-fileaname> [--top-frequency=<10/25/50>] \
-          [--cache-size=<n>]  [--debug=<0|1>]
+          --btree-file=<btree-filename> --query-file=<query-fileaname> \
+          [--top-frequency=<10/25/50>] [--cache-size=<n>]  [--debug=<0|1>]
 
-java -jar build/libs/SSHSearchDatabase.jar --type=<tree-type> --database=<sqlite-database-path> \
-          --top-frequency=<10/25/50>
+java -jar build/libs/SSHSearchDatabase.jar --type=<tree-type> \
+          --database=<sqlite-database-path> --top-frequency=<10/25/50>
 ```
 
 **Note that the arguments can be provided in any order.** The backslash represents that the command
