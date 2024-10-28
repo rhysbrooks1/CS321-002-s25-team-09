@@ -71,7 +71,7 @@ public interface BTreeInterface {
      * @param key
      *            The key value to search for.
      */
-    TreeObject search(long key) throws IOException;
+    TreeObject search(String key) throws IOException;
 
 
 	/**
@@ -79,6 +79,6 @@ public interface BTreeInterface {
      *
      * @param key the key to be deleted
      */
-    void delete(long key);
+    void delete(String key);
 
 }

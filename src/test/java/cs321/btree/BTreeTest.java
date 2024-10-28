@@ -129,12 +129,12 @@ public class BTreeTest {
 
         BTree b = new BTree(2, testFilename);
 
-        b.insert(new TreeObject(1));
+        b.insert(new TreeObject("1"));
 
         assertEquals(1, b.getSize());
         assertEquals(0, b.getHeight());
 
-        assertTrue(validateInserts(b, new long[]{1}));
+        assertTrue(validateInserts(b, new String[]{"1"}));
     }
 
     /**
@@ -148,11 +148,11 @@ public class BTreeTest {
 
         BTree b = new BTree(2, testFilename);
 
-        long[] input = new long[10];
+        String[] input = new String[10];
 
         for (int i = 0; i < 10; i++) {
-            input[i] = i;
-            b.insert(new TreeObject(i));
+            input[i] = i + "";
+            b.insert(new TreeObject(i + ""));
         }
 
         assertEquals(10, b.getSize());
@@ -173,11 +173,11 @@ public class BTreeTest {
 
         BTree b = new BTree(2, testFilename);
 
-        long[] input = new long[10];
+        String[] input = new String[10];
 
         for (int i = 10; i > 0; i--) {
-            input[10 - i] = i;
-            b.insert(new TreeObject(i));
+            input[10 - i] = i + "";
+            b.insert(new TreeObject(i + ""));
         }
 
         assertEquals(10, b.getSize());
@@ -200,13 +200,13 @@ public class BTreeTest {
         BTree b = new BTree(2, testFilename);
 
         for (int i = 0; i < 10; i++) {
-            b.insert(new TreeObject(1));
+            b.insert(new TreeObject(1 + ""));
         }
 
         assertEquals(1, b.getSize());
         assertEquals(0, b.getHeight());
 
-        assertTrue(validateInserts(b, new long[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));
+        assertTrue(validateInserts(b, new String[]{"1", "1", "1", "1", "1", "1", "1", "1", "1", "1"}));
     }
 
 
@@ -221,11 +221,11 @@ public class BTreeTest {
 
         BTree b = new BTree(2, testFilename);
 
-        long[] input = new long[10000];
+        String[] input = new String[10000];
 
         for (int i = 0; i < 10000; i++) {
-            input[i] = i;
-            b.insert(new TreeObject(i));
+            input[i] = i + "";
+            b.insert(new TreeObject(i + ""));
         }
 
         assertEquals(10000, b.getSize());
@@ -247,8 +247,7 @@ public class BTreeTest {
 
         BTree b = new BTree(4, testFilename);
 
-        //                        A  D  F  H   L   N   P  B
-        long[] input = new long[]{1, 4, 6, 8, 12, 14, 16, 2};
+        String[] input = new String[]{"A", "D", "F", "H", "L", "N", "P", "B"};
 
         for (int i = 0; i < input.length - 1; i++) {
             b.insert(new TreeObject(input[i]));
@@ -278,7 +277,7 @@ public class BTreeTest {
 
         BTree b = new BTree(2, testFilename);
 
-        TreeObject t = b.search(1L);
+        TreeObject t = b.search("1");
 
         assertNull(t);
 
@@ -295,7 +294,7 @@ public class BTreeTest {
     @Test
     public void testSearchOneKey() throws BTreeException, IOException {
 
-        long key = 1L;
+        String key = "1";
         TreeObject t = new TreeObject(key);
 
         BTree b = new BTree(2, testFilename);
@@ -313,7 +312,7 @@ public class BTreeTest {
      * More complex search test for searching recursively.
      * Test inserting a duplicate into a node that is not a leaf and has
      * a full child.
-     * Assertion is that TreeObject with key 'A' (1) has been found
+     * Assertion is that TreeObject with key 'A' has been found
      *
      * @throws BTreeException
      * @throws IOException
@@ -323,15 +322,15 @@ public class BTreeTest {
 
         BTree b = new BTree(2, testFilename); //Different degree than CLRS 18.6!
 
-        b.insert(new TreeObject(1)); //A
-        b.insert(new TreeObject(4)); //D
-        b.insert(new TreeObject(6)); //F
-        b.insert(new TreeObject(8)); //H
-        b.insert(new TreeObject(12)); //L
+        b.insert(new TreeObject("A"));
+        b.insert(new TreeObject("D"));
+        b.insert(new TreeObject("F"));
+        b.insert(new TreeObject("H"));
+        b.insert(new TreeObject("L"));
 
-        TreeObject obj = b.search(1); //search for 'A'
+        TreeObject obj = b.search("A");
 
-        assertEquals(0, obj.compareTo(new TreeObject(1)));
+        assertEquals("A", obj.getKey());
     }
 
     /**
@@ -343,7 +342,7 @@ public class BTreeTest {
     @Test
     public void testTreeObjectCount() throws BTreeException, IOException {
 
-        long key = 1L;
+        String key = "A";
 
         BTree b = new BTree(2, testFilename);
 
@@ -363,7 +362,7 @@ public class BTreeTest {
     @Test
     public void testCountingTreeObjectDuplicates() throws BTreeException, IOException {
 
-        long duplicateKey = 1L;
+        String duplicateKey = "A";
 
         BTree b = new BTree(2, testFilename);
 
@@ -381,8 +380,8 @@ public class BTreeTest {
      */
     @Test
     public void testSettingTreeObjectCount() {
-        long key = 1L;
-        int count = 12;
+        String key = "A";
+        long count = 12;
 
         TreeObject t = new TreeObject(key, count);
 
@@ -396,7 +395,7 @@ public class BTreeTest {
      * Run a similar test to example 18.6 in the book, except
      * that a duplicate key ('H') is inserted again to the root when
      * it is no longer a leaf node.
-     * Assertion is that TreeObject with key 'H' (8) has count = 2.
+     * Assertion is that TreeObject with key 'H' has count = 2.
      *
      * @throws BTreeException Exception thrown when BTree encounters an unexpected problem
      * @throws IOException Exception thrown when testing fails due to IO errors
@@ -406,8 +405,7 @@ public class BTreeTest {
 
         BTree b = new BTree(4, testFilename);
 
-        //                        A  D  F  H   L   N   P  B  H
-        long[] input = new long[]{1, 4, 6, 8, 12, 14, 16, 2, 8};
+        String[] input = new String[]{"A", "D", "F", "H", "L", "N", "P", "B", "H"};
 
         for (int i = 0; i < input.length - 1; i++) {
             b.insert(new TreeObject(input[i]));
@@ -416,7 +414,7 @@ public class BTreeTest {
         //by inserting a duplicate into a non leaf node, another branch is tested.
         b.insert(new TreeObject(input[8])); //H
 
-        TreeObject obj = b.search(8);
+        TreeObject obj = b.search("H");
 
         assertEquals(2, obj.getCount());
 
@@ -438,14 +436,13 @@ public class BTreeTest {
 
         BTree b = new BTree(2, testFilename); //Different degree than CLRS 18.6!
 
-        //                        A  D  F  H   L  H
-        long[] input = new long[]{1, 4, 6, 8, 12, 8};
+        String[] input = new String[]{"A", "D", "F", "H", "L", "H"};
 
-        for (long l : input) {
+        for (String l : input) {
             b.insert(new TreeObject(l));
         }
 
-        TreeObject obj = b.search(8);
+        TreeObject obj = b.search("H");
 
         assertEquals(2, obj.getCount());
 
@@ -496,22 +493,22 @@ public class BTreeTest {
      *
      * @return true if BTree in order traversal matches provide input
      */
-    private boolean validateInserts(BTree b, long[] inputKeys) throws IOException {
+    private boolean validateInserts(BTree b, String[] inputKeys) throws IOException {
 
-        long[] bTreeKeys = b.getSortedKeyArray();
+        String[] bTreeKeys = b.getSortedKeyArray();
 
         //input may be unsorted
         Arrays.sort(inputKeys);
 
         //track input as a dynamic set to easily remove duplicates
-        ArrayList<Long> inputNoDuplicates = new ArrayList<>(inputKeys.length);
+        ArrayList<String> inputNoDuplicates = new ArrayList<>(inputKeys.length);
 
         //Copy with excluding duplicates
         for (int i = 0; i < inputKeys.length; i++) {
 
             if (i > 0) {
                 //only add an element if it is different from the previous iteration.
-                if (inputKeys[i - 1] != inputKeys[i]) {
+                if (!inputKeys[i - 1].equals(inputKeys[i])) {
                     inputNoDuplicates.add(inputKeys[i]);
                 }
             } else {
@@ -524,14 +521,14 @@ public class BTreeTest {
             return false;
         }
 
-        long prev = bTreeKeys[0];
+        String prev = bTreeKeys[0];
 
         for (int i = 0; i < bTreeKeys.length; i++) {
-            if (bTreeKeys[i] != inputNoDuplicates.get(i)) {
+            if (!bTreeKeys[i].equals(inputNoDuplicates.get(i))) {
                 return false;
             }
 
-            if (i > 0 && prev > bTreeKeys[i]) {
+            if (i > 0 && prev.compareTo(bTreeKeys[i]) > 0) {
                 return false;
             }
         }
