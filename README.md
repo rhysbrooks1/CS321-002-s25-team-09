@@ -453,7 +453,7 @@ Examples:
 ### 4.3. Class Design
 We will need a `BTree` class as well as a `BTreeNode` class. The `BTreeNode` class may be an
 inner class in the main `BTree` class. The objects that we store in the BTree will be similar
-to the objects we stored in the previous `Hashtable` assignment. You should call the relevant
+to the objects we stored in the previous `Hashtable` assignment. You should use the relevant
 class `TreeObject` to represent the objects using the `Comparable` interface.
 
 ### 4.4 Priority Queues

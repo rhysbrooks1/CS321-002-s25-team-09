@@ -15,12 +15,10 @@ import static org.junit.Assert.*;
  * Unit testing for BTree constructors, Insert, Search and
  * some TreeObject interactions in the BTree (such as counting duplicates)
  *
- * Note some tests use Alphabetic letters as keys, using the simple
- * mapping that key = index of letter in English alphabet.
- * e.g. 'A' = 1, 'B' = 2 etc.
+ * Note some tests use Alphabetic letters as keys and follow the examples
+ * given in the textbook.
  *
- * This is to provide more complicated tests that can be modeled
- * after figures in the CLRS textbook.
+ * @author CS321 instructors
  */
 public class BTreeTest {
 
