@@ -26,6 +26,7 @@ This repository contains:
 - the expected project package structure, in the [src/](src) folder
 - some partial implementation of classes, in the [src/main/java/cs321/](src/main/java/cs321) folder
 - sample [JUnit](https://junit.org/) tests, in the [src/test/java/cs321/](src/test/java/cs321) folder
+    - note that we have provided a full unit test for the BTree class in BTreeTest.java class
 - sample input data and expected results, in the [data/](data) folder
 - a wrapper for the [gradle](https://gradle.org/) build tool, which simplifies installing and running gradle. In turn, gradle facilitates and handles:
     - Java library (e.g., JUnit) dependency management
@@ -453,7 +454,7 @@ Examples:
 ### 4.3. Class Design
 We will need a `BTree` class as well as a `BTreeNode` class. The `BTreeNode` class may be an
 inner class in the main `BTree` class. The objects that we store in the BTree will be similar
-to the objects we stored in the previous `Hashtable` assignment. You should use the relevant
+to the objects we stored in the previous `Hashtable` assignment. You should use the provided
 class `TreeObject` to represent the objects using the `Comparable` interface.
 
 ### 4.4 Priority Queues
