@@ -434,8 +434,13 @@ testing purposes.
 
 ### 4.1. Memory
 We can represent each SSH Log sequence (from the stripped log file)  as a string of 32 characters
-long (which requires 64 bytes).  No value should go over 32 characters but if it does, then we
-simply truncate the sequence to just the first 32 characters.
+long (which would require 64 bytes).  No value should go over 32 characters but if it does,
+then we simply truncate the sequence to just the first 32 characters. This would form the key value.
+
+Note that in order to store the key on the disk, we will simply convert it to a byte array (for
+example, using the `getBytes()` method in the String class and then pad up to make a fixed size
+array of 64 bytes. We need this since we always want to write a fixed size array on disk so that
+size of each TreeObject is known ahead of time.
 
 ### 4.2. Key Values
 Note that the key values will be the two variables of that BTree's type concatenated with a dash (`-`)
