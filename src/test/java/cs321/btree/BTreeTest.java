@@ -458,20 +458,20 @@ public class BTreeTest {
      */
     private boolean validateSearchTreeProperty(BTree b) throws IOException {
 
-        long[] keys = b.getSortedKeyArray();
+        String[] keys = b.getSortedKeyArray();
 
         /*if there are no keys, the tree is valid
             Beware, if keys have indeed been inserted but getKeysInOrder is not,
             this method will return true
         */
-        if (keys.length == 0) {
+        if (keys == null | keys.length == 0) {
             return true;
         }
 
-        long prev = keys[0];
+        String prev = keys[0];
 
         for (int i = 1; i < keys.length; i++) {
-            if (prev > keys[i]) {
+            if (prev.compareTo(keys[i]) > 0) {
                 return false;
             }
         }
