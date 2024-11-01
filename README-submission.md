@@ -10,9 +10,9 @@
 # Test Results
 How many of the dumpfiles matched (using the check-dump-files.sh script)?
 
-How many of the query files results matched (using the check-btree-search.sh script)?
+How many of the btree query files results matched (using the check-btree-search.sh script)?
 
-How many of the query files results matched (using the check-db-search.sh script)?
+How many of the database query files results matched (using the check-db-search.sh script)?
 
 
 # AWS Notes
