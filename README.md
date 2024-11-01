@@ -433,15 +433,16 @@ testing purposes.
 ## 4. Design Issues
 
 ### 4.1. Memory
-We can represent each SSH Log sequence (from the stripped log file)  as a string of 32 characters
-long (which would require 64 bytes).  No value should go over 32 characters but if it does,
-then we simply truncate the sequence to just the first 32 characters. This would form the key value.
+We can represent the key from a SSH log line (from the stripped log file) as a string of 32
+characters long (which would require 64 bytes).  No value should go over 32 characters but if
+it does, then we simply truncate the sequence to just the first 32 characters. This would form
+the key value.
 
 Note that we always want to write a fixed size array on disk so that size of each TreeObject
 is known ahead of time. In order to do that, we can pad each key to be 32 characters (by adding
 spaces or null character at the end). We can also keep the key values to be their natural size
-but pad them with null characters only when we store to the disk (and then remove them when we
-read the key values back).
+but pad them with null characters only when we store to the disk (and then remove the padding
+when we read the key values back from the disk).
 
 ### 4.2. Key Values
 Note that the key values will be the two variables of that BTree's type concatenated with a dash (`-`)
@@ -605,7 +606,7 @@ The following displays what each main driver must output:
 | Class               | Output                                                                                                                                                                                               | 
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `SSHCreateBTree`    | - `SSH_log.txt.ssh.btree.<type>.<degree>` file (in the current folder)<br/>- appropriately named table in `SSHLogDB.db` (database is in current folder) <br/>- `dump-<type>.<degree>.txt` (in the current folder)   if `<debug>`=`1` <br/> |
-| `SSHSearchBTree`    | -  Output for the queries to standard out  |    
+| `SSHSearchBTree`    | - output for the queries to standard out  |    
 | `SSHSearchDatabase` | - top 10/25/50 `<SSH Key> <frequency>` to standard out |
 
 ### 5.2. Example Demonstration of Project
@@ -687,7 +688,7 @@ java -jar build/libs/SSHSearchBTree.jar --cache=0 --degree=0 \
 Assumes that the query files are in `data/queries` folder.
 
 Outputs:
-- Query output file: `QUERY-accepted-ip.0.txt`
+- Query output: output of queries goes to standard out
 - Note that the outut is sorted first by the frequency and then alphabetically by the key.
 
 | Key                     |  Frequency |
