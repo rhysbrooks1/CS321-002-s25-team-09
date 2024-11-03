@@ -26,7 +26,7 @@ This repository contains:
 - the expected project package structure, in the [src/](src) folder
 - some partial implementation of classes, in the [src/main/java/cs321/](src/main/java/cs321) folder
 - sample [JUnit](https://junit.org/) tests, in the [src/test/java/cs321/](src/test/java/cs321) folder
-    - note that we have provided a full unit test for the BTree class in BTreeTest.java class
+    - note that we have provided a full unit test for the BTree class in `BTreeTest.java` class
 - sample input data and expected results, in the [data/](data) folder
 - a wrapper for the [gradle](https://gradle.org/) build tool, which simplifies installing and running gradle. In turn, gradle facilitates and handles:
     - Java library (e.g., JUnit) dependency management
@@ -39,7 +39,7 @@ This repository contains:
 cannot have its own GitHub issues, which will be used as Scrum tasks.
 
 :heavy_exclamation_mark: **NOTE: Do NOT modify the package structure in the [src/](src) folder**,
-otherwise the project may not be built correctly using gradle.
+otherwise the project may not build correctly using gradle.
 
 ## Ensure that we have the correct JDK version
 Use the following command to check our installed JDK version:
