@@ -122,11 +122,16 @@ $ java -jar build/libs/SSHSearchDatabase.jar <arguments>
 ```
 
 ## Run the project from an IDE: IntelliJ IDEA, VSCode or Eclipse
+
+Note that the following wiki pages may refer for GeneBankCreateBTree --> simply replace that with
+SSHCreateBtree. In general, replace GeneBank with SSH.
+
 ### Eclipse
 This repository is an [Eclipse](https://www.eclipse.org/) project, and can be directly opened in
 [Eclipse](https://www.eclipse.org/).
 
 :book: See this [wiki page for additional instructions to run this project in Eclipse](https://github.com/BoiseState/CS321_Cybersecurity/wiki/Instructions-to-run-in-Eclipse).
+
 
 ### IntelliJ IDEA
 This project can be opened with [IntelliJ IDEA](https://www.jetbrains.com/idea/).
