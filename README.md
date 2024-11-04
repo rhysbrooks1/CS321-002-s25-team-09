@@ -488,8 +488,8 @@ We will create three (or four, if doing the extra credit part) programs:
 form suitable for creating BTrees.
 
 - `SSHCreateBTree.java`: to **create a BTree** from a given wrangled SSH log file and outputs
-a query with all unique values found within the SSH log file as a Random-Access-File file
-of the BTree, a dump file (if debug option is on), and as a table into a SQL database named
+all unique values found within the SSH log file as a Random-Access-File file
+containing the BTree, a dump file (if debug option is on), and as a table into a SQL database named
 `SSHLogDB.db` (using an inorder traversal). Note that, in a real setting, we probably don't
 want to dump the full BTree into the database! We do that here for testing purposes.
 
@@ -651,7 +651,7 @@ Outputs:
 - Dump text file: `dump-accepted-ip.0.txt`
 - Table name: `acceptedip` to `SSHLogDB.db`
 
-See below for a snippet of the dmp file  `dump-accepted-ip.0.txt`: 
+See below for a snippet of the dump file  `dump-accepted-ip.0.txt`: 
 
 | Key | Frequency |
 |-------------------------|--------------------------------|
