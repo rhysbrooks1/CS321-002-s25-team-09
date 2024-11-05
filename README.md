@@ -443,11 +443,10 @@ characters long (which would require 64 bytes).  No value should go over 32 char
 it does, then we simply truncate the sequence to just the first 32 characters. This would form
 the key value.
 
-Note that we always want to write a fixed size array on disk so that size of each TreeObject
-is known ahead of time. In order to do that, we can pad each key to be 32 characters (by adding
-spaces or null character at the end). We can also keep the key values to be their natural size
-but pad them with null characters only when we store to the disk (and then remove the padding
-when we read the key values back from the disk).
+Note that we always want to write a fixed size array on disk so that size of each TreeObject is
+known ahead of time. In order to do that, we can keep the key values to be their natural size
+but pad them with null characters when we store to the disk (and then remove the padding when
+we read the key values back from the disk).
 
 ### 4.2. Key Values
 Note that the key values will be the two variables of that BTree's type concatenated with a dash (`-`)
