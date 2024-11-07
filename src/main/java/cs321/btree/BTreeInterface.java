@@ -32,12 +32,12 @@ public interface BTreeInterface {
     
     /**
      *
-     * Insert a given sequence in the B-Tree. If the sequence already exists in the B-Tree,
-     * the frequency count is incremented. Otherwise a new node is inserted
+     * Insert a given SSH key into the B-Tree. If the key already exists in the B-Tree,
+     * the frequency count is incremented. Otherwise, a new node is inserted
      * following the B-Tree insertion algorithm.
      *
      * @param obj
-     *            A TreeObject representing a DNA string.
+     *            A TreeObject representing an SSH key.
      *
      */
     void insert(TreeObject obj) throws IOException;
@@ -66,7 +66,7 @@ public interface BTreeInterface {
 
 
     /**
-     * Searches for a sequence in the given BTree.
+     * Searches for a key in the given BTree.
      *
      * @param key
      *            The key value to search for.
