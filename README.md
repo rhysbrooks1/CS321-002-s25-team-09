@@ -167,13 +167,15 @@ the Scrum process learned in CS-HU 271 (or CS 208) and focus exclusively on:
 that can be [run from the command line](#compile-and-run-the-project-from-the-command-line).
 
 ## Scrum Board
-Creating the tasks upfront will allow dividing and assigning the work in order to provide
+Creating the tasks upfront will facilitate dividing and assigning the work in order to provide
 transparency and accountability within the team.
 
 Use the [Projects](https://github.com/BoiseState/CS321_Cybersecurity/projects) tab (i.e., a
-simplified version of [ZenHub](https://www.zenhub.com)) to configure our own team Scrum board,
+simplified version of [ZenHub](https://www.zenhub.com)) to configure your own team Scrum board,
 based on this [project example](https://github.com/orgs/BoiseState/projects/124) (feel free to
-copy the contents of these tasks to your Scrum board).
+copy the contents of these tasks to your Scrum board). The team member that creates the private repo
+will create the Project board and add the other members to the Project board as admins. This can be
+done from the Settings for the project board.
 
 Your Scrum board should contain the following columns (pipelines):
 
