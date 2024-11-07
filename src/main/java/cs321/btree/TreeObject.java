@@ -2,7 +2,7 @@ package cs321.btree;
 
 /**
  * A class that holds a key value and its count. The key value is a string of up 
- * to 32 characters. The size is limited to make data storage on disk simpler.
+ * to 32 characters. The size is limited to simplify storage of a TreeObject on disk.
  * 
  * @author amit, andre, natalie
  */
@@ -10,7 +10,10 @@ public class TreeObject implements Comparable<TreeObject> {
 
     private String key;
     private long count;
-    private static final int SIZE  = 64; //#bytes
+	/**
+	 * Number of bytes needed on disk.
+	 */
+    public static final int BYTES  = 64 + Long.BYTES; 
 
     /**
      * Create a TreeObject with the given key.
@@ -80,13 +83,6 @@ public class TreeObject implements Comparable<TreeObject> {
 		return key + " " + this.count;
 	}
 
-
-    /**
-     * Returns the size of the disk
-     * @return SIZE - the Disk's size
-     */
-    public static int getDiskSize() { return SIZE;}
-    
 
     /**
 	 * Two TreeObjects are equal if they contain equal keys. 
