@@ -166,7 +166,7 @@ the Scrum process learned in CS-HU 271 (or CS 208) and focus exclusively on:
 - Test-Driven Development and unit testing. The [starter code](#starter-code) already contains a few [sample unit tests](src/test/java/cs321)
 that can be [run from the command line](#compile-and-run-the-project-from-the-command-line).
 
-## Scrum Board
+## Setting up the Scrum Board
 Creating the tasks upfront will facilitate dividing and assigning the work in order to provide
 transparency and accountability within the team.
 
