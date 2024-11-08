@@ -123,7 +123,7 @@ $ java -jar build/libs/SSHSearchDatabase.jar <arguments>
 
 ## Run the project from an IDE: IntelliJ IDEA, VSCode or Eclipse
 
-Note that the following wiki pages may refer for GeneBankCreateBTree --> simply replace that with
+Note that the following wiki pages may refer to GeneBankCreateBTree --> simply replace that with
 SSHCreateBtree. In general, replace GeneBank with SSH.
 
 ### Eclipse
@@ -157,25 +157,37 @@ automatically by gradle or our IDE.
 <hr/>
 
 # Scrum Process
-The focus of this project is to learn about data structures, while working effectively in a group.
-In addition, given the small project scope, and the fixed set of requirements that are already
-defined (and will not need to be elicited with the use of a Product Owner), the team can customize
-the Scrum process learned in CS-HU 271 (or CS 208) and focus exclusively on: 
-- creating tasks 
-- linking commits to task IDs (e.g., `Implements task #123` or `Closes #123`) 
-- Test-Driven Development and unit testing. The [starter code](#starter-code) already contains a few [sample unit tests](src/test/java/cs321)
-that can be [run from the command line](#compile-and-run-the-project-from-the-command-line).
+The focus of this project is to solve a domain-specific problem using data
+structures, while working effectively in a software engineering team.  In addition, given
+the relatively small project scope, and the fixed set of requirements that are already defined (and
+will not need to be elicited with the use of a Product Owner), the team can customize the
+[Scrum](https://en.wikipedia.org/wiki/Scrum_(software_development)) process learned in CS 208
+(or CS-HU 271) and focus exclusively on:
+
+- Dividing the project into smaller tasks (or stories) 
+- Linking commits to task IDs (e.g., `Implements task #123` or `Closes #123`) 
+- Test-Driven Development and unit testing. The [starter code](#starter-code) already
+contains [some unit tests](src/test/java/cs321) that can be [run from the command
+line](#compile-and-run-the-project-from-the-command-line).
+
+We highly recommend that you consider reading *The Elements of Scrum* book by Chris Sims and
+Hillary Louise Johnson to get a better understanding of the Scrum process. It is a small book
+that is very readable and a classic in software engineering.
 
 ## Setting up the Scrum Board
-Creating the tasks upfront will facilitate dividing and assigning the work in order to provide
-transparency and accountability within the team.
+We will create and manage tasks corresponding to stories in a Scrum
+process using the project board feature in GitHub. Check out the project
+[Projects](https://github.com/BoiseState/CS321_Cybersecurity/projects) tab provided in the starter
+repository. It contains a [project example](https://github.com/orgs/BoiseState/projects/124)
+that you can use as a model to create your own scrum project board in your private repo ((feel
+free to copy the contents of these tasks to your Scrum board).
 
-Use the [Projects](https://github.com/BoiseState/CS321_Cybersecurity/projects) tab (i.e., a
-simplified version of [ZenHub](https://www.zenhub.com)) to configure your own team Scrum board,
-based on this [project example](https://github.com/orgs/BoiseState/projects/124) (feel free to
-copy the contents of these tasks to your Scrum board). The team member that creates the private repo
-will create the Project board and add the other members to the Project board as admins. This can be
-done from the Settings for the project board.
+The team member that creates the private repo will create the project board (give it an appropriate
+name like our example) and add the other members to the project board in the `admin` role. This
+can be done from the Settings for the project board.
+
+Using the scrum process via the project board is an important part of software engineering so take
+some time to make good use of the project board feature in GitHub.
 
 Your Scrum board should contain the following columns (pipelines):
 
@@ -187,8 +199,9 @@ Your Scrum board should contain the following columns (pipelines):
 | Review/QA       | Tasks ready to be reviewed by another team member                                                        |
 | Closed          | Completed tasks, whose corresponding code is integrated in the `master` branch                           |
 
-Tasks should be assigned to the developer working on them. Each team
-member should add to the project log file, Project-Log.md, the tasks (e.g.,
+Tasks should be assigned to the developer working on them. Once a task has been
+completed, the developer assigned to the task will close the corresponding
+issue and then update the project log file, `Project-Log.md`, the tasks (e.g.,
 `https://github.com/StudentUserNameHostingRepo/CS321_Cybersecurity/issues/123`) completed that
 week, as described in the [progress reports](#11-progress-reports).
 
@@ -695,7 +708,7 @@ Assumes that the query files are in `data/queries` folder.
 
 Outputs:
 - Query output: output of queries goes to standard out
-- Note that the outut is sorted first by the frequency and then alphabetically by the key.
+- Note that the output is sorted first by the frequency and then alphabetically by the key.
 
 | Key                     |  Frequency |
 |--------------------------------------------------|------------|
