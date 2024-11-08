@@ -179,7 +179,7 @@ We will create and manage tasks corresponding to stories in a Scrum
 process using the project board feature in GitHub. Check out the project
 [Projects](https://github.com/BoiseState/CS321_Cybersecurity/projects) tab provided in the starter
 repository. It contains a [project example](https://github.com/orgs/BoiseState/projects/124)
-that you can use as a model to create your own scrum project board in your private repo ((feel
+that you can use as a model to create your own scrum project board in your private repo (feel
 free to copy the contents of these tasks to your Scrum board).
 
 The team member that creates the private repo will create the project board (give it an appropriate
