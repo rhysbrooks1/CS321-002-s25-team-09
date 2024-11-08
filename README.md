@@ -199,9 +199,9 @@ Your Scrum board should contain the following columns (pipelines):
 | Review/QA       | Tasks ready to be reviewed by another team member                                                        |
 | Closed          | Completed tasks, whose corresponding code is integrated in the `master` branch                           |
 
-Tasks should be assigned to the developer working on them. Once a task has been
-completed, the developer assigned to the task will close the corresponding
-issue and then update the project log file, `Project-Log.md`, the tasks (e.g.,
+Tasks should be assigned to the developer working on them. Once a task has
+been completed, the developer assigned to the task will close the corresponding
+issue and then update the project log file, `Project-Log.md`, with the tasks (e.g.,
 `https://github.com/StudentUserNameHostingRepo/CS321_Cybersecurity/issues/123`) completed that
 week, as described in the [progress reports](#11-progress-reports).
 
