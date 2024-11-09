@@ -21,7 +21,7 @@ public interface BTreeInterface {
     /**
      * @return Returns the number of nodes in the BTree.
      */
-    int getNumberOfNodes();
+    long getNumberOfNodes();
 
 
     /**
