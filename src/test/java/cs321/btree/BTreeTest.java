@@ -455,6 +455,7 @@ public class BTreeTest {
      * @return true if there are no keys in the BTree, or if the keys are indeed in sorted order.
      *
      */
+	@SuppressWarnings("unused")
     private boolean validateSearchTreeProperty(BTree b) throws IOException {
 
         String[] keys = b.getSortedKeyArray();
