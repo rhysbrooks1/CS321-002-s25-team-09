@@ -513,7 +513,7 @@ provide a top frequency count to use to output just the top occurring searched q
 
 - `SSHSearchDatabase.java`: to **search in the SQL database** for the top occurring key values along
 with their frequencies. This database would be created as a by-product of the `SSHCreateBTree.java`
-program and contains all the keys from an inorder traversal for each BTree.
+program. There will be a single database that contains a table for each type of BTree. and contains all the keys from an inorder traversal for each BTree.
 
 
 ### 5.1. Program Arguments
@@ -837,8 +837,8 @@ Design a simple database to store the results (key values and frequencies) from 
 We will perform an inorder tree traversal to get the information to store in the database with
 the `<tree type>` as the table's name without the `-` (to prevent SQL syntax errors). This would
 be done at the end of creating the SSH BTree. Afterwards, we will create a separate search
-program named `SSHSearchDatabase` that uses the database instead of the BTree and the top
-searched query list outputted by `SSHSearchBTree` to get the top frequencies of a certain BTree.
+program named `SSHSearchDatabase` that uses the database instead of the BTree and finds the
+top frequencies along with the keys for a given type of BTree. See below for the usage:
 
 ```bash
 $ ./gradlew createJarSSHSearchDatabase
@@ -846,11 +846,70 @@ $ java -jar build/libs/SSHSearchDatabase.jar --type=<tree-type> --database=<SQLi
             --top-frequency=<10/25/50>
 ```
 
-We will use the embedded SQLite database for this project.  The SQLite database is fully contained
-in a jar file that gradle will automatically pull down for us. See the database example in the
-section below on how to use SQLite.
+We will use the embedded SQLite database for this project. The SQLite database is fully contained
+in a jar file that gradle will automatically pull down for us. 
 
-### 7.1 Analyzing the Database
+### 7.1 Testing the SSHSearchDatabase
+
+Normally, `SSHCreateBTree` program would have created the database for `SSHSearchDatabase`
+to use.  In order to be more agile in our development process, we want to develop and test
+`SSHSearchDatabase` ahead of `SSHCreateBTree` program. To do so, we will allow the user to
+specify a `--type=test` option.
+
+```
+$ java -jar build/libs/SSHSearchDatabase.jar --type=test --database=test.db \
+            --top-frequency=<10/25/50>
+```
+
+In this case, the `--top-frequency` option is ignored .
+
+When `--type=test` is specified, `SSHSearchDatabase` program will create the database named
+`test.db`, then create a table named `acceptedip` (recall no hyphen in table names because
+of SQL syntax rules) and insert the following 25  entries (used as test data) in the table
+using SQL insert statements.
+
+```
+Accepted-111.222.107.90 25
+Accepted-112.96.173.55 3
+Accepted-112.96.33.40 3
+Accepted-113.116.236.34 6
+Accepted-113.118.187.34 2
+Accepted-113.99.127.215 2
+Accepted-119.137.60.156 1
+Accepted-119.137.62.123 9
+Accepted-119.137.62.142 1
+Accepted-119.137.63.195 14
+Accepted-123.255.103.142 5
+Accepted-123.255.103.215 5
+Accepted-137.189.204.138 1
+Accepted-137.189.204.155 1
+Accepted-137.189.204.220 1
+Accepted-137.189.204.236 1
+Accepted-137.189.204.246 1
+Accepted-137.189.204.253 3
+Accepted-137.189.205.44 2
+Accepted-137.189.206.152 1
+Accepted-137.189.206.243 1
+Accepted-137.189.207.18 1
+Accepted-137.189.207.28 1
+Accepted-137.189.240.159 1
+Accepted-137.189.241.19 2
+```
+
+Now we will have a database that we can use to test the search functionality. We can use the
+following command for testing it.
+
+
+```
+$ java -jar build/libs/SSHSearchDatabase.jar --type=accepted-ip --database=test.db \
+            --top-frequency=10
+```
+
+We should get the top 10 values from the test data.  If we specify the top 25, then we should get
+all of the above test data. 
+
+
+### 7.2 Analyzing the Database
 
 When searching for the top results in the database, we want to analyze the top key frequencies
 for patterns.  The top keys should be printed out with their frequencies as demonstrated by
