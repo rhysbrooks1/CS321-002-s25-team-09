@@ -511,9 +511,11 @@ want to dump the full BTree into the database! We do that here for testing purpo
 search program assumes that the user specified the appropriate BTree. Optionally, the user can
 provide a top frequency count to use to output just the top occurring searched queries.
 
-- `SSHSearchDatabase.java`: to **search in the SQL database** for the top occurring key values along
-with their frequencies. This database would be created as a by-product of the `SSHCreateBTree.java`
-program. There will be a single database that contains a table for each type of BTree. and contains all the keys from an inorder traversal for each BTree.
+- `SSHSearchDatabase.java`: to **search in the SQL database** for the top occurring key
+values along with their frequencies. This database would be created as a by-product of the
+`SSHCreateBTree.java` program. There will be a single database that contains up to nine tables,
+one for each type of BTree. Each table contains all the keys from an inorder traversal for the
+corresponding type of BTree.
 
 
 ### 5.1. Program Arguments
@@ -535,8 +537,8 @@ java -jar build/libs/SSHSearchDatabase.jar --type=<tree-type> \
           --database=<sqlite-database-path> --top-frequency=<10/25/50>
 ```
 
-**Note that the arguments can be provided in any order.** The backslash represents that the command
-is displayed on multiple lines but we would type it in one line (without the backslash).
+**Note that the arguments can be provided in any order.** The backslash represents that the
+command is displayed on multiple lines but we would type it in one line (without the backslash).
 
 - `<cache>` specifies whether the program should use cache (value `1`) or
 no cache (value `0`); if the value is `1`, the `<cache-size>` has to be specified
@@ -781,17 +783,17 @@ Outputs to standard output stream:
 
 #### 5.3.1. Your programs should always keep the root node in the memory
 Write the root node to disk file only at the end of the program and read it in when the program
-starts up. In addition, our program can only hold a few nodes in memory. In other words,
-we can only use a few BTreeNode variables (including the root) in our program (e.g., root,
-parent, current, child, temporary node for split). However, if the cache is enabled, we can
-store `<cache-size>` `BTreeNode` objects in the cache.
+starts up. In addition, our program can only hold a few nodes in memory. In other words, we can
+only use a few BTreeNode variables (including the root) in our program (e.g., root, parent,
+current, child, temporary node for split). However, if the cache is enabled, we can store
+`<cache-size>` `BTreeNode` objects in the cache.
 
 #### 5.3.2. Metadata storage
 We need to store some metadata about the BTree on disk. For example, we can store the degree
-of the tree, the byte offset of the root node (so we can find it), the number of nodes, and other
-information. This information should be stored at the beginning of the BTree file. We read the
-metadata when we open the BTree file, and we write it back (as it may have changed) when we close
-the BTree file at the end of the program.
+of the tree, the byte offset of the root node (so we can find it), the number of nodes, and
+other information. This information should be stored at the beginning of the BTree file. We
+read the metadata when we open the BTree file, and we write it back (as it may have changed)
+when we close the BTree file at the end of the program.
 
 #### 5.3.3. Layout of the BTree in the binary file 
 
@@ -825,11 +827,11 @@ data structure in a binary file on disk.
 
 
 ## 6. Using a Cache
-We will incorporate the generic Cache class from `Project 1` to improve the performance of our
-BTree implementation. The size of the cache should be a command line argument. An entry in the
-cache is a `BTreeNode`. With the cache enabled command line option, the `<cache-size>` needs to
-be specified as between `100` and `10000` (inclusive).  Using the cache greatly speeds up the
-execution time especially when searching larger BTrees.
+We will incorporate the generic Cache class from `Project 1` to improve the performance of
+our BTree implementation. The size of the cache should be a command line argument. An entry
+in the cache is a `BTreeNode`. With the cache enabled command line option, the `<cache-size>`
+needs to be specified as between `100` and `10000` (inclusive).  Using the cache greatly speeds
+up the execution time especially when searching larger BTrees.
 
 ## 7. Using a Database
 
@@ -849,6 +851,10 @@ $ java -jar build/libs/SSHSearchDatabase.jar --type=<tree-type> --database=<SQLi
 We will use the embedded SQLite database for this project. The SQLite database is fully contained
 in a jar file that gradle will automatically pull down for us. 
 
+[SQLite example](https://github.com/BoiseState/CS321-resources/tree/master/examples/SQLite): A
+quick starter example on how to set up and use SQLite. Note that this example has the SQLite jar
+file in it as the example does not have gradle setup in it like we do in our project.
+
 ### 7.1 Testing the SSHSearchDatabase
 
 Normally, `SSHCreateBTree` program would have created the database for `SSHSearchDatabase`
@@ -861,7 +867,7 @@ $ java -jar build/libs/SSHSearchDatabase.jar --type=test --database=test.db \
             --top-frequency=<10/25/50>
 ```
 
-In this case, the `--top-frequency` option is ignored .
+In this case, the `--top-frequency` option is ignored.
 
 When `--type=test` is specified, `SSHSearchDatabase` program will create the database named
 `test.db`, then create a table named `acceptedip` (recall no hyphen in table names because
@@ -896,9 +902,8 @@ Accepted-137.189.240.159 1
 Accepted-137.189.241.19 2
 ```
 
-Now we will have a database that we can use to test the search functionality. We can use the
+Now we will have a database that we can use to test the search functionality. We can the use the
 following command for testing it.
-
 
 ```
 $ java -jar build/libs/SSHSearchDatabase.jar --type=accepted-ip --database=test.db \
