@@ -501,11 +501,11 @@ We will create three (or four, if doing the extra credit part) programs:
 - `SSHDataWrangler.java`: (*Optional -- Extra Credit*)  to **wrangle the raw SSH file** into the
 form suitable for creating BTrees.
 
-- `SSHCreateBTree.java`: to **create a BTree** from a given wrangled SSH log file and outputs
-all unique values found within the SSH log file as a Random-Access-File file
-containing the BTree, a dump file (if debug option is on), and as a table into a SQL database named
-`SSHLogDB.db` (using an inorder traversal). Note that, in a real setting, we probably don't
-want to dump the full BTree into the database! We do that here for testing purposes.
+- `SSHCreateBTree.java`: to **create a BTree** from a given wrangled SSH log file and outputs all
+unique values found within the SSH log file as a Random-Access-File file containing the BTree,
+a dump file (if debug option is on), and as a table into a SQL database named `SSHLogDB.db`
+(using an inorder traversal). Note that, in a real setting, we probably don't want to dump the
+full BTree into the database! We do that here for testing purposes.
 
 - `SSHSearchBTree.java`: for **searching a specified BTree** for the given key values. The
 search program assumes that the user specified the appropriate BTree. Optionally, the user can
