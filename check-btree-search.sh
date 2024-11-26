@@ -16,7 +16,7 @@ echo
 for value in accepted-ip accepted-time invalid-ip invalid-time failed-ip failed-time reverseaddress-ip reverseaddress-time user-ip
 do
 	echo "Checking search query for top 25 frequencies on "QUERY-"$value".txt""
-  	diff -w output/btree-search/"QUERY-"$value"-top25.0.txt" "results/db-search/"query-"$value"-top25.txt""
+  	diff -w output/btree-search/"QUERY-"$value"-top25.0.txt" "results/db-search/"$value"-top25.txt""
   	if test "$?" = "0"
   	then
     	echo "----> Test-$value for top 25 PASSED!"

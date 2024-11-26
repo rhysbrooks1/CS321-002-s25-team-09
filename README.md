@@ -295,9 +295,10 @@ Daemon (sshd) (with its process id), and the type of action followed by the user
 port number and SSH protocol version.
 
 Note that the above example shows five types of actions denoted by the starting phrases:
-`Accepted`, `Failed`, `Invalid`, `reverse`, or `Address`. Note that the last two types of
-entries are the same for our analysis as they are both the same type of break-in attempts.
-The full log file has a few other types of entries but those are not useful for our analysis.
+`Accepted`, `Failed`, `Invalid`, `reverse`, or `Address`. Note that the last two types of entries
+are the same for our analysis as they are both the same type of break-in attempts (but those
+lines don't have the fields in the same order!).  The full log file has a few other types of
+entries but those are not useful for our analysis.
 
 With a quick scan of the above sample, we can see that there are multiple occurrences of failed
 passwords, accepted passwords, and invalid users.  Upon closer look we can see that the block of
@@ -315,10 +316,9 @@ There are many types of log files but the one we will focus on for this project 
 [Zenodo-Loghub](https://zenodo.org/record/3227177#.ZEc9T-zMI-Q) dataset.
 
 
-To get a feel for log file analysis,  please watch the following
-helpful video that shows how to use Linux command line tools for analyzing
-log files for specific patterns and attacks: 
-[Analyzing Log Files For Attacks](https://www.youtube.com/watch?v=L2BFDyYknIg&ab_channel=Hackpens)[15m] 
+To get a feel for log file analysis,  please watch the following helpful video that shows how to
+use Linux command line tools for analyzing log files for specific patterns and attacks: [Analyzing
+Log Files For Attacks](https://www.youtube.com/watch?v=L2BFDyYknIg&ab_channel=Hackpens)[15m]
 (yes, this is a time-warped advertisement for CS153 :-))
 
 However, the approach shown in video will be slow if we had hundreds of large log files.
@@ -373,7 +373,7 @@ Once the raw SSH text file has been wrangled, the file should have the following
 | Failed           | 160,572    |
 | Invalid          | 14,165     |
 | reverse          | 18,909     |
-| Total:          | 194,324    |
+| Total:           | 194,324    |
 
 
 Note that we have already done this for you and provided the wrangled log file
@@ -479,9 +479,9 @@ Examples:
 
 ### 4.3. Class Design
 We will need a `BTree` class as well as a `BTreeNode` class. The `BTreeNode` class may be an
-inner class in the main `BTree` class. The objects that we store in the BTree will be similar
-to the objects we stored in the previous `Hashtable` assignment. You should use the provided
-class `TreeObject` to represent the objects using the `Comparable` interface.
+inner class in the main `BTree` class. The objects that we store in the BTree will be similar to
+the objects we stored in the previous `Hashtable` assignment. You should use the provided class
+`TreeObject` to represent the objects using the `Comparable` interface.
 
 ### 4.4 Priority Queues
 
@@ -489,7 +489,7 @@ In order to find the top `k` keys (by frequency), we will need a priority queue 
 programs. This is because the BTree is sorted by the key value and not by their frequencies. We
 created our own priority queue in Project 2, but for  this project we will use the [Priority
 Queue](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/PriorityQueue.html)
-class available from the standard library in Java. 
+class available from the standard library in Java.
 
 The Priority Queue will have the frequency as its primary key and the BTree key as its secondary
 key (so the `compareTo` will use frequency first and then the BTree key next to ensure stable
