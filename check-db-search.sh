@@ -4,6 +4,7 @@ for value in accepted-ip accepted-time invalid-ip invalid-time failed-ip failed-
 do
   echo
   echo "Checking db search query results DB-QUERY-$value.txt"
+  dos2unix output/db-search/DB-QUERY-"$value"-top25.txt
   diff -w output/db-search/DB-QUERY-"$value"-top25.txt results/db-search/"$value"-top25.txt
   if test "$?" = "0"
   then

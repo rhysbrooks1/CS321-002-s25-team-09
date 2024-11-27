@@ -700,7 +700,7 @@ steven-115.238.230.180
 desktop-87.120.255.161
 alex-218.4.104.194
 gitosis-183.129.255.34
-xxxxxxxxxxxxxxxxxxxxxxxx-60.174.195.41
+xxxxxxxxxxxxxxxxxxxxxxxx-60.174.
 weblogic-58.217.157.177
 postgres-115.238.230.180
 qiang-183.136.178.30

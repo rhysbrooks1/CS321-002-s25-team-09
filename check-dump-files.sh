@@ -7,12 +7,13 @@ echo
 for value in accepted-ip accepted-time invalid-ip invalid-time failed-ip failed-time reverseaddress-ip reverseaddress-time user-ip
 do
 	echo -n "Test-$value: Comparing /dumps/dump $value 0"
+	dos2unix output/dump-files/"dump-"$value".0.txt"
 	diff -w output/dump-files/"dump-"$value".0.txt" results/dump-files/"dump-"$value".0.txt"
 	if test "$?" = "0"
 	then
 		echo "----> Test-$value PASSED!"
 	else
-		echo "----> Test-$value FAILED :( @#$%!"
+		echo "----> Test-$value FAILED!"
 	fi
 done
 echo
