@@ -29,7 +29,6 @@ echo
 for value in accepted-ip accepted-time invalid-ip invalid-time failed-ip failed-time reverseaddress-ip reverseaddress-time user-ip
 do
 	echo
-	echo -n "Test top 25 frequencies on QUERY-$value.txt: "
 	dos2unix output/btree-search/QUERY-"$value"-top25.0.txt >& /dev/null
 
     sort --stable "output/btree-search/QUERY-$value-top25.0.txt" > sort1
@@ -43,9 +42,9 @@ do
 	diff -w count1 count2
   	if test "$?" = "0"
   	then
-    	echo "  PASSED!"
+		echo "Test top 25 frequencies on QUERY-$value.txt:  PASSED!"
 	  else
-    	echo "  FAILED! See diff below"
+		echo "Test top 25 frequencies on QUERY-$value.txt:  FAILED! See diff below"
 		# do a full diff if counts don't match
   		diff -w "output/btree-search/QUERY-$value-top25.0.txt" "results/db-search/$value-top25.txt" > diff.log
 		echo

@@ -3,7 +3,6 @@
 for value in accepted-ip accepted-time invalid-ip invalid-time failed-ip failed-time reverseaddress-ip reverseaddress-time user-ip
 do
   echo
-  echo -n "Test DB-QUERY-$value.txt: "
   dos2unix output/db-search/DB-QUERY-"$value"-top25.txt >& /dev/null
 
   sort --stable "output/db-search/DB-QUERY-$value-top25.txt" > dbsort1
@@ -17,9 +16,9 @@ do
   diff -w count1 count2
   if test "$?" = "0"
   then
-    echo "  PASSED!"
+  	echo "Test DB-QUERY-$value.txt:  PASSED!"
   else
-    echo "  FAILED! See diff below"
+  	echo "Test DB-QUERY-$value.txt:  FAILED!"
 	echo
 	# do a full diff if counts don't match
     diff -w "output/db-search/DB-QUERY-$value-top25.txt" "results/db-search/$value-top25.txt" > diff.log

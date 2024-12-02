@@ -7,7 +7,6 @@ echo
 for value in accepted-ip accepted-time invalid-ip invalid-time failed-ip failed-time reverseaddress-ip reverseaddress-time user-ip
 do
 	echo
-	echo -n "Test type $value: "
 	dos2unix output/dump-files/dump-$value.0.txt >& /dev/null
 
 	sort --stable output/dump-files/dump-$value.0.txt > sort1
@@ -19,9 +18,9 @@ do
 	diff -w "output/dump-files/dump-$value.0.txt" "results/dump-files/dump-$value.0.txt" > diff.log
 	if test "$?" = "0"
 	then
-		echo "  PASSED!"
+		echo "Test type $value:  PASSED!"
 	else
-		echo "  FAILED! See diff below"
+		echo "Test type $value:  FAILED! See diff below"
 		echo
 		cat diff.log
 		/bin/rm -f diff.log
