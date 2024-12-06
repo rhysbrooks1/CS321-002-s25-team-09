@@ -5,7 +5,6 @@
 # - Java 11 (LTS)
 # - Java 17 (LTS; officially supported since Gradle 7.3)
 # - Java 21 (latest LTS; officially supported since Gradle 8.4)
-# - Java 22 (deprecated; officially supported since Gradle 8.8)
 # - Java 23 (current; to be deprecated in March 2025; officially supported since Gradle 8.10)
 # - Java 24 (to be released in March 2025; to be deprecated in September 2025; not officially supported by Gradle)
 # - Java 25 (LTS; to be released in September 2025; not officially supported by Gradle)
