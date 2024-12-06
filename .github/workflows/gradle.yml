@@ -2,14 +2,8 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
 # Use GitHub Actions CI to verify successful Gradle builds on:
-# - Java 8 (LTS)
 # - Java 11 (LTS)
-# - Java 15 (deprecated)
-# - Java 16 (deprecated)
 # - Java 17 (LTS; officially supported since Gradle 7.3)
-# - Java 18 (deprecated; officially supported since Gradle 7.5)
-# - Java 19 (deprecated; officially supported since Gradle 7.6)
-# - Java 20 (deprecated; officially supported since Gradle 8.1)
 # - Java 21 (latest LTS; officially supported since Gradle 8.4)
 # - Java 22 (deprecated; officially supported since Gradle 8.8)
 # - Java 23 (current; to be deprecated in March 2025; officially supported since Gradle 8.10)
@@ -30,7 +24,7 @@ jobs:
 
     strategy:
       matrix:
-        java: [ '8', '11', '15', '16', '17', '18', '19', '20', '21', '22', '23' ]
+        java: [ '8', '11', '17', '21', '23' ]
     name: Java version ${{ matrix.Java }}
 
     steps:
