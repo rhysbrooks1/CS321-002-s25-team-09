@@ -24,7 +24,7 @@ jobs:
 
     strategy:
       matrix:
-        java: [ '11', '17', '21', '22', '23' ]
+        java: [ '8', '11', '17', '21', '23' ]
     name: Java version ${{ matrix.Java }}
 
     steps:
