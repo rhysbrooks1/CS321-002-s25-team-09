@@ -11,7 +11,7 @@ do
   sort --stable "results/db-search/$value-top25.txt" > dbsort2
   mv dbsort2 "results/db-search/$value-top25.txt"
 
-  cat "output/btree-search/QUERY-$value-top25.0.txt" | awk '{print $2}' | sort -rn  > count1
+  cat "output/db-search/DB-QUERY-$value-top25.txt" | awk '{print $2}' | sort -rn  > count1
   cat "results/db-search/$value-top25.txt" | awk '{print $2}' | sort -rn  > count2
   diff -w count1 count2
   if test "$?" = "0"
