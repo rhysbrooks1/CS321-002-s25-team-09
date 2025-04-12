@@ -1,11 +1,6 @@
 package cs321.search;
 
-import cs321.btree.BTree;
-import cs321.common.ParseArgumentException;
-import cs321.common.ParseArgumentUtils;
-import java.util.HashMap;
-import java.util.Map;
-
+import java.sql.*;
 
 /**
  * Executes database queries to retrieve the most frequent key values
@@ -27,29 +22,54 @@ import java.util.Map;
  * This class relies on {@code SSHSearchDatabaseArguments} to handle all input validation
  * and argument extraction, ensuring that the logic here focuses purely on execution.
  */
-
-
- public class SSHSearchDatabase {
+public class SSHSearchDatabase {
 
     public static void main(String[] args) {
         SSHSearchDatabaseArguments parsed;
 
         try {
+            // Parse and validate command-line arguments using a helper class
             parsed = new SSHSearchDatabaseArguments(args);
         } catch (IllegalArgumentException e) {
+            // If arguments are invalid, print error and exit
             System.err.println("failed " + e.getMessage());
             System.exit(1);
             return;
         }
 
-        System.out.println("Input validation passed");
-        System.out.println("Type: " + parsed.getType());
-        System.out.println("Database: " + parsed.getDatabase());
-        System.out.println("Top Frequency: " + parsed.getTopFrequency());
+        try (
+            // Open a connection to the SQLite database provided by the user
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:" + parsed.getDatabase())
+        ) {
+            // Convert the tree type (e.g., accepted-ip) to a valid SQL table name (e.g., acceptedip)
+            String table = parsed.getType().replace("-", "");//"-" is not a valid character in SQL table names
 
-        // TODO: implement SQLite query logic here
-        System.out.println("Database search logic not implemented yet.");
+            // Build SQL query to select top N most frequent entries
+            // The query selects the key and frequency from the specified table,
+            // orders the results by frequency in descending order and key in ascending order,
+            // and limits the results to the top N entries specified by the user.
+            String query = "SELECT key, frequency " +
+                           "FROM " + table + " " +
+                           "ORDER BY frequency DESC, key ASC " +
+                           "LIMIT ?";
+
+
+            // Prepare the query and set the LIMIT value (top N)
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, parsed.getTopFrequency());
+
+            // Execute the query and obtain results
+            ResultSet rs = stmt.executeQuery();
+
+            // Print each result line in the format: <Key> <Frequency>
+            while (rs.next()) {
+                System.out.println(rs.getString("key") + " " + rs.getInt("frequency"));
+            }
+
+        } catch (SQLException e) {
+            // If any database error occurs, report it and exit
+            System.err.println("Database error: " + e.getMessage());
+            System.exit(1);
+        }
     }
 }
-
-    
