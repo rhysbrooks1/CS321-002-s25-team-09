@@ -37,12 +37,25 @@ public class SSHSearchDatabase {
             return;
         }
 
+        // Delegate query execution to a separate method
+        queryDatabase(parsed.getType(), parsed.getDatabase(), parsed.getTopFrequency());
+    }
+
+    /**
+     * Queries the SQLite database for the top N most frequent key values
+     * from the specified BTree-derived table and prints them.
+     *
+     * @param type         The BTree type (e.g., accepted-ip, failed-time)
+     * @param dbPath       Path to the SQLite database file
+     * @param topFrequency Number of top results to retrieve
+     */
+    public static void queryDatabase(String type, String dbPath, int topFrequency) {
         try (
             // Open a connection to the SQLite database provided by the user
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:" + parsed.getDatabase())
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:" + dbPath)
         ) {
             // Convert the tree type (e.g., accepted-ip) to a valid SQL table name (e.g., acceptedip)
-            String table = parsed.getType().replace("-", "");//"-" is not a valid character in SQL table names
+            String table = type.replace("-", ""); // "-" is not a valid character in SQL table names
 
             // Build SQL query to select top N most frequent entries
             // The query selects the key and frequency from the specified table,
@@ -53,10 +66,9 @@ public class SSHSearchDatabase {
                            "ORDER BY frequency DESC, key ASC " +
                            "LIMIT ?";
 
-
             // Prepare the query and set the LIMIT value (top N)
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setInt(1, parsed.getTopFrequency());
+            stmt.setInt(1, topFrequency);
 
             // Execute the query and obtain results
             ResultSet rs = stmt.executeQuery();
