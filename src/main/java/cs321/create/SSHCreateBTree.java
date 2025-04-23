@@ -4,7 +4,8 @@ import cs321.btree.BTree;
 import cs321.btree.TreeObject;
 import cs321.common.ParseArgumentException;
 
-import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.PrintWriter;
 
 /**
  * The driver class for building a BTree representation of an SSH Log file.
@@ -24,10 +25,15 @@ public class SSHCreateBTree {
                 System.out.println(parsed);
             }
 
-            // Initialize BTree
-            BTree btree = new BTree(parsed.getDegree(), parsed.getTreeType(), parsed.isCacheEnabled(), parsed.getCacheSize());
+            // Initialize the BTree with parameters
+            BTree btree = new BTree(
+                parsed.getDegree(),
+                parsed.getTreeType(),
+                parsed.isCacheEnabled(),
+                parsed.getCacheSize()
+            );
 
-            // Read from wrangled file and insert into BTree
+            // Read wrangled file and insert each key
             SSHFileReader reader = new SSHFileReader(parsed.getSSHFileName(), parsed.getTreeType());
             while (reader.hasNextKey()) {
                 String key = reader.nextKey();
@@ -35,24 +41,22 @@ public class SSHCreateBTree {
             }
             reader.close();
 
-            // Save the BTree to disk
-            btree.saveToFile();
-
-            // Optional: write inorder traversal to dump file
+            // Dump contents to debug text file if requested
             if (parsed.getDebugLevel() == 1) {
-                btree.dumpToTextFile();
+                String dumpFileName = "dump-" + parsed.getTreeType() + "." + parsed.getDegree() + ".txt";
+                try (PrintWriter writer = new PrintWriter(new File(dumpFileName))) {
+                    btree.dumpToFile(writer);
+                }
             }
 
-            // Optional: insert BTree contents into a database
+            // Export BTree data to SQLite database if enabled
             if (parsed.useDatabase()) {
-                btree.writeToDatabase("SSHLogDB.db");
+                String tableName = parsed.getTreeType().replace("-", "");
+                btree.dumpToDatabase("SSHLogDB.db", tableName);
             }
 
         } catch (ParseArgumentException e) {
             printUsageAndExit("Argument error: " + e.getMessage());
-        } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + e.getMessage());
-            System.exit(1);
         } catch (Exception e) {
             System.err.println("Fatal error: " + e.getMessage());
             e.printStackTrace();
