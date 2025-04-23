@@ -102,21 +102,23 @@ public class BTreeTest {
         assertTrue(validateInserts(b, new String[]{"1"}));
     }
 
-      /**
+   /**
      * Nine Keys (0 -> 8) added to a tree of degree 2, ensuring full nodes will be split.
      */
     @Test
     public void testInsertTenKeys() throws BTreeException, IOException {
         BTree b = new BTree(2, testFilename);
 
-        // now only 9 slots, so no null in the input[]
+        // exactly 9 slots, so no null in the input[]
         String[] input = new String[9];
         for (int i = 0; i < input.length; i++) {
             input[i] = Integer.toString(i);
             b.insert(new TreeObject(input[i]));
         }
 
+        // we inserted 9 distinct keys
         assertEquals(9, b.getSize());
+        // with degree=2 and 9 keys, height should be 2
         assertEquals(2, b.getHeight());
         assertTrue(validateInserts(b, input));
     }
