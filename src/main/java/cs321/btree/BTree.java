@@ -147,7 +147,7 @@ public class BTree implements BTreeInterface {
     }
 
     private void insertNonFull(BTreeNode node, long off, TreeObject obj) throws IOException {
-        // 1) if key already in this node, bump count and return
+        // 1) SCAN for duplicate in this node; if found, bump count and return
         for (int k = 0; k < node.n; k++) {
             if (node.keys[k].getKey().equals(obj.getKey())) {
                 node.keys[k].incCount();
@@ -157,16 +157,18 @@ public class BTree implements BTreeInterface {
         }
 
         if (node.isLeaf) {
-            // 2) leaf-insert
+            // 2) leaf‐insert (all keys here are distinct)
             int i = node.n - 1;
             while (i >= 0 && obj.compareTo(node.keys[i]) < 0) i--;
-            for (int j = node.n; j > i + 1; j--) node.keys[j] = node.keys[j - 1];
+            for (int j = node.n; j > i + 1; j--) {
+                node.keys[j] = node.keys[j - 1];
+            }
             node.keys[i + 1] = obj;
             node.n++;
             size++;
             writeNode(off, node);
         } else {
-            // 3) internal-descent
+            // 3) internal‐node descent
             int i = 0;
             while (i < node.n && obj.compareTo(node.keys[i]) > 0) i++;
             BTreeNode child = readNode(node.children[i]);

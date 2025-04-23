@@ -157,20 +157,23 @@ public class BTreeTest {
     }
 
     /**
-     * Simply tests inserting many objects into the BTree (no duplicates).
-     */
-    @Test
-    public void testInsertTenThousandObjects() throws BTreeException, IOException {
-        BTree b = new BTree(2, testFilename);
-        String[] input = new String[10000];
-        for (int i = 0; i <= 10000; i++) {
-            input[i] = i + "";
-            b.insert(new TreeObject(i + ""));
-        }
+ * Simply tests inserting many objects into the BTree (no duplicates).
+ */
+@Test
+public void testInsertTenThousandObjects() throws BTreeException, IOException {
+    BTree b = new BTree(2, testFilename);
 
-        assertEquals(10000, b.getSize());
-        assertTrue(validateInserts(b, input));
+    String[] input = new String[10000];
+    // only 0 through 9999
+    for (int i = 0; i < input.length; i++) {
+        input[i] = Integer.toString(i);
+        b.insert(new TreeObject(input[i]));
     }
+
+    assertEquals(10000, b.getSize());
+    assertTrue(validateInserts(b, input));
+}
+
 
     /**
      * Test inserting into a tree using the example in Figure 18.6 in CLRS.
