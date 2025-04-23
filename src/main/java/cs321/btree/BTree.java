@@ -42,7 +42,6 @@ public class BTree implements BTreeInterface {
         if (exists && file.length() >= METADATA_SIZE) {
             readMetadata();
         } else {
-            // brand-new file
             size      = 0;
             nodeCount = 0;
             writeMetadata();              // reserve the first METADATA_SIZE bytes
@@ -101,7 +100,6 @@ public class BTree implements BTreeInterface {
         long storedCount  = buf.getLong();
 
         if (storedDegree != degree) {
-            // wipe & re‐init
             file.setLength(0);
             size      = 0;
             nodeCount = 0;
@@ -123,8 +121,7 @@ public class BTree implements BTreeInterface {
     private int calcHeight(long off) {
         try {
             BTreeNode n = readNode(off);
-            if (n.isLeaf) return 0;
-            return 1 + calcHeight(n.children[0]);
+            return n.isLeaf ? 0 : 1 + calcHeight(n.children[0]);
         } catch (IOException e) {
             return -1;
         }
@@ -134,7 +131,7 @@ public class BTree implements BTreeInterface {
     public void insert(TreeObject obj) throws IOException {
         BTreeNode root = readNode(rootOffset);
         if (root.isFull(degree)) {
-            long newRootOff = createNewNode(false);  // nodeCount++
+            long newRootOff = createNewNode(false);
             BTreeNode newRoot = new BTreeNode(false, degree);
             newRoot.children[0] = rootOffset;
             writeNode(newRootOff, newRoot);
@@ -150,41 +147,33 @@ public class BTree implements BTreeInterface {
     }
 
     private void insertNonFull(BTreeNode node, long off, TreeObject obj) throws IOException {
-        if (node.isLeaf) {
-            // **leaf**: find insertion point
-            int i = node.n - 1;
-            while (i >= 0 && obj.compareTo(node.keys[i]) < 0) i--;
-            // duplicate?
-            if (i >= 0 && node.keys[i].getKey().equals(obj.getKey())) {
-                node.keys[i].incCount();
-            } else {
-                // shift & insert
-                for (int j = node.n; j > i+1; j--) node.keys[j] = node.keys[j-1];
-                node.keys[i+1] = obj;
-                node.n++;
-                size++;
-            }
-            writeNode(off, node);
-        } else {
-            // **internal**: first check for a duplicate in this node
-            int i = 0;
-            while (i < node.n && obj.compareTo(node.keys[i]) > 0) i++;
-            if (i < node.n && obj.compareTo(node.keys[i]) == 0) {
-                node.keys[i].incCount();
+        // 1) if key already in this node, bump count and return
+        for (int k = 0; k < node.n; k++) {
+            if (node.keys[k].getKey().equals(obj.getKey())) {
+                node.keys[k].incCount();
                 writeNode(off, node);
                 return;
             }
+        }
 
-            // now descend into child[i]
+        if (node.isLeaf) {
+            // 2) leaf-insert
+            int i = node.n - 1;
+            while (i >= 0 && obj.compareTo(node.keys[i]) < 0) i--;
+            for (int j = node.n; j > i + 1; j--) node.keys[j] = node.keys[j - 1];
+            node.keys[i + 1] = obj;
+            node.n++;
+            size++;
+            writeNode(off, node);
+        } else {
+            // 3) internal-descent
+            int i = 0;
+            while (i < node.n && obj.compareTo(node.keys[i]) > 0) i++;
             BTreeNode child = readNode(node.children[i]);
             if (child.isFull(degree)) {
                 splitChild(node, off, i);
-                // re-load parent
                 node = readNode(off);
-                // figure out which side to go to
-                if (obj.getKey().compareTo(node.keys[i].getKey()) > 0) {
-                    i++;
-                }
+                if (obj.compareTo(node.keys[i]) > 0) i++;
                 child = readNode(node.children[i]);
             }
             insertNonFull(child, node.children[i], obj);
@@ -193,41 +182,32 @@ public class BTree implements BTreeInterface {
 
     private void splitChild(BTreeNode parent, long pOff, int idx) throws IOException {
         BTreeNode full = readNode(parent.children[idx]);
-        // create sibling (this already does nodeCount++)
         long sibOff = createNewNode(full.isLeaf);
         BTreeNode sib = new BTreeNode(full.isLeaf, degree);
 
-        // move over degree-1 keys
-        for (int j = 0; j < degree-1; j++) {
+        for (int j = 0; j < degree - 1; j++) {
             sib.keys[j] = full.keys[j + degree];
         }
         if (!full.isLeaf) {
-            System.arraycopy(full.children, degree,
-                             sib.children,   0,
-                             degree);
+            System.arraycopy(full.children, degree, sib.children, 0, degree);
         }
-        sib.n   = degree - 1;
-        full.n  = degree - 1;
+        sib.n = degree - 1;
+        full.n = degree - 1;
 
-        // insert sibling into parent
         for (int j = parent.n; j > idx; j--) {
-            parent.children[j+1] = parent.children[j];
+            parent.children[j + 1] = parent.children[j];
         }
-        parent.children[idx+1] = sibOff;
+        parent.children[idx + 1] = sibOff;
 
-        // shift parent keys & insert pivot
-        for (int j = parent.n-1; j >= idx; j--) {
-            parent.keys[j+1] = parent.keys[j];
+        for (int j = parent.n - 1; j >= idx; j--) {
+            parent.keys[j + 1] = parent.keys[j];
         }
         parent.keys[idx] = full.keys[degree - 1];
         parent.n++;
 
-        // write back
         writeNode(pOff, parent);
         writeNode(parent.children[idx], full);
         writeNode(sibOff, sib);
-
-        // <-- **removed** the extra nodeCount++ here
     }
 
     @Override
@@ -239,8 +219,7 @@ public class BTree implements BTreeInterface {
         int i = 0;
         while (i < n.n && key.compareTo(n.keys[i].getKey()) > 0) i++;
         if (i < n.n && key.equals(n.keys[i].getKey())) return n.keys[i];
-        if (n.isLeaf) return null;
-        return searchRec(n.children[i], key);
+        return n.isLeaf ? null : searchRec(n.children[i], key);
     }
 
     @Override
@@ -289,7 +268,7 @@ public class BTree implements BTreeInterface {
 
     private long createNewNode(boolean leaf) throws IOException {
         BTreeNode node = new BTreeNode(leaf, degree);
-        long off = file.length();      // append
+        long off = file.length();
         writeNode(off, node);
         if (useCache) cache.put(off, node);
         nodeCount++;
