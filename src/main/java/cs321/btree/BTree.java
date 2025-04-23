@@ -168,8 +168,8 @@ public class BTree implements BTreeInterface {
         } else {
             // **internal**: first check for a duplicate in this node
             int i = 0;
-            while (i < node.n && obj.getKey().compareTo(node.keys[i].getKey()) > 0) i++;
-            if (i < node.n && obj.getKey().compareTo(node.keys[i].getKey()) == 0) {
+            while (i < node.n && obj.compareTo(node.keys[i]) > 0) i++;
+            if (i < node.n && obj.compareTo(node.keys[i]) == 0) {
                 node.keys[i].incCount();
                 writeNode(off, node);
                 return;

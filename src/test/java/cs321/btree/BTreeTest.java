@@ -115,10 +115,12 @@ public class BTreeTest {
             input[i] = Integer.toString(i);
             b.insert(new TreeObject(input[i]));
         }
+
         assertEquals(9, b.getSize());
         assertEquals(2, b.getHeight());
         assertTrue(validateInserts(b, input));
     }
+
 
     /**
      * Ten keys (10 -> 1) inserted into a BTree of degree 2.
@@ -161,7 +163,7 @@ public class BTreeTest {
     public void testInsertTenThousandObjects() throws BTreeException, IOException {
         BTree b = new BTree(2, testFilename);
         String[] input = new String[10000];
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i <= 10000; i++) {
             input[i] = i + "";
             b.insert(new TreeObject(i + ""));
         }
