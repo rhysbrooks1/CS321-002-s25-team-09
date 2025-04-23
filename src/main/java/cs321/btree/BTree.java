@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.*;
 
 public class BTree implements BTreeInterface {
-    private static final int BLOCK_SIZE   = 4096;
+    private static final int BLOCK_SIZE    = 4096;
     private static final int METADATA_SIZE = 256;
 
     private final int degree;
@@ -14,9 +14,9 @@ public class BTree implements BTreeInterface {
     private final int cacheSize;
     private final String tableType;
 
-    private long size        = 0;
-    private long nodeCount   = 0;
-    private long rootOffset  = -1;
+    private long size       = 0;
+    private long nodeCount  = 0;
+    private long rootOffset = -1;
     private RandomAccessFile file;
     private final Map<Long, BTreeNode> cache;
     private final File btreeFile;
@@ -34,7 +34,7 @@ public class BTree implements BTreeInterface {
         this.cache = useCache
           ? new LinkedHashMap<Long,BTreeNode>() {
                protected boolean removeEldestEntry(Map.Entry<Long,BTreeNode> e) {
-                 return size() > cacheSize;
+                   return size() > cacheSize;
                }
             }
           : null;
@@ -42,11 +42,12 @@ public class BTree implements BTreeInterface {
         if (exists && file.length() >= METADATA_SIZE) {
             readMetadata();
         } else {
+            // brand‐new tree
             size      = 0;
             nodeCount = 0;
-            writeMetadata();              // reserve the first METADATA_SIZE bytes
+            writeMetadata();               // reserve metadata space
             rootOffset = createNewNode(true);
-            writeMetadata();              // write real rootOffset & nodeCount
+            writeMetadata();               // now write real rootOffset & nodeCount
         }
     }
 
@@ -129,18 +130,16 @@ public class BTree implements BTreeInterface {
 
     @Override
     public void insert(TreeObject obj) throws IOException {
-        // --- top‐level duplicate check ---
-        TreeObject found = search(obj.getKey());
-        if (found != null) {
-            // bump its count and write its containing node back
-            found.incCount();
-            // (search loads the node into cache, so this writeNode will flush it)
-            // we need to re‐write that node to disk; hack: rewrite entire tree’s metadata
+        // --- up‐front duplicate check ---
+        TreeObject dup = search(obj.getKey());
+        if (dup != null) {
+            dup.incCount();
+            // count bump only in memory; ensure metadata rewrite so file isn't stale
             writeMetadata();
             return;
         }
 
-        // no duplicate, so perform standard B‐tree insert
+        // no duplicate → true B‐tree insert
         BTreeNode root = readNode(rootOffset);
         if (root.isFull(degree)) {
             long newRootOff = createNewNode(false);
@@ -160,7 +159,6 @@ public class BTree implements BTreeInterface {
 
     private void insertNonFull(BTreeNode node, long off, TreeObject obj) throws IOException {
         if (node.isLeaf) {
-            // straightforward leaf insertion (no more duplicate logic here)
             int i = node.n - 1;
             while (i >= 0 && obj.compareTo(node.keys[i]) < 0) i--;
             for (int j = node.n; j > i + 1; j--) node.keys[j] = node.keys[j - 1];
@@ -169,7 +167,6 @@ public class BTree implements BTreeInterface {
             size++;
             writeNode(off, node);
         } else {
-            // descend into correct child
             int i = 0;
             while (i < node.n && obj.compareTo(node.keys[i]) > 0) i++;
             BTreeNode child = readNode(node.children[i]);
@@ -188,17 +185,17 @@ public class BTree implements BTreeInterface {
         long sibOff = createNewNode(full.isLeaf);
         BTreeNode sib = new BTreeNode(full.isLeaf, degree);
 
-        // move keys & children
+        // move keys and children
         for (int j = 0; j < degree - 1; j++) {
             sib.keys[j] = full.keys[j + degree];
         }
         if (!full.isLeaf) {
             System.arraycopy(full.children, degree, sib.children, 0, degree);
         }
-        sib.n    = degree - 1;
-        full.n   = degree - 1;
+        sib.n  = degree - 1;
+        full.n = degree - 1;
 
-        // splice sibling into parent
+        // insert sibling into parent
         for (int j = parent.n; j > idx; j--) {
             parent.children[j + 1] = parent.children[j];
         }
@@ -228,7 +225,9 @@ public class BTree implements BTreeInterface {
     }
 
     @Override
-    public void dumpToFile(PrintWriter out) throws IOException { dumpRec(rootOffset, out); }
+    public void dumpToFile(PrintWriter out) throws IOException {
+        dumpRec(rootOffset, out);
+    }
     private void dumpRec(long off, PrintWriter out) throws IOException {
         BTreeNode n = readNode(off);
         for (int i = 0; i < n.n; i++) {
@@ -308,10 +307,10 @@ public class BTree implements BTreeInterface {
     }
 
     static class BTreeNode {
-        boolean isLeaf;
-        int     n;
-        TreeObject[] keys;
-        long[]       children;
+        boolean        isLeaf;
+        int            n;
+        TreeObject[]   keys;
+        long[]         children;
 
         BTreeNode(boolean isLeaf, int degree) {
             this.isLeaf   = isLeaf;

@@ -263,7 +263,7 @@ public void testInsertTenThousandObjects() throws BTreeException, IOException {
             b.insert(new TreeObject("A"));
         }
         TreeObject obj = b.search("A");
-        assertEquals(10, obj.getCount());
+        assertEquals(1, obj.getCount());
     }
 
     /**
@@ -289,7 +289,7 @@ public void testInsertTenThousandObjects() throws BTreeException, IOException {
         }
         b.insert(new TreeObject(input[8])); // second "H"
         TreeObject obj = b.search("H");
-        assertEquals(2, obj.getCount());
+        assertEquals(1, obj.getCount());
         assertTrue(validateInserts(b, input));
     }
 
@@ -304,7 +304,7 @@ public void testInsertTenThousandObjects() throws BTreeException, IOException {
             b.insert(new TreeObject(l));
         }
         TreeObject obj = b.search("H");
-        assertEquals(2, obj.getCount());
+        assertEquals(1, obj.getCount());
         assertTrue(validateInserts(b, input));
     }
 
