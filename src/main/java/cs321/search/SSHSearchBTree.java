@@ -9,7 +9,7 @@ import java.io.FileReader;
 import java.util.*;
 
 public class SSHSearchBTree {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws BTreeException {
         try {
             SSHSearchBTreeArguments arguments = new SSHSearchBTreeArguments(args);
 
@@ -40,8 +40,6 @@ public class SSHSearchBTree {
                 System.out.println(r.key + " " + r.count);
             }
 
-        } catch (BTreeException e) {
-            System.err.println("BTree error: " + e.getMessage());
         } catch (Exception e) {
             System.err.println("ERROR: " + e.getMessage());
             e.printStackTrace();
