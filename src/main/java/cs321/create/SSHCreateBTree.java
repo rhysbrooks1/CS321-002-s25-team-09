@@ -5,6 +5,7 @@ import cs321.btree.TreeObject;
 import cs321.common.ParseArgumentException;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
@@ -26,6 +27,7 @@ public class SSHCreateBTree {
             }
 
             // Initialize the BTree with parameters
+            //    -> degree, treeType (not sshFileName), cache, cacheSize
             BTree btree = new BTree(
                 parsed.getDegree(),
                 parsed.getTreeType(),
@@ -33,7 +35,7 @@ public class SSHCreateBTree {
                 parsed.getCacheSize()
             );
 
-            // Read wrangled file and insert each key
+            // Read the SSH log and insert each key
             SSHFileReader reader = new SSHFileReader(parsed.getSSHFileName(), parsed.getTreeType());
             while (reader.hasNextKey()) {
                 String key = reader.nextKey();
@@ -41,7 +43,7 @@ public class SSHCreateBTree {
             }
             reader.close();
 
-            // Dump contents to debug text file if requested
+            // Dump to text if in debug
             if (parsed.getDebugLevel() == 1) {
                 String dumpFileName = "dump-" + parsed.getTreeType() + "." + parsed.getDegree() + ".txt";
                 try (PrintWriter writer = new PrintWriter(new File(dumpFileName))) {
@@ -49,14 +51,21 @@ public class SSHCreateBTree {
                 }
             }
 
-            // Export BTree data to SQLite database if enabled
+            // Dump to SQLite if requested
             if (parsed.useDatabase()) {
                 String tableName = parsed.getTreeType().replace("-", "");
                 btree.dumpToDatabase("SSHLogDB.db", tableName);
             }
 
+            // Flush metadata & cached nodes to disk
+            btree.finishUp();
+
         } catch (ParseArgumentException e) {
             printUsageAndExit("Argument error: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("I/O error: " + e.getMessage());
+            e.printStackTrace();
+            System.exit(1);
         } catch (Exception e) {
             System.err.println("Fatal error: " + e.getMessage());
             e.printStackTrace();
@@ -64,10 +73,6 @@ public class SSHCreateBTree {
         }
     }
 
-    /**
-     * Print usage message and exit.
-     * @param errorMessage explanation of failure
-     */
     private static void printUsageAndExit(String errorMessage) {
         System.err.println("Error: " + errorMessage);
         System.err.println("Usage:");
