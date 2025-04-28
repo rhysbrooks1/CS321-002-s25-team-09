@@ -27,13 +27,24 @@ public class SSHCreateBTree {
             }
 
             // Initialize the BTree with parameters
-            //    -> degree, treeType (not sshFileName), cache, cacheSize
-            BTree btree = new BTree(
-                parsed.getDegree(),
-                parsed.getTreeType(),
-                parsed.isCacheEnabled(),
-                parsed.getCacheSize()
-            );
+            BTree btree;
+            if (parsed.isCacheEnabled()) {
+                // Build BTree with cache
+                btree = new BTree(
+                    parsed.getDegree(),
+                    parsed.getTreeType(),
+                    true,
+                    parsed.getCacheSize()
+                );
+            } else {
+                // Build BTree without cache
+                btree = new BTree(
+                    parsed.getDegree(),
+                    parsed.getTreeType(),
+                    false,
+                    0
+                );
+            }
 
             // Read the SSH log and insert each key
             SSHFileReader reader = new SSHFileReader(parsed.getSSHFileName(), parsed.getTreeType());
@@ -43,7 +54,7 @@ public class SSHCreateBTree {
             }
             reader.close();
 
-            // Dump to text if in debug
+            // Dump to text if in debug mode
             if (parsed.getDebugLevel() == 1) {
                 String dumpFileName = "dump-" + parsed.getTreeType() + "." + parsed.getDegree() + ".txt";
                 try (PrintWriter writer = new PrintWriter(new File(dumpFileName))) {
@@ -51,13 +62,13 @@ public class SSHCreateBTree {
                 }
             }
 
-            // Dump to SQLite if requested
+            // Dump to SQLite database if requested
             if (parsed.useDatabase()) {
                 String tableName = parsed.getTreeType().replace("-", "");
                 btree.dumpToDatabase("SSHLogDB.db", tableName);
             }
 
-            // Flush metadata & cached nodes to disk
+            // Flush and close the BTree file
             btree.finishUp();
 
         } catch (ParseArgumentException e) {
