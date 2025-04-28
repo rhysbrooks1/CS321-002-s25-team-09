@@ -1,47 +1,70 @@
-package cs321.create;
+// package cs321.create;
 
-import cs321.common.ParseArgumentException;
+// import cs321.common.ParseArgumentException;
 
+// import java.util.HashMap;
+// import java.util.Map;
 
-/**
- * The driver class for wrangling a raw SSH log file into a useful form.
- *
- * @author 
- */
-public class SSHDataWrangler {
+// /**
+//  * The driver class for wrangling a raw SSH log file into a useful form.
+//  * Converts raw logs into stripped format for downstream BTree creation.
+//  */
+// public class SSHDataWrangler {
 
-	private final static String rawSSHFile = null;
-	private final static String SSHFile = null;
+//     private static String rawSSHFile;
+//     private static String SSHFile;
 
-    /**
-     * Main driver of program.
-     * @param args
-     */
-    public static void main(String[] args) throws Exception 
-	{
-		System.out.println("Hello world from cs321.create.SSHDataWrangler.main");
-        parseArguments(args);
-        // other code    
-	}
+//     /**
+//      * Main driver of the program.
+//      * @param args Command-line arguments
+//      */
+//     public static void main(String[] args) throws Exception {
+//         System.out.println("Starting SSHDataWrangler...");
 
+//         try {
+//             parseArguments(args);
+//         } catch (ParseArgumentException e) {
+//             printUsageAndExit(e.getMessage());
+//         }
 
-    /**
-     * Process command line arguments.
-     * @param args  The command line arguments passed to the main method.
-     */
-    public static void parseArguments(String[] args) throws ParseArgumentException
-    {
-        return;
-    }
+//         // TODO: Perform actual wrangling logic here
+//         System.out.println("Raw file: " + rawSSHFile);
+//         System.out.println("Output file: " + SSHFile);
+//     }
 
+//     /**
+//      * Processes command line arguments.
+//      * Expected format:
+//      * --rawSshFile=<inputFile>
+//      * --sshFile=<outputFile>
+//      */
+//     public static void parseArguments(String[] args) throws ParseArgumentException {
+//         Map<String, String> argMap = new HashMap<>();
 
-	/** 
-	 * Print usage message and exit.
-	 * @param errorMessage the error message for proper usage
-	 */
-	private static void printUsageAndExit(String errorMessage)
-    {
-        System.exit(1);
-	}
+//         for (String arg : args) {
+//             if (arg.startsWith("--") && arg.contains("=")) {
+//                 String[] parts = arg.substring(2).split("=", 2);
+//                 if (parts.length == 2) {
+//                     argMap.put(parts[0], parts[1]);
+//                 }
+//             }
+//         }
 
-}
+//         rawSSHFile = argMap.get("rawSshFile");
+//         SSHFile = argMap.get("sshFile");
+
+//         if (rawSSHFile == null || SSHFile == null) {
+//             throw new ParseArgumentException("Both --rawSshFile and --sshFile arguments are required.");
+//         }
+//     }
+
+//     /**
+//      * Prints usage message and exits the program.
+//      * @param errorMessage Description of what went wrong
+//      */
+//     private static void printUsageAndExit(String errorMessage) {
+//         System.err.println("Error: " + errorMessage);
+//         System.err.println("Usage: java -jar SSHDataWrangler.jar --rawSshFile=<rawLog> --sshFile=<strippedLog>");
+//         System.exit(1);
+//     }
+// }
