@@ -13,7 +13,7 @@ import java.util.Map;
  *   --degree=<btree-degree>
  *   --sshFile=<input filename>
  *   --type=<btree-type>
- *   [--cache-size=<n>] if cache=1
+ *   [--cache-size=<n>] or [--cacheSize=<n>] if cache=1
  *   --database=<yes|no>
  *   [--debug=<0|1>]
  */
@@ -54,6 +54,10 @@ public class SSHCreateBTreeArguments {
         this.useCache = (cacheInt == 1);
 
         this.degree = ParseArgumentUtils.convertStringToInt(map.get("degree"));
+        if (degree < 2) {
+            throw new ParseArgumentException("--degree must be at least 2");
+        }
+
         this.SSHFileName = map.get("sshFile");
         this.treeType = map.get("type");
 
@@ -64,10 +68,11 @@ public class SSHCreateBTreeArguments {
         this.useDatabase = dbFlag.equals("yes");
 
         if (useCache) {
-            if (!map.containsKey("cache-size")) {
+            String sizeStr = map.getOrDefault("cache-size", map.get("cacheSize"));
+            if (sizeStr == null) {
                 throw new ParseArgumentException("--cache-size is required when cache=1");
             }
-            int size = ParseArgumentUtils.convertStringToInt(map.get("cache-size"));
+            int size = ParseArgumentUtils.convertStringToInt(sizeStr);
             ParseArgumentUtils.verifyRanges(size, 100, 10000);
             this.cacheSize = size;
         } else {
