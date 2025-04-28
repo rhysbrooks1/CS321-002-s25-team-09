@@ -93,4 +93,13 @@ public class TreeObject implements Comparable<TreeObject> {
     public int compareTo(TreeObject o) {
         return this.key.compareTo(o.getKey());
     }
+
+     /**
+     * Returns the number of bytes a TreeObject occupies on disk.
+     * @return the size in bytes
+     */
+    public static int getDiskSize() {
+        return BYTES;
+    }
+
 }
