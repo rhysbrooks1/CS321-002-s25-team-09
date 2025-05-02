@@ -54,7 +54,7 @@ public class SSHCreateBTree {
 
             // Dump to text if in debug mode
             if (parsed.getDebugLevel() == 1) {
-                String dumpFileName = "dump-" + parsed.getTreeType() + "." + parsed.getDegree() + ".txt";
+                String dumpFileName = "dump-" + parsed.getTreeType() + ".0.txt";
                 try (PrintWriter writer = new PrintWriter(new File(dumpFileName))) {
                     btree.dumpToFile(writer);
                 }

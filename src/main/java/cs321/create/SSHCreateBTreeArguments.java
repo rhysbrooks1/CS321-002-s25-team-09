@@ -53,9 +53,11 @@ public class SSHCreateBTreeArguments {
         ParseArgumentUtils.verifyRanges(cacheInt, 0, 1);
         this.useCache = (cacheInt == 1);
 
-        this.degree = ParseArgumentUtils.convertStringToInt(map.get("degree"));
-        if (degree < 0) {
-            throw new ParseArgumentException("--degree must be >= 0");
+        int parsedDegree = ParseArgumentUtils.convertStringToInt(map.get("degree"));
+        this.degree = (parsedDegree == 0) ? 26 : parsedDegree;
+
+        if (this.degree < 2) {
+            throw new ParseArgumentException("--degree must be at least 2");
         }
 
         this.SSHFileName = map.get("sshFile");
