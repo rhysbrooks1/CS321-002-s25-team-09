@@ -151,25 +151,37 @@ public class BTree implements BTreeInterface {
             while (i >= 0 && obj.compareTo(node.keys.get(i)) < 0) {
                 i--;
             }
-
+            // if matches bump its count and return
             if (i >= 0 && obj.compareTo(node.keys.get(i)) == 0) {
                 node.keys.get(i).setCount(node.keys.get(i).getCount() + 1);
                 writeNode(node);
-            } else {
-                i++;
-                long childAddress = node.children.get(i);
-                BTreeNode child = readNode(childAddress);
-
-                if (child.keys.size() == 2 * degree - 1) {
-                    splitChild(node, i);
-                    node = readNode(node.diskAddress);
-                    if (obj.compareTo(node.keys.get(i)) > 0) {
-                        i++;
-                    }
-                    child = readNode(node.children.get(i));
-                }
-                insertNonFull(child, obj);
+                return;
             }
+            // descend into child i+1
+            i++;
+            long childAddress = node.children.get(i);
+            BTreeNode child = readNode(childAddress);
+
+            // if that child is full, split it
+            if (child.keys.size() == 2 * degree - 1) {
+                splitChild(node, i);
+
+                // Check for duplicates
+                if (obj.compareTo(node.keys.get(i)) == 0) {
+                    node.keys.get(i).setCount(node.keys.get(i).getCount() + 1);
+                    writeNode(node);
+                    return;
+                }
+
+                // decide which of the two children to descend into
+                if (obj.compareTo(node.keys.get(i)) > 0) {
+                    i++;
+                }
+                child = readNode(node.children.get(i));
+            }
+
+            // finally, recurse
+            insertNonFull(child, obj);
         }
     }
 
