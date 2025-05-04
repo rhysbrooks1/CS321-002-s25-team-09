@@ -1,137 +1,150 @@
 package cs321.create;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
+import cs321.common.ParseArgumentException;
+import cs321.common.ParseArgumentUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * SSHCreateBTreeArguments parses command line arguments for SSHCreateBTree and
- * validates them according to the project specification.
+ * SSHCreateBTreeArguments parses command line arguments for SSHCreateBTree.
+ * Expected flags:
+ *   --cache=<0|1>
+ *   --degree=<btree-degree>
+ *   --sshFile=<input filename>
+ *   --type=<btree-type>
+ *   [--cache-size=<n>] or [--cacheSize=<n>] if cache=1
+ *   --database=<yes|no>
+ *   [--debug=<0|1>]
  */
 public class SSHCreateBTreeArguments {
 
     private final boolean useCache;
-    private final boolean createDatabase;
-    private final int     degree;
-    private final String  sshFilename;
-    private final String  treeType;
-    private final int     cacheSize;
-    private final int     debugLevel;
+    private final int degree;
+    private final String SSHFileName;
+    private final String treeType;
+    private final int cacheSize;
+    private final int debugLevel;
+    private final boolean useDatabase;
 
-    // Allowed tree types per spec
-    private static final String[] VALID_TYPES = {
-        "accepted-ip","accepted-time","invalid-ip","invalid-time",
-        "failed-ip","failed-time","reverseaddress-ip","reverseaddress-time","user-ip"
-    };
-
-    private static final String USAGE =
-        "Usage: SSHCreateBTree --cache=<0|1> --degree=<btree-degree> " +
-        "--sshFile=<wrangled-ssh-file> --type=<tree-type> " +
-        "[--cache-size=<100-10000>] --database=<yes|no> [--debug=<0|1>]";
-
-    public SSHCreateBTreeArguments(String[] args) {
-        Boolean _useCache   = null;
-        Boolean _createDB   = null;
-        Integer _degree     = null;
-        String  _sshFile    = null;
-        String  _treeType   = null;
-        Integer _cacheSize  = null;
-        Integer _debugLevel = 0;
+    /**
+     * Constructor parses and validates CLI arguments.
+     * @param args command-line arguments
+     * @throws ParseArgumentException if invalid arguments are provided
+     */
+    public SSHCreateBTreeArguments(String[] args) throws ParseArgumentException {
+        Map<String, String> map = new HashMap<>();
 
         for (String arg : args) {
-            if (arg.startsWith("--cache=")) {
-                int v = parseInt(arg, 8, "cache");
-                if (v!=0 && v!=1) fail("--cache must be 0 or 1");
-                _useCache = v==1;
-            }
-            else if (arg.startsWith("--cache-size=") || arg.startsWith("--cacheSize=")) {
-                // accept both --cache-size and --cacheSize
-                int prefix = arg.indexOf('=') + 1;
-                _cacheSize = parseInt(arg, prefix, "cache-size");
-            }
-            else if (arg.startsWith("--degree=")) {
-                _degree = parseInt(arg, 9, "degree");
-                if (_degree < 0) fail("--degree cannot be negative");
-            }
-            else if (arg.startsWith("--sshFile=")) {
-                _sshFile = arg.substring(10);
-            }
-            else if (arg.startsWith("--type=")) {
-                _treeType = arg.substring(7);
-            }
-            else if (arg.startsWith("--database=")) {
-                String val = arg.substring(11);
-                if (!val.equals("yes") && !val.equals("no")) {
-                    fail("--database must be 'yes' or 'no'");
-                }
-                _createDB = val.equals("yes");
-            }
-            else if (arg.startsWith("--debug=")) {
-                _debugLevel = parseInt(arg, 8, "debug");
-                if (_debugLevel<0 || _debugLevel>1) fail("--debug must be 0 or 1");
-            }
-            else {
-                fail("Unknown argument: " + arg);
+            if (arg.startsWith("--") && arg.contains("=")) {
+                String[] split = arg.substring(2).split("=", 2);
+                map.put(split[0], split[1]);
             }
         }
 
-        // Validate mandatory args
-        if (_useCache==null || _createDB==null || _degree==null ||
-            _sshFile==null || _treeType==null) {
-            fail("Missing required arguments");
+        // Validate required arguments
+        if (!map.containsKey("cache") || !map.containsKey("degree") ||
+            !map.containsKey("sshFile") || !map.containsKey("type") ||
+            !map.containsKey("database")) {
+            throw new ParseArgumentException("Missing required arguments: --cache, --degree, --sshFile, --type, --database");
         }
-        // File checks
-        if (!Files.exists(Paths.get(_sshFile)))  fail("SSH log file not found: " + _sshFile);
-        if (!Files.isReadable(Paths.get(_sshFile))) fail("SSH log file not readable: " + _sshFile);
-        // Tree type
-        if (!Arrays.asList(VALID_TYPES).contains(_treeType)) {
-            fail("Invalid tree type: " + _treeType);
-        }
-        // Cache-size constraints
-        if (_useCache) {
-            if (_cacheSize==null) fail("--cache-size required when --cache=1");
-            if (_cacheSize < 100 || _cacheSize > 10000) {
-                fail("--cache-size must be between 100 and 10000");
-            }
+
+        int cacheInt = ParseArgumentUtils.convertStringToInt(map.get("cache"));
+        ParseArgumentUtils.verifyRanges(cacheInt, 0, 1);
+        this.useCache = (cacheInt == 1);
+
+        int rawDegree = ParseArgumentUtils.convertStringToInt(map.get("degree"));
+        if (rawDegree == 0) {
+            this.degree = computeOptimalDegree();
+        } else if (rawDegree < 2) {
+            throw new ParseArgumentException("--degree must be at least 2 or 0 for auto");
         } else {
-            _cacheSize = 0;
+            this.degree = rawDegree;
         }
-        // Assign
-        this.useCache      = _useCache;
-        this.createDatabase= _createDB;
-        this.degree        = _degree;
-        this.sshFilename   = _sshFile;
-        this.treeType      = _treeType;
-        this.cacheSize     = _cacheSize;
-        this.debugLevel    = _debugLevel;
-    }
 
-    private int parseInt(String arg, int prefixLen, String name) {
-        try {
-            return Integer.parseInt(arg.substring(prefixLen));
-        } catch (NumberFormatException e) {
-            fail("Invalid integer for " + name + ": " + arg);
-            return -1;
+        this.SSHFileName = map.get("sshFile");
+        this.treeType = map.get("type");
+
+        String dbFlag = map.get("database");
+        if (!dbFlag.equals("yes") && !dbFlag.equals("no")) {
+            throw new ParseArgumentException("--database must be yes or no");
+        }
+        this.useDatabase = dbFlag.equals("yes");
+
+        if (useCache) {
+            String sizeStr = map.getOrDefault("cache-size", map.get("cacheSize"));
+            if (sizeStr == null) {
+                throw new ParseArgumentException("--cache-size is required when cache=1");
+            }
+            int size = ParseArgumentUtils.convertStringToInt(sizeStr);
+            ParseArgumentUtils.verifyRanges(size, 100, 10000);
+            this.cacheSize = size;
+        } else {
+            this.cacheSize = -1;
+        }
+
+        if (map.containsKey("debug")) {
+            int debug = ParseArgumentUtils.convertStringToInt(map.get("debug"));
+            ParseArgumentUtils.verifyRanges(debug, 0, 1);
+            this.debugLevel = debug;
+        } else {
+            this.debugLevel = 0;
         }
     }
 
-    private void fail(String msg) {
-        throw new IllegalArgumentException("Error: " + msg + "\n\n" + USAGE);
+    private int computeOptimalDegree() {
+        final int blockSize = 4096;
+        final int overhead = 5; // 1 byte isLeaf + 4 bytes n
+        final int keySize = 64 + 8; // 64 bytes for key + 8 bytes count
+        final int ptrSize = 8;
+
+        for (int t = 2; t < 100; t++) {
+            int totalSize = overhead + (2 * t - 1) * keySize + (2 * t) * ptrSize;
+            if (totalSize > blockSize) {
+                return t - 1;
+            }
+        }
+        return 2; // fallback
     }
 
-    public boolean getUseCache()       { return useCache; }
-    public boolean getCreateDatabase() { return createDatabase; }
-    public int     getDegree()         { return degree; }
-    public String  getSSHFilename()    { return sshFilename; }
-    public String  getTreeType()       { return treeType; }
-    public int     getCacheSize()      { return cacheSize; }
-    public int     getDebugLevel()     { return debugLevel; }
+    public boolean isCacheEnabled() {
+        return useCache;
+    }
+
+    public int getDegree() {
+        return degree;
+    }
+
+    public String getSSHFileName() {
+        return SSHFileName;
+    }
+
+    public String getTreeType() {
+        return treeType;
+    }
+
+    public int getCacheSize() {
+        return cacheSize;
+    }
+
+    public int getDebugLevel() {
+        return debugLevel;
+    }
+
+    public boolean useDatabase() {
+        return useDatabase;
+    }
 
     @Override
     public String toString() {
-        return "SSHCreateBTreeArguments[cache="+useCache+", degree="+degree+
-             ", sshFile="+sshFilename+", type="+treeType+
-             ", cacheSize="+cacheSize+", db="+createDatabase+
-             ", debug="+debugLevel+"]";
+        return "SSHCreateBTreeArguments{" +
+                "useCache=" + useCache +
+                ", degree=" + degree +
+                ", SSHFileName='" + SSHFileName + '\'' +
+                ", treeType='" + treeType + '\'' +
+                ", cacheSize=" + cacheSize +
+                ", debugLevel=" + debugLevel +
+                ", useDatabase=" + useDatabase +
+                '}';
     }
 }

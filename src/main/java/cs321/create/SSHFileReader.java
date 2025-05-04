@@ -1,115 +1,214 @@
 package cs321.create;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-import java.util.NoSuchElementException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * Reads the stripped (wrangled) SSH log file line-by-line and provides keys for BTree insertion.
- * Each call to nextKey() returns the next line's key formatted as: type-field (e.g., Accepted-1.2.3.4).
+ * Class for reading SSH log files and extracting keys based on specified tree type.
  */
 public class SSHFileReader {
-
-    private final Scanner scanner;
-    private final String type;
+    
+    // Regular expression patterns for extracting information
+    private static final Pattern IP_PATTERN = Pattern.compile("\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b");
+    private static final Pattern USER_PATTERN = Pattern.compile("user\\s+([^\\s]+)");
+    private static final Pattern PORT_PATTERN = Pattern.compile("port\\s+(\\d+)");
+    private static final Pattern TIME_PATTERN = Pattern.compile("(\\w{3}\\s+\\d+\\s+\\d+:\\d+:\\d+)");
+    
+    private BufferedReader reader;
     private String nextKey;
-
-    public SSHFileReader(String filePath, String type) throws FileNotFoundException {
-        this.scanner = new Scanner(new File(filePath));
-        this.type = type;
-        advance(); // Load the first key
+    private String treeType;
+    
+    /**
+     * Constructor opens the file and prepares for reading.
+     * 
+     * @param filename SSH log file path
+     * @param treeType type of key to extract
+     * @throws IOException if file cannot be read
+     */
+    public SSHFileReader(String filename, String treeType) throws IOException {
+        this.reader = new BufferedReader(new FileReader(filename));
+        this.treeType = treeType;
+        readNextKey();
     }
-
-    private void advance() {
-        nextKey = null;
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine().trim();
-            if (line.isEmpty()) continue;
-
-            String[] parts = line.split(" ");
-            if (parts.length < 3) continue;
-
-            String timestamp = parts[1];
-            String action = parts[2];
-
-            switch (type) {
-                case "accepted-ip":
-                    if (action.equals("Accepted") && parts.length >= 5) {
-                        nextKey = "Accepted-" + parts[4];
-                    }
-                    break;
-
-                case "accepted-time":
-                    if (action.equals("Accepted")) {
-                        nextKey = "Accepted-" + timestamp;
-                    }
-                    break;
-
-                case "failed-ip":
-                    if (action.equals("Failed") && parts.length >= 5) {
-                        nextKey = "Failed-" + parts[4];
-                    }
-                    break;
-
-                case "failed-time":
-                    if (action.equals("Failed")) {
-                        nextKey = "Failed-" + timestamp;
-                    }
-                    break;
-
-                case "invalid-ip":
-                    if (action.equals("Invalid") && parts.length >= 5) {
-                        nextKey = "Invalid-" + parts[4];
-                    }
-                    break;
-
-                case "invalid-time":
-                    if (action.equals("Invalid")) {
-                        nextKey = "Invalid-" + timestamp;
-                    }
-                    break;
-
-                case "reverseaddress-ip":
-                    if ((action.equals("reverse") || action.equals("Address")) && parts.length >= 4) {
-                        nextKey = action + "-" + parts[3];
-                    }
-                    break;
-
-                case "reverseaddress-time":
-                    if (action.equals("reverse") || action.equals("Address")) {
-                        nextKey = action + "-" + timestamp;
-                    }
-                    break;
-
-                case "user-ip":
-                    if (!action.equals("reverse") && !action.equals("Address") && parts.length >= 5) {
-                        nextKey = parts[3] + "-" + parts[4];
-                    }
-                    break;
-
-                default:
-                    throw new IllegalArgumentException("Unknown BTree type: " + type);
-            }
-
-            if (nextKey != null) return; // Found a valid key, stop scanning
-        }
-    }
-
+    
+    /**
+     * Checks if there are more keys to read.
+     * 
+     * @return true if more keys are available
+     */
     public boolean hasNextKey() {
         return nextKey != null;
     }
-
+    
+    /**
+     * Returns the next key and advances to the next one.
+     * 
+     * @return the next key
+     */
     public String nextKey() {
-        if (nextKey == null) {
-            throw new NoSuchElementException("No more keys in file.");
-        }
         String current = nextKey;
-        advance(); // prepare the next one
+        try {
+            readNextKey();
+        } catch (IOException e) {
+            nextKey = null;
+        }
         return current;
     }
-
-    public void close() {
-        scanner.close();
+    
+    /**
+     * Closes the reader.
+     * 
+     * @throws IOException if an error occurs while closing
+     */
+    public void close() throws IOException {
+        if (reader != null) {
+            reader.close();
+        }
+    }
+    
+    /**
+     * Reads the next valid key from the file based on the tree type.
+     * 
+     * @throws IOException if an error occurs while reading
+     */
+    private void readNextKey() throws IOException {
+        String line;
+        nextKey = null;
+        
+        while (nextKey == null && (line = reader.readLine()) != null) {
+            nextKey = extractKey(line, treeType);
+        }
+    }
+    
+    /**
+     * Extracts the appropriate key from a log line based on the tree type.
+     * 
+     * @param logLine line from SSH log
+     * @param type key type to extract
+     * @return extracted key or null if no match
+     */
+    private String extractKey(String logLine, String type) {
+        switch (type) {
+            case "accepted-ip":
+                // Extract IPs from accepted connections
+                if (logLine.contains("Accepted")) {
+                    return extractIP(logLine);
+                }
+                return null;
+                
+            case "accepted-time":
+                // Extract timestamps from accepted connections
+                if (logLine.contains("Accepted")) {
+                    return extractTime(logLine);
+                }
+                return null;
+                
+            case "invalid-ip":
+                // Extract IPs from invalid user lines
+                if (logLine.contains("Invalid user")) {
+                    return extractIP(logLine);
+                }
+                return null;
+                
+            case "invalid-time":
+                // Extract timestamps from invalid user lines
+                if (logLine.contains("Invalid user")) {
+                    return extractTime(logLine);
+                }
+                return null;
+                
+            case "failed-ip":
+                // Extract IPs from failed password lines
+                if (logLine.contains("Failed password")) {
+                    return extractIP(logLine);
+                }
+                return null;
+                
+            case "failed-time":
+                // Extract timestamps from failed password lines
+                if (logLine.contains("Failed password")) {
+                    return extractTime(logLine);
+                }
+                return null;
+                
+            case "reverseaddress-ip":
+                // Extract reversed IP addresses
+                String ip = extractIP(logLine);
+                if (ip != null) {
+                    // Reverse the IP address (e.g., 192.168.1.1 -> 1.1.168.192)
+                    String[] ipParts = ip.split("\\.");
+                    if (ipParts.length == 4) {
+                        return ipParts[3] + "." + ipParts[2] + "." + 
+                               ipParts[1] + "." + ipParts[0];
+                    }
+                }
+                return null;
+                
+            case "reverseaddress-time":
+                // Extract reverse address (reversed IP) and time
+                String ip2 = extractIP(logLine);
+                String time = extractTime(logLine);
+                
+                if (ip2 != null && time != null) {
+                    // Reverse the IP address
+                    String[] ipParts = ip2.split("\\.");
+                    if (ipParts.length == 4) {
+                        String reversedIP = ipParts[3] + "." + ipParts[2] + "." + 
+                                          ipParts[1] + "." + ipParts[0];
+                        return reversedIP + "-" + time;
+                    }
+                }
+                return null;
+                
+            case "user-ip":
+                // Extract username and IP pairs
+                String user = extractUser(logLine);
+                String ip3 = extractIP(logLine);
+                
+                if (user != null && ip3 != null) {
+                    return user + "-" + ip3;
+                }
+                return null;
+                
+            default:
+                // Unknown type, return null
+                System.err.println("Warning: Unknown tree type: " + type);
+                return null;
+        }
+    }
+    
+    /**
+     * Extracts IP address from log line.
+     */
+    private String extractIP(String logLine) {
+        Matcher matcher = IP_PATTERN.matcher(logLine);
+        return matcher.find() ? matcher.group() : null;
+    }
+    
+    /**
+     * Extracts username from log line.
+     */
+    private String extractUser(String logLine) {
+        Matcher matcher = USER_PATTERN.matcher(logLine);
+        return matcher.find() ? matcher.group(1) : null;
+    }
+    
+    /**
+     * Extracts port number from log line.
+     */
+    private String extractPort(String logLine) {
+        Matcher matcher = PORT_PATTERN.matcher(logLine);
+        return matcher.find() ? matcher.group(1) : null;
+    }
+    
+    /**
+     * Extracts timestamp from log line.
+     */
+    private String extractTime(String logLine) {
+        Matcher matcher = TIME_PATTERN.matcher(logLine);
+        return matcher.find() ? matcher.group(1) : null;
     }
 }
