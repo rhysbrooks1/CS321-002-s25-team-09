@@ -4,96 +4,57 @@ import cs321.btree.BTree;
 import cs321.btree.TreeObject;
 import java.io.*;
 import java.sql.*;
-import java.util.Scanner;
+import cs321.create.SSHFileReader;
 
 /**
- * Create a BTree from a given wrangled SSH log file and output all unique
- * values found within the SSH log file as
- *   1) a Random-Access-File file containing the BTree,
- *   2) a dump file (if debug option is on), and
- *   3) a table into a SQL database named SSHLogDB.db
- *
- * Usage:
- *   java -jar SSHCreateBTree.jar --cache=<0|1> --degree=<btree-degree> \
- *       --sshFile=<ssh-file> --type=<tree-type> [--cache-size=<n>] \
- *       --database=<yes|no> [--debug=<0|1>]
+ * Driver for creating a BTree from a wrangled SSH log file.
+ * Produces:
+ *   1) A disk-backed BTree file,
+ *   2) An optional dump file,
+ *   3) An optional SQLite table.
  */
 public class SSHCreateBTree {
-    static final String DATABASE_URL = "jdbc:sqlite:SSHLogDB.db";
+    private static final String DATABASE_URL = "jdbc:sqlite:SSHLogDB.db";
 
     public SSHCreateBTree(SSHCreateBTreeArguments params) throws Exception {
-        // Construct BTree filename
-        String btreeFileName = String.format(
+        String btreeFile = String.format(
             "SSH_log.txt.ssh.btree.%s.%d",
             params.getTreeType(), params.getDegree()
         );
 
-        // Instantiate BTree
         BTree btree = new BTree(
             params.getDegree(),
-            btreeFileName,
+            btreeFile,
             params.getUseCache(),
             params.getCacheSize()
         );
 
-        System.out.println("Processing SSH file: "
-            + params.getSSHFilename() + " of type " + params.getTreeType());
+        System.out.println("Processing SSH file: " +
+            params.getSSHFilename() + " of type " + params.getTreeType());
 
-        // Insert keys into BTree
-        processSSHFile(params, btree);
+        // Use SSHFileReader to iterate keys
+        SSHFileReader reader = new SSHFileReader(
+            params.getSSHFilename(), params.getTreeType()
+        );
+        while (reader.hasNextKey()) {
+            String key = reader.nextKey();
+            btree.insert(new TreeObject(key));
+        }
+        reader.close();
 
-        // Dump to file if debug
+        // Optional dump
         if (params.getDebugLevel() == 1) {
             dumpTreeToFile(params, btree);
         }
 
-        // Dump to database if requested
+        // Optional database
         if (params.getCreateDatabase()) {
             dumpTreeToDatabase(params, btree);
         }
 
-        // Finalize and close
+        // Finalize
         btree.finishUp();
-        System.out.println("BTree creation complete for type: "
-            + params.getTreeType());
-    }
-
-    private static void processSSHFile(
-        SSHCreateBTreeArguments params,
-        BTree btree
-    ) throws IOException {
-        Scanner scanner = new Scanner(new File(params.getSSHFilename()));
-        String[] parts = params.getTreeType().split("-");
-        String identifier = parts[0];
-        String target = parts[1];
-
-        while (scanner.hasNextLine()) {
-            String[] tokens = scanner.nextLine().split(" ");
-            boolean hasUser = tokens.length == 5;
-
-            // Skip user-ip invalid lines
-            if (identifier.equals("user") &&
-                (!hasUser || tokens[2].equals("reverse") || tokens[2].equals("Address"))) {
-                continue;
-            }
-            // Skip other types
-            if (!identifier.equals("user") &&
-                !tokens[2].equalsIgnoreCase(identifier)) {
-                continue;
-            }
-
-            // Build key
-            String key = (identifier.equals("user") ? tokens[3] : tokens[2]) + "-";
-            if (target.equals("ip")) {
-                key += hasUser && !tokens[2].equals("Address")
-                    ? tokens[4] : tokens[3];
-            } else {
-                key += tokens[1].substring(0, 5);
-            }
-
-            btree.insert(new TreeObject(key));
-        }
-        scanner.close();
+        System.out.println("BTree creation complete for type: " + params.getTreeType());
     }
 
     private static void dumpTreeToFile(
