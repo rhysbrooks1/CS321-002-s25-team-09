@@ -13,7 +13,15 @@ public class SSHSearchBTree {
         try {
             SSHSearchBTreeArguments arguments = new SSHSearchBTreeArguments(args);
 
-            BTree btree = new BTree(arguments.getDegree(), arguments.getBtreeFile());
+			BTree btree;
+			if(arguments.isCacheEnabled())
+			{
+				btree = new BTree(arguments.getDegree(), arguments.getBtreeFile(), true, arguments.getCacheSize());
+			}
+			else
+			{
+				btree = new BTree(arguments.getDegree(), arguments.getBtreeFile());
+			}
 
             List<SearchResult> results = new ArrayList<>();
             BufferedReader reader = new BufferedReader(new FileReader(arguments.getQueryFile()));
