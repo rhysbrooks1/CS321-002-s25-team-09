@@ -2,104 +2,155 @@ package cs321.create;
 
 import cs321.btree.BTree;
 import cs321.btree.TreeObject;
-import cs321.common.ParseArgumentException;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.sql.*;
+import java.util.Scanner;
 
 /**
- * The driver class for building a BTree representation of an SSH Log file.
+ * Create a BTree from a given wrangled SSH log file and output all unique
+ * values found within the SSH log file as
+ *   1) a Random-Access-File file containing the BTree,
+ *   2) a dump file (if debug option is on), and
+ *   3) a table into a SQL database named SSHLogDB.db
+ *
+ * Usage:
+ *   java -jar SSHCreateBTree.jar --cache=<0|1> --degree=<btree-degree> \
+ *       --sshFile=<ssh-file> --type=<tree-type> [--cache-size=<n>] \
+ *       --database=<yes|no> [--debug=<0|1>]
  */
 public class SSHCreateBTree {
+    static final String DATABASE_URL = "jdbc:sqlite:SSHLogDB.db";
 
-    private static final int DEFAULT_DISK_BLOCK_SIZE = 4096;
+    public SSHCreateBTree(SSHCreateBTreeArguments params) throws Exception {
+        // Construct BTree filename
+        String btreeFileName = String.format(
+            "SSH_log.txt.ssh.btree.%s.%d",
+            params.getTreeType(), params.getDegree()
+        );
 
-    /**
-     * Main method to run the BTree creation process.
-     * @param args command-line arguments
-     */
+        // Instantiate BTree
+        BTree btree = new BTree(
+            params.getDegree(),
+            btreeFileName,
+            params.getUseCache(),
+            params.getCacheSize()
+        );
+
+        System.out.println("Processing SSH file: "
+            + params.getSSHFilename() + " of type " + params.getTreeType());
+
+        // Insert keys into BTree
+        processSSHFile(params, btree);
+
+        // Dump to file if debug
+        if (params.getDebugLevel() == 1) {
+            dumpTreeToFile(params, btree);
+        }
+
+        // Dump to database if requested
+        if (params.getCreateDatabase()) {
+            dumpTreeToDatabase(params, btree);
+        }
+
+        // Finalize and close
+        btree.finishUp();
+        System.out.println("BTree creation complete for type: "
+            + params.getTreeType());
+    }
+
+    private static void processSSHFile(
+        SSHCreateBTreeArguments params,
+        BTree btree
+    ) throws IOException {
+        Scanner scanner = new Scanner(new File(params.getSSHFilename()));
+        String[] parts = params.getTreeType().split("-");
+        String identifier = parts[0];
+        String target = parts[1];
+
+        while (scanner.hasNextLine()) {
+            String[] tokens = scanner.nextLine().split(" ");
+            boolean hasUser = tokens.length == 5;
+
+            // Skip user-ip invalid lines
+            if (identifier.equals("user") &&
+                (!hasUser || tokens[2].equals("reverse") || tokens[2].equals("Address"))) {
+                continue;
+            }
+            // Skip other types
+            if (!identifier.equals("user") &&
+                !tokens[2].equalsIgnoreCase(identifier)) {
+                continue;
+            }
+
+            // Build key
+            String key = (identifier.equals("user") ? tokens[3] : tokens[2]) + "-";
+            if (target.equals("ip")) {
+                key += hasUser && !tokens[2].equals("Address")
+                    ? tokens[4] : tokens[3];
+            } else {
+                key += tokens[1].substring(0, 5);
+            }
+
+            btree.insert(new TreeObject(key));
+        }
+        scanner.close();
+    }
+
+    private static void dumpTreeToFile(
+        SSHCreateBTreeArguments params,
+        BTree btree
+    ) throws IOException {
+        File out = new File(
+            String.format("dump-%s.%d.txt",
+                params.getTreeType(), params.getDegree())
+        );
+        try (BufferedWriter w = new BufferedWriter(new FileWriter(out))) {
+            for (TreeObject obj : btree.getSortedTreeObjects()) {
+                w.write(obj.getKey() + " " + obj.getCount());
+                w.newLine();
+            }
+        }
+        System.out.println("Dump file: " + out.getAbsolutePath());
+    }
+
+    private static void dumpTreeToDatabase(
+        SSHCreateBTreeArguments params,
+        BTree btree
+    ) throws SQLException {
+        String table = params.getTreeType().replaceAll("[^a-zA-Z0-9_]", "_");
+        String createSQL = String.format(
+            "CREATE TABLE IF NOT EXISTS %s(key TEXT PRIMARY KEY, frequency INTEGER);",
+            table
+        );
+        String insertSQL = String.format(
+            "INSERT OR REPLACE INTO %s(key, frequency) VALUES (?,?);",
+            table
+        );
+
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL)) {
+            conn.setAutoCommit(true);
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute(createSQL);
+            }
+            try (PreparedStatement ps = conn.prepareStatement(insertSQL)) {
+                for (TreeObject obj : btree.getSortedTreeObjects()) {
+                    ps.setString(1, obj.getKey());
+                    ps.setLong(2, obj.getCount());
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            }
+        }
+        System.out.println("Database updated: table '" + table + "'");
+    }
+
     public static void main(String[] args) {
         try {
-            // Parse and validate command-line arguments
-            SSHCreateBTreeArguments parsed = new SSHCreateBTreeArguments(args);
-
-            if (parsed.getDebugLevel() == 1) {
-                System.out.println(parsed);
-            }
-
-            // Compute optimal degree if degree=0
-            int degree = parsed.getDegree();
-            if (degree == 0) {
-                degree = computeOptimalDegree(DEFAULT_DISK_BLOCK_SIZE);
-            }
-
-            // Initialize the BTree with parameters
-            BTree btree;
-            if (parsed.isCacheEnabled()) {
-                // Build BTree with cache
-                btree = new BTree(degree, parsed.getTreeType(), true, parsed.getCacheSize());
-            } else {
-                // Build BTree without cache
-                btree = new BTree(degree, parsed.getTreeType(), false, 0);
-            }
-
-            // Read the SSH log and insert each key
-            SSHFileReader reader = new SSHFileReader(parsed.getSSHFileName(), parsed.getTreeType());
-            while (reader.hasNextKey()) {
-                String key = reader.nextKey();
-                btree.insert(new TreeObject(key));
-            }
-            reader.close();
-
-            // Dump to text if in debug mode
-            if (parsed.getDebugLevel() == 1) {
-                String dumpFileName = "dump-" + parsed.getTreeType() + ".0.txt";
-                try (PrintWriter writer = new PrintWriter(new File(dumpFileName))) {
-                    btree.dumpToFile(writer);
-                }
-            }
-
-            // Dump to SQLite database if requested
-            if (parsed.useDatabase()) {
-                String tableName = parsed.getTreeType().replace("-", "");
-                btree.dumpToDatabase("SSHLogDB.db", tableName);
-            }
-
-            // Flush and close the BTree file
-            btree.finishUp();
-
-        } catch (ParseArgumentException e) {
-            printUsageAndExit("Argument error: " + e.getMessage());
-        } catch (IOException e) {
-            System.err.println("I/O error: " + e.getMessage());
-            e.printStackTrace();
-            System.exit(1);
+            new SSHCreateBTree(new SSHCreateBTreeArguments(args));
         } catch (Exception e) {
-            System.err.println("Fatal error: " + e.getMessage());
+            System.err.println("Error: " + e.getMessage());
             e.printStackTrace();
             System.exit(1);
         }
-    }
-
-    private static void printUsageAndExit(String errorMessage) {
-        System.err.println("Error: " + errorMessage);
-        System.err.println("Usage:");
-        System.err.println("  java -jar SSHCreateBTree.jar "
-                + "--cache=<0|1> --degree=<btree-degree> --sshFile=<file> "
-                + "--type=<tree-type> --database=<yes|no> "
-                + "[--cache-size=<n>] [--debug=<0|1>]");
-        System.exit(1);
-    }
-
-    private static int computeOptimalDegree(int blockSize) {
-        // 32-byte fixed key (for <= 32 char strings), 8-byte long frequency, 8-byte child pointers
-        int keySize = 32 + 8;           // TreeObject = key + frequency = 40 bytes
-        int pointerSize = 8;            // Each child pointer is 8 bytes
-        int metadataSize = 16;          // e.g., numKeys, isLeaf
-
-        // Solve: blockSize >= metadataSize + (2t - 1) * keySize + 2t * pointerSize
-        // Simplified estimate:
-        return (blockSize - metadataSize) / (keySize + pointerSize);
     }
 }
