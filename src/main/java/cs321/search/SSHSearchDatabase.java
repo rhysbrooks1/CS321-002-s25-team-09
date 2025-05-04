@@ -1,81 +1,75 @@
 package cs321.search;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
- * The driver class for searching a Database of a B-Tree.
+ * SSHSearchDatabase: queries an existing SQLite database for the top-frequency entries
+ * in a specified B-Tree table.
  *
- * @author Devyn Korber
+ * Usage:
+ *   java -jar SSHSearchDatabase.jar \
+ *     --type=<tree-type> \
+ *     --database=<sqlite-database-path> \
+ *     --top-frequency=<10|25|50>
  */
 public class SSHSearchDatabase {
-    private Connection connection;
-
-    /**
-     * Constructor for initializing the database connection
-     * 
-     * @param params created from the arguments class
-     */
-    public SSHSearchDatabase(SSHSearchDatabaseArguments params) {
-        try {
-            connection = DriverManager.getConnection("jdbc:sqlite:" + params.getDatabase());
-            System.out.println("Successfully connected to the database: " + connection);
-            search(params.getTopFrequency(), params.getTreeType());
-            close();
-        } catch (SQLException e) {
-            System.err.println("Connection error: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Method to search the database
-     * 
-     * @param topFrequency - the top frequency command line argument
-     * @param treeType     - the type of tree from the command line argument
-     */
-    public void search(int topFrequency, String treeType) {
-        treeType = treeType.replaceAll("-", "_");
-        String selectSQL = "SELECT key, frequency FROM " + treeType +
-                " GROUP BY key ORDER BY frequency DESC LIMIT ?";
-
-        try (PreparedStatement ps = connection.prepareStatement(selectSQL)) {
-            ps.setInt(1, topFrequency);
-            ResultSet rs = ps.executeQuery();
-
-            // Iterate through select SQL results
-            System.out.println("Key\t\t\t\t|\tFrequency");
-            while (rs.next()) {
-                String key = rs.getString("key");
-                int freq = rs.getInt("frequency");
-                System.out.println(key + "\t|\t" + freq);
-            }
-        } catch (SQLException e) {
-            System.err.println("Search error: " + e.getMessage());
-        }
-
-    }
-
-    /**
-     * Method to close the db connection
-     */
-    public void close() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("Successfully closed connection." + "\n");
-            }
-        } catch (SQLException e) {
-            System.err.println("Closing error: " + e.getMessage());
-        }
-    }
 
     public static void main(String[] args) {
         try {
-            new SSHSearchDatabase(new SSHSearchDatabaseArguments(args));
-        } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
+            // Parse and validate arguments
+            SSHSearchDatabaseArguments params = new SSHSearchDatabaseArguments(args);
+
+            String originalType = params.getTreeType();
+            String tableName    = originalType.replace('-', '_');
+            String dbPath       = params.getDatabase();
+            int topFreq         = params.getTopFrequency();
+
+            // Build SQL: always sum frequencies, group by key or minute
+            String sql;
+            if (originalType.endsWith("-time")) {
+                // Truncate seconds: HH:MM from key format "Type-HH:MM:SS"
+                // key_min = substr(key, 1, instr(key, '-') + 6)
+                sql = String.format(
+                    "SELECT substr(key, 1, instr(key, '-') + 5) AS key, SUM(frequency) AS freq " +
+                    "FROM %s " +
+                    "GROUP BY substr(key, 1, instr(key, '-') + 5) " +
+                    "ORDER BY freq DESC, key ASC " +
+                    "LIMIT ?;",
+                    tableName
+                );
+            } else {
+                // Group by full key
+                sql = String.format(
+                    "SELECT key, SUM(frequency) AS freq " +
+                    "FROM %s " +
+                    "GROUP BY key " +
+                    "ORDER BY freq DESC, key ASC " +
+                    "LIMIT ?;",
+                    tableName
+                );
+            }
+
+            // Execute query and print results
+            try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+
+                ps.setInt(1, topFreq);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        String key = rs.getString("key");
+                        long freq  = rs.getLong("freq");
+                        System.out.println(key + " " + freq);
+                    }
+                }
+            }
+
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
-            e.printStackTrace();
+            // Only print the error message and exit
+            System.err.println(e.getMessage());
+            System.exit(1);
         }
     }
 }
