@@ -1,67 +1,77 @@
 package cs321.search;
 
 import cs321.btree.BTree;
-import cs321.btree.BTreeException;
 import cs321.btree.TreeObject;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.util.*;
 
+/**
+ * Search keys in an existing B-Tree file and optionally output the top K by frequency.
+ *
+ * Usage:
+ *   java -jar SSHSearchBTree.jar \
+ *     --cache=<0|1> --degree=<btree-degree> \
+ *     --btreeFile=<btree-filename> \
+ *     --queryFile=<query-filename> \
+ *     [--topFrequency=<10|25|50>] [--cacheSize=<100-10000>] [--debug=<0|1>]
+ */
 public class SSHSearchBTree {
-    public static void main(String[] args) throws BTreeException {
+
+    public static void main(String[] args) {
         try {
-            SSHSearchBTreeArguments arguments = new SSHSearchBTreeArguments(args);
+            SSHSearchBTreeArguments params = new SSHSearchBTreeArguments(args);
 
-            BTree btree = new BTree(arguments.getDegree(), arguments.getBtreeFile());
+            // Load the existing B-Tree
+            BTree tree = new BTree(
+                params.getDegree(),
+                params.getBtreeFilename(),
+                params.getUseCache(),
+                params.getCacheSize()
+            );
 
-            List<SearchResult> results = new ArrayList<>();
-            BufferedReader reader = new BufferedReader(new FileReader(arguments.getQueryFile()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) continue;
-
-                TreeObject result = btree.search(line);
-                if (result != null) {
-                    results.add(new SearchResult(result.getKey(), result.getCount()));
+            // Read queries
+            List<String> queries = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new FileReader(params.getQueryFilename()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    line = line.trim();
+                    if (!line.isEmpty()) {
+                        queries.add(line);
+                    }
                 }
             }
-            reader.close();
 
-            if (arguments.getTopFrequency() > 0) {
-                results.sort(Comparator
-                        .comparingLong(SearchResult::getCount).reversed()
-                        .thenComparing(SearchResult::getKey));
-                results = results.subList(0, Math.min(arguments.getTopFrequency(), results.size()));
+            // Search and collect results
+            List<TreeObject> hits = new ArrayList<>();
+            for (String key : queries) {
+                TreeObject obj = tree.search(key);
+                if (obj != null) {
+                    hits.add(obj);
+                } else if (params.getDebugLevel() == 1) {
+                    System.err.println("Query not found: " + key);
+                }
             }
 
-            for (SearchResult r : results) {
-                System.out.println(r.key + " " + r.count);
+            // Sort by frequency desc, then key asc
+            hits.sort(Comparator
+                .comparingLong(TreeObject::getCount).reversed()
+                .thenComparing(TreeObject::getKey)
+            );
+
+            // Limit to topFrequency if specified
+            int limit = params.getTopFrequency();
+            if (limit > 0 && hits.size() > limit) {
+                hits = hits.subList(0, limit);
+            }
+
+            // Print results
+            for (TreeObject obj : hits) {
+                System.out.println(obj.getKey() + " " + obj.getCount());
             }
 
         } catch (Exception e) {
-            System.err.println("ERROR: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    private static class SearchResult {
-        String key;
-        long count;
-
-        public SearchResult(String key, long count) {
-            this.key = key;
-            this.count = count;
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-        public long getCount() {
-            return count;
+            System.err.println(e.getMessage());
+            System.exit(1);
         }
     }
 }
-
