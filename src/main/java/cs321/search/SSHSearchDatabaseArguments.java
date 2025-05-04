@@ -1,114 +1,121 @@
 package cs321.search;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
 /**
- * Parses and validates command-line arguments for the SSHSearchDatabase program.
- *
- * This class is responsible for interpreting arguments passed to:
- *
- *   java -jar build/libs/SSHSearchDatabase.jar
- *
- * Required command-line arguments:
- *
- *   --type=<tree-type>
- *     Specifies the category of log data to query.
- *     Valid values:
- *       accepted-ip
- *       accepted-time
- *       failed-ip
- *       failed-time
- *       invalid-ip
- *       invalid-time
- *       reverseaddress-ip
- *       reverseaddress-time
- *       user-ip
- *
- *   --database=<sqlite-database-path>
- *     The path to the SQLite database file.
- *     Example: SSHLogDB.db
- *
- *   --top-frequency=<10|25|50>
- *     The number of most frequent keys to return from the database.
- *
- * Complete Format:
- * java -jar build/libs/SSHSearchDatabase.jar --type=<tree-type> \
-          --database=<sqlite-database-path> --top-frequency=<10/25/50>
+ * The argument class for parsing SSHSearchDatabase's command line arguments
+ * 
+ * @author Devyn Korber
  */
+public class SSHSearchDatabaseArguments {
+    private String treeType;
+    private String database;
+    private int topFrequency;
 
- public class SSHSearchDatabaseArguments {
-
-    // Stores the validated value for --type
-    private final String type;
-
-    // Stores the validated value for --database
-    private final String database;
-
-    // Stores the validated value for --top-frequency
-    private final int topFrequency;
-
-    // List of valid values for the --type argument
-    private static final String[] VALID_TYPES = {
-        "accepted-ip", "accepted-time", "failed-ip", "failed-time",
-        "invalid-ip", "invalid-time", "reverseaddress-ip", "reverseaddress-time",
-        "user-ip"
+    private static final String[] VALID_TREE_TYPES = {
+            "accepted-ip", "accepted-time", "invalid-ip", "invalid-time",
+            "failed-ip", "failed-time", "reverseaddress-ip", "reverseaddress-time", "user-ip"
     };
 
-    /**
-     * Constructor that parses and validates command-line arguments.
-     *
-     * @param args command-line arguments in the format --key=value
-     * @throws IllegalArgumentException if required arguments are missing or invalid
-     */
-    public SSHSearchDatabaseArguments(String[] args) {
-        // Parse arguments into a map of key-value pairs
-        Map<String, String> map = new HashMap<>();
-        for (String arg : args) {
-            if (arg.startsWith("--") && arg.contains("=")) {
-                String[] split = arg.substring(2).split("=", 2); // Remove '--' and split at '='
-                map.put(split[0], split[1]); // Store as key-value in map
-            }
-        }
-
-        // Extract individual argument values from the map
-        this.type = map.get("type");
-        this.database = map.get("database");
-        String topStr = map.get("top-frequency");
-
-        // Ensure all required arguments are provided
-        if (type == null || database == null || topStr == null) {
-            throw new IllegalArgumentException("Usage: --type=<type> --database=<path> --top-frequency=<10|25|50>");
-        }
-
-        // Validate that the given type is one of the supported types
-        if (!java.util.Arrays.asList(VALID_TYPES).contains(type)) {
-            throw new IllegalArgumentException("Invalid --type: " + type);
-        }
-
-        // Validate that the top-frequency is an integer and one of the accepted values
+    public SSHSearchDatabaseArguments(String[] args) throws IllegalArgumentException {
         try {
-            this.topFrequency = Integer.parseInt(topStr);
-            if (topFrequency != 10 && topFrequency != 25 && topFrequency != 50) {
-                throw new NumberFormatException(); // Trigger catch block
+            for (String arg : args) {
+                if (arg.startsWith("--type=")) {
+                    treeType = arg.substring(7);
+                } else if (arg.startsWith("--database=")) {
+                    database = arg.substring(11);
+                } else if (arg.startsWith("--top-frequency=")) {
+                    topFrequency = Integer.parseInt(arg.substring(16));
+                }
             }
+
+            validateArguments();
+
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid --top-frequency: must be 10, 25, or 50.");
+            this.notifyInvalidArguments("Error: Failed to parse argument.");
         }
     }
 
-    // Getter for the --type value
-    public String getType() {
-        return type;
+    /**
+     * Validates the arguments for SSHSearchDatabase.
+     *
+     * @throws IllegalArgumentException If the arguments are invalid.
+     */
+    private void validateArguments() throws IllegalArgumentException {
+        // required arguments not found -> invalid arguments
+        if (this.treeType == null || this.database == null || this.topFrequency == 0) {
+            this.notifyInvalidArguments("Error: Missing required arguments");
+        }
+
+        // validate tree type
+        if (!Arrays.asList(VALID_TREE_TYPES).contains(treeType)) {
+            this.notifyInvalidArguments("Error: Invalid tree type.");
+        }
+
+        // validate database file exists
+        if (!Files.exists(Paths.get(this.database))) {
+            this.notifyInvalidArguments("Error: Database does not exist.");
+        }
+
+        // make sure top frequency is correct
+        if (topFrequency != 10 && topFrequency != 25 && topFrequency != 50) {
+            this.notifyInvalidArguments("Error: Top frequency must be <10/25/50>");
+        }
     }
 
-    // Getter for the --database value
+    /**
+     * Notifies the user of invalid arguments and throws an
+     * IllegalArgumentException.
+     *
+     * @param message the message to display to the user
+     *
+     * @throws IllegalArgumentException
+     */
+    private void notifyInvalidArguments(String message) throws IllegalArgumentException {
+        String formattedString = message + "\n";
+
+        formattedString += "Usage: SSHSearchDatabase --type=<tree-type> --database=<sqlite-database-path> --top-frequency=<10/25/50>"
+                + "\n";
+
+        throw new IllegalArgumentException(formattedString);
+    }
+
+    /**
+     * Returns the treeType string
+     *
+     * @return the treeType string
+     */
+    public String getTreeType() {
+        return this.treeType;
+    }
+
+    /**
+     * Returns the database string filename
+     * 
+     * @return the database string filename
+     */
     public String getDatabase() {
         return database;
     }
 
-    // Getter for the --top-frequency value
+    /**
+     * Returns the top frequency integer
+     * 
+     * @return the top frequency integer
+     */
     public int getTopFrequency() {
-        return topFrequency;
+        return this.topFrequency;
     }
+
+    @Override
+    public String toString() {
+        return "SSHSearchDatabaseArguments{" +
+                "type=" + treeType +
+                ", database=" + database +
+                ", top-frequency='" + topFrequency +
+                '}';
+    }
+
 }
