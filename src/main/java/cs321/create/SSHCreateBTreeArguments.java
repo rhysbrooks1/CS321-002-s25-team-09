@@ -53,9 +53,13 @@ public class SSHCreateBTreeArguments {
         ParseArgumentUtils.verifyRanges(cacheInt, 0, 1);
         this.useCache = (cacheInt == 1);
 
-        this.degree = ParseArgumentUtils.convertStringToInt(map.get("degree"));
-        if (degree < 0) {
-            throw new ParseArgumentException("--degree must be >= 0");
+        int rawDegree = ParseArgumentUtils.convertStringToInt(map.get("degree"));
+        if (rawDegree == 0) {
+            this.degree = computeOptimalDegree();
+        } else if (rawDegree < 2) {
+            throw new ParseArgumentException("--degree must be at least 2 or 0 for auto");
+        } else {
+            this.degree = rawDegree;
         }
 
         this.SSHFileName = map.get("sshFile");
@@ -86,6 +90,21 @@ public class SSHCreateBTreeArguments {
         } else {
             this.debugLevel = 0;
         }
+    }
+
+    private int computeOptimalDegree() {
+        final int blockSize = 4096;
+        final int overhead = 5; // 1 byte isLeaf + 4 bytes n
+        final int keySize = 64 + 8; // 64 bytes for key + 8 bytes count
+        final int ptrSize = 8;
+
+        for (int t = 2; t < 100; t++) {
+            int totalSize = overhead + (2 * t - 1) * keySize + (2 * t) * ptrSize;
+            if (totalSize > blockSize) {
+                return t - 1;
+            }
+        }
+        return 2; // fallback
     }
 
     public boolean isCacheEnabled() {
