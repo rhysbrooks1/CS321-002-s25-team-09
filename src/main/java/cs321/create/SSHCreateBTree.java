@@ -129,14 +129,31 @@ public class SSHCreateBTree {
             // Format key with proper prefix and clean up based on tree type
             switch (treeType) {
                 case "accepted-ip":
-                    // Format: Accepted-x.x.x.x
+                    // Accepted-137.x.x.x (most common first three digits in top 10)
+                    if (!key.startsWith("Accepted-")) {
+                        key = "Accepted-" + key;
+                    }
+                    break;
+                    
+                case "accepted-timestamp":
+                    // Format: Accepted-HH:MM
                     if (!key.startsWith("Accepted-")) {
                         key = "Accepted-" + key;
                     }
                     break;
                     
                 case "failed-ip":
-                    // Format: Failed-x.x.x.x (remove ***** if present)
+                    // Format: Failed-183.x.x.x (top 2 entries have 183 as first three digits)
+                    if (key.contains("*****-")) {
+                        key = key.replace("*****-", "");
+                    }
+                    if (!key.startsWith("Failed-")) {
+                        key = "Failed-" + key;
+                    }
+                    break;
+                    
+                case "failed-timestamp":
+                    // Format: Failed-HH:MM
                     if (key.contains("*****-")) {
                         key = key.replace("*****-", "");
                     }
@@ -146,16 +163,22 @@ public class SSHCreateBTree {
                     break;
                     
                 case "invalid-ip":
-                    // Format: Invalid-x.x.x.x (already correct in example)
+                    // Format: Invalid-x.x.x.x
                     if (!key.startsWith("Invalid-")) {
                         key = "Invalid-" + key;
                     }
                     break;
                     
-                case "address":
-                    // Format: Address-x.x.x.x (convert from .0.x-y.y.y.y format)
-                    if (key.startsWith(".0.")) {
-                        // Extract the second part after the dash
+                case "invalid-timestamp":
+                    // Invalid-XX (where XX is between 42 and 55)
+                    if (!key.startsWith("Invalid-")) {
+                        key = "Invalid-" + key;
+                    }
+                    break;
+                    
+                case "reverseaddress-ip":
+                    // The top entry is of 'reverse' type in top 25
+                    if (key.contains("-")) {
                         String[] parts = key.split("-");
                         if (parts.length > 1) {
                             key = "Address-" + parts[1];
@@ -167,11 +190,16 @@ public class SSHCreateBTree {
                     }
                     break;
                     
-                case "time":
-                    // Format: Address-00:00 (already has Address- prefix)
+                case "reverseaddress-timestamp":
+                    // Format: Address-HH:MM (top entry is 11:00)
                     if (!key.startsWith("Address-")) {
                         key = "Address-" + key;
                     }
+                    break;
+                    
+                case "user-ip":
+                    // Format: user-x.x.x.x (predominant user is 'root')
+                    // Keep as is, as it seems format varies based on user (root, admin, etc.)
                     break;
                     
                 default:
