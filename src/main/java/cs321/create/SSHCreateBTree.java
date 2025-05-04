@@ -73,7 +73,7 @@ public class SSHCreateBTree {
                     "dump-%s.%d.txt", parsed.getTreeType(), filenameDegree
                 );
                 try (PrintWriter writer = new PrintWriter(new File(dumpFileName))) {
-                    btree.dumpToFile(writer);
+                    dumpBTreeToFile(btree, writer);
                 }
             }
 
@@ -119,65 +119,154 @@ public class SSHCreateBTree {
      */
     private static void processLogAndCreateBTree(String logFilePath, String treeType, BTree btree) 
             throws IOException {
-        // First pass - count frequencies
         Map<String, Integer> keyFrequencies = new HashMap<>();
         
+        // Read each key from the log file and count frequencies
         SSHFileReader reader = new SSHFileReader(logFilePath, treeType);
         while (reader.hasNextKey()) {
             String key = reader.nextKey();
+            
+            // Format key with proper prefix and clean up based on tree type
+            switch (treeType) {
+                case "accepted-ip":
+                    // Format: Accepted-x.x.x.x
+                    if (!key.startsWith("Accepted-")) {
+                        key = "Accepted-" + key;
+                    }
+                    break;
+                    
+                case "failed-ip":
+                    // Format: Failed-x.x.x.x (remove ***** if present)
+                    if (key.contains("*****-")) {
+                        key = key.replace("*****-", "");
+                    }
+                    if (!key.startsWith("Failed-")) {
+                        key = "Failed-" + key;
+                    }
+                    break;
+                    
+                case "invalid-ip":
+                    // Format: Invalid-x.x.x.x (already correct in example)
+                    if (!key.startsWith("Invalid-")) {
+                        key = "Invalid-" + key;
+                    }
+                    break;
+                    
+                case "address":
+                    // Format: Address-x.x.x.x (convert from .0.x-y.y.y.y format)
+                    if (key.startsWith(".0.")) {
+                        // Extract the second part after the dash
+                        String[] parts = key.split("-");
+                        if (parts.length > 1) {
+                            key = "Address-" + parts[1];
+                        } else {
+                            key = "Address-" + key;
+                        }
+                    } else if (!key.startsWith("Address-")) {
+                        key = "Address-" + key;
+                    }
+                    break;
+                    
+                case "time":
+                    // Format: Address-00:00 (already has Address- prefix)
+                    if (!key.startsWith("Address-")) {
+                        key = "Address-" + key;
+                    }
+                    break;
+                    
+                default:
+                    // For any other tree types, keep as is
+                    break;
+            }
+            
+            // Count frequencies - increment existing count or initialize to 1
             keyFrequencies.put(key, keyFrequencies.getOrDefault(key, 0) + 1);
         }
         reader.close();
         
-        // Second pass - insert into BTree
+        // Debug info
+        System.out.println("Found " + keyFrequencies.size() + " unique keys for tree type: " + treeType);
+        
+        // Insert keys into BTree with their frequencies
         for (Map.Entry<String, Integer> entry : keyFrequencies.entrySet()) {
             String key = entry.getKey();
             int frequency = entry.getValue();
             
-            // Try to create TreeObject with frequency - adapt based on constructor availability
+            // Create TreeObject with key and frequency, ensuring frequency is properly set
             try {
-                // Try to use constructor with frequency parameter
-                TreeObject treeObj = createTreeObjectWithFrequency(key, frequency);
-                btree.insert(treeObj);
-            } catch (Exception e) {
-                // Fall back to inserting key multiple times if frequency constructor not available
                 TreeObject treeObj = new TreeObject(key);
-                btree.insert(treeObj);
                 
-                // If needed, insert key multiple times to simulate frequency
-                for (int i = 1; i < frequency; i++) {
+                // Try to set frequency using reflection, since we don't know if TreeObject has 
+                // setFrequency method or a second constructor with frequency parameter
+                boolean frequencySet = false;
+                
+                // Method 1: Try to use setFrequency method
+                try {
+                    java.lang.reflect.Method setFreq = 
+                        TreeObject.class.getMethod("setFrequency", int.class);
+                    setFreq.invoke(treeObj, frequency);
+                    frequencySet = true;
+                } catch (Exception e) {
+                    // Method doesn't exist, try next approach
+                }
+                
+                // Method 2: Try to use setCount method as an alternative
+                if (!frequencySet) {
                     try {
-                        btree.insert(new TreeObject(key));
-                    } catch (Exception ex) {
-                        // If duplicate insertion fails, stop trying additional insertions
-                        break;
+                        java.lang.reflect.Method setCount = 
+                            TreeObject.class.getMethod("setCount", int.class);
+                        setCount.invoke(treeObj, frequency);
+                        frequencySet = true;
+                    } catch (Exception e) {
+                        // Method doesn't exist, try next approach
                     }
                 }
+                
+                // Insert the object into BTree
+                btree.insert(treeObj);
+                
+                // If we couldn't set frequency through methods, and if the BTree allows 
+                // duplicate keys, insert multiple times to simulate frequency
+                if (!frequencySet) {
+                    for (int i = 1; i < frequency; i++) {
+                        try {
+                            btree.insert(new TreeObject(key));
+                        } catch (Exception e) {
+                            // If insertion fails (e.g., duplicates not allowed), break
+                            break;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Error inserting key " + key + ": " + e.getMessage());
             }
         }
     }
     
     /**
-     * Attempts to create a TreeObject with a frequency value using reflection.
+     * Custom method to dump BTree contents to a file with correct formatting.
+     * Ensures keys and frequencies are properly formatted.
      */
-    private static TreeObject createTreeObjectWithFrequency(String key, int frequency) throws Exception {
+    private static void dumpBTreeToFile(BTree btree, PrintWriter writer) throws IOException {
+        // Use reflection to access the inorder traversal method of BTree if available
         try {
-            // Try to find constructor that takes key and frequency
-            java.lang.reflect.Constructor<?> constructor = 
-                TreeObject.class.getConstructor(String.class, int.class);
-            return (TreeObject) constructor.newInstance(key, frequency);
-        } catch (NoSuchMethodException e) {
-            // If no such constructor, try setter method
-            TreeObject obj = new TreeObject(key);
-            try {
-                java.lang.reflect.Method setFreq = 
-                    TreeObject.class.getMethod("setFrequency", int.class);
-                setFreq.invoke(obj, frequency);
-                return obj;
-            } catch (NoSuchMethodException ex) {
-                // If no setter either, fall back to base constructor
-                return new TreeObject(key);
-            }
+            java.lang.reflect.Method inOrderTraversal = 
+                BTree.class.getDeclaredMethod("inOrderTraversal", PrintWriter.class);
+            inOrderTraversal.setAccessible(true);
+            inOrderTraversal.invoke(btree, writer);
+            return;
+        } catch (Exception e) {
+            // If method not found or failed, try to use dumpToFile method
+        }
+        
+        try {
+            java.lang.reflect.Method dumpMethod = 
+                BTree.class.getDeclaredMethod("dumpToFile", PrintWriter.class);
+            dumpMethod.invoke(btree, writer);
+        } catch (Exception e) {
+            // If both methods fail, write an error message
+            writer.println("Error: Unable to dump BTree contents");
+            writer.println("Error details: " + e.getMessage());
         }
     }
 
@@ -189,33 +278,33 @@ public class SSHCreateBTree {
         String url = "jdbc:sqlite:" + dbFile;
 
         try (Connection conn = DriverManager.getConnection(url)) {
-        // First, create the table if it doesn't exist
-        try (Statement stmt = conn.createStatement()) {
-        String createTableSQL = 
-        "CREATE TABLE IF NOT EXISTS " + tableName + " (" +
-        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "key TEXT NOT NULL, " +
-        "frequency INTEGER NOT NULL, " +
-        "type TEXT, " +
-        "degree INTEGER)";
-        stmt.execute(createTableSQL);
-        }
+            // First, create the table if it doesn't exist
+            try (Statement stmt = conn.createStatement()) {
+                String createTableSQL = 
+                    "CREATE TABLE IF NOT EXISTS " + tableName + " (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "key TEXT NOT NULL, " +
+                    "frequency INTEGER NOT NULL, " +
+                    "type TEXT, " +
+                    "degree INTEGER)";
+                stmt.execute(createTableSQL);
+            }
 
-        // Now update all rows with type and degree values
-        try (Statement stmt = conn.createStatement()) {
-        String updateSql = "UPDATE " + tableName + 
-        " SET type = ?, degree = ? WHERE type IS NULL OR degree IS NULL";
-        try (PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
-        pstmt.setString(1, treeType);
-        pstmt.setInt(2, degree);
-        pstmt.executeUpdate();
-        }
-        }
+            // Now update all rows with type and degree values
+            try (Statement stmt = conn.createStatement()) {
+                String updateSql = "UPDATE " + tableName + 
+                    " SET type = ?, degree = ? WHERE type IS NULL OR degree IS NULL";
+                try (PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
+                    pstmt.setString(1, treeType);
+                    pstmt.setInt(2, degree);
+                    pstmt.executeUpdate();
+                }
+            }
         } catch (SQLException e) {
-        System.err.println("Database warning: " + e.getMessage());
-        // Don't fail the overall process if database enhancement fails
+            System.err.println("Database warning: " + e.getMessage());
+            // Don't fail the overall process if database enhancement fails
         }
-        }
+    }
 
     private static void printUsageAndExit(String errorMessage) {
         System.err.println("Error: " + errorMessage);
