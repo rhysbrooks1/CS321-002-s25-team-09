@@ -1,82 +1,113 @@
 package cs321.common;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
-/**
- * This program creates and manages a cache for the BTree.
- */
+
+
+// Project 1 implementation of a webcache refactored for b-tree usage.
+
 public class Cache<K, V extends KeyInterface<K>> {
-    // Instance variables
-    private LinkedHashMap<K, V> cachedNodes;
-    private int cacheSize;
-    private int cacheHits;
-    private int numberOfGetCalls;
+    private final LinkedList<V> cache;
+    private final int maxSize;
+    private int calls;
+    private int hits;
 
-    /**
-     * Constructs a Cache with the specified size.
-     *
-     * @param size the maximum number of elements the cache can hold
-     */
-    public Cache(int size) {
-        cachedNodes = new LinkedHashMap<>();
-        cacheSize = size;
-        cacheHits = 0;
-        numberOfGetCalls = 0;
+    public Cache(int maxSize) {
+        this.cache = new LinkedList<>();
+        this.maxSize = maxSize;
+        this.calls = 0;
+        this.hits = 0;
     }
 
     /**
-     * Retrieves a node from the cache by its key.
-     *
-     * @param targetAddress the key to search for
-     * @return the cached node if found, otherwise null
+     * Returns the object associated with the key, if present. Moves it to the front.
      */
-    public V get(K targetAddress) {
-        numberOfGetCalls++;
-        V retVal = cachedNodes.get(targetAddress);
-        if (retVal != null) {
-            cacheHits++;
+    public V get(K key) {
+        calls += 1;
+        for (int i = 0; i < cache.size(); i++) {
+            V value = cache.get(i);
+            if (value.getKey().equals(key)) {
+                cache.remove(i);
+                cache.addFirst(value);
+                hits += 1;
+                return value;
+            }
         }
-        return retVal;
+        return null;
     }
 
     /**
-     * Adds a node to the cache. If the cache is full, removes the oldest entry.
-     *
-     * @param newNode the node to add
-     * @return the removed node if the cache was full, otherwise null
+     * Adds a value to the cache. If it's a duplicate, replaces the old one.
+     * If the cache is full, removes the least recently used.
      */
-    public V add(V newNode) {
-        V retVal = null;
-        if (cachedNodes.size() == cacheSize) {
-            retVal = cachedNodes.entrySet().iterator().next().getValue();
-            cachedNodes.remove(retVal.getKey());
+    public V add(V value) {
+        for (int i = 0; i < cache.size(); i++) {
+            if (cache.get(i).getKey().equals(value.getKey())) {
+                cache.remove(i);
+                break;
+            }
         }
-        cachedNodes.put(newNode.getKey(), newNode);
-        return retVal;
+        cache.addFirst(value);
+        if (cache.size() > maxSize) {
+            return cache.removeLast(); // evict LRU
+        }
+        return null;
     }
 
     /**
-     * Clears all cached nodes.
+     * Removes a cached item by its key.
+     */
+    public V remove(K key) {
+        for (int i = 0; i < cache.size(); i++) {
+            V value = cache.get(i);
+            if (value.getKey().equals(key)) {
+                cache.remove(i);
+                return value;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Clears the cache.
      */
     public void clear() {
-        cachedNodes.clear();
+        cache.clear();
+        calls = 0;
+        hits = 0;
     }
 
     /**
-     * Returns the current cached nodes.
-     *
-     * @return a LinkedHashMap of cached nodes
+     * Returns a map copy of the cache for compatibility.
      */
     public LinkedHashMap<K, V> getCachedNodes() {
-        return this.cachedNodes;
+        LinkedHashMap<K, V> map = new LinkedHashMap<>();
+        for (V item : cache) {
+            map.put(item.getKey(), item);
+        }
+        return map;
     }
 
     /**
-     * Calculates and returns the cache hit percentage.
-     *
-     * @return the cache hit rate as a percentage
+     * Returns the cache hit rate as a percentage.
      */
     public double getCacheHitPercent() {
-        return ((double) this.cacheHits / this.numberOfGetCalls) * 100;
+        return calls == 0 ? 0 : ((double) hits / calls) * 100.0;
     }
+
+    @Override
+    public String toString() {
+        double hitRatio = (calls == 0) ? 0 : ((double) hits / calls) * 100;
+        return String.format(
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "Cache with %d entries has been created\n" +
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "Total number of references:        %d\n" +
+            "Total number of cache hits:        %d\n" +
+            "Cache hit percent:                 %.2f%%\n",
+            maxSize, calls, hits, hitRatio
+        );
+    }
+    
 }
