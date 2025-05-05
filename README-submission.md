@@ -7,7 +7,7 @@
 | Last Name | First Name | GitHub User Name |
 |-----------|------------|------------------|
 | Korber       Devyn        DevynKore          |
-| TBD       | TBD        | TBD              |
+| Brooks       | Rhys        | RhysBrooks1              |
 | TBD       | TBD        | TBD              |
 
 # Test Results
@@ -67,8 +67,8 @@ To be completed by each team member.
 Devyn Korber
 Implementing the disk‑backed B‑Tree for SSH log analysis pushed me to turn textbook algorithms into production‑quality code—handling fixed‑size node serialization, RandomAccessFile I/O, and optimal degree tuning for 4 KB blocks—while integrating an in‑memory cache to balance performance and resource limits. Building the top‑k frequency extractor with Java’s priority queue and mapping inorder traversals into SQLite tables sharpened my data‑structure and database skills, and writing end‑to‑end shell scripts for automated testing reinforced the value of reproducible workflows. Coordinating via GitHub issues, pull requests, and a Scrum board taught me the discipline of collaborative engineering, and ultimately transformed my understanding of how to design, implement, and validate a scalable pipeline from raw logs to searchable analytics in a real‑world setting.
 
-## Reflection (Team member name: )
-[Individual reflection to be added]
+## Reflection (Team member name: Rhys Brooks )
+Implementing the Btree class helped me put into practice a lot of the fundamentals of working with trees and caches. It was also my first time working with reading and writing static memory using the disk write and read methods. Workign as a team asllowed me to understand some of the difficulties that come with asynchronous work as there were sometimes issues that appeared on one computer that did not appear on others. Overall I feel that this project sharpened my skills as both a programmer and a team player in the world of software development.
 
 ## Reflection (Team member name: )
 [Individual reflection to be added]
