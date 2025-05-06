@@ -1,26 +1,26 @@
 package cs321.search;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 
 /**
  * The argument class for parsing SSHSearchDatabase's command line arguments
- * 
- * @author Devyn Korber
  */
 public class SSHSearchDatabaseArguments {
     private String treeType;
     private String database;
     private int topFrequency;
 
+    // Valid tree types according to project spec
     private static final String[] VALID_TREE_TYPES = {
-            "accepted-ip", "accepted-time", "invalid-ip", "invalid-time",
-            "failed-ip", "failed-time", "reverseaddress-ip", "reverseaddress-time", "user-ip"
+            "accepted-ip", "accepted-time", "failed-ip", "failed-time",
+            "invalid-ip", "invalid-time", "reverseaddress-ip", "reverseaddress-time", "user-ip",
+            // Include timestamp variants for compatibility
+            "accepted-timestamp", "failed-timestamp", "invalid-timestamp", "reverseaddress-timestamp"
     };
 
     public SSHSearchDatabaseArguments(String[] args) throws IllegalArgumentException {
         try {
+            // Process arguments
             for (String arg : args) {
                 if (arg.startsWith("--type=")) {
                     treeType = arg.substring(7);
@@ -34,7 +34,7 @@ public class SSHSearchDatabaseArguments {
             validateArguments();
 
         } catch (NumberFormatException e) {
-            this.notifyInvalidArguments("Error: Failed to parse argument.");
+            this.notifyInvalidArguments("Error: Failed to parse numeric argument.");
         }
     }
 
@@ -44,22 +44,22 @@ public class SSHSearchDatabaseArguments {
      * @throws IllegalArgumentException If the arguments are invalid.
      */
     private void validateArguments() throws IllegalArgumentException {
-        // required arguments not found -> invalid arguments
+        // Required arguments not found -> invalid arguments
         if (this.treeType == null || this.database == null || this.topFrequency == 0) {
             this.notifyInvalidArguments("Error: Missing required arguments");
         }
 
-        // validate tree type
+        // Handle timestamp vs time naming conversion
+        if (treeType.endsWith("-timestamp")) {
+            treeType = treeType.replace("-timestamp", "-time");
+        }
+
+        // Validate tree type
         if (!Arrays.asList(VALID_TREE_TYPES).contains(treeType)) {
-            this.notifyInvalidArguments("Error: Invalid tree type.");
+            this.notifyInvalidArguments("Error: Invalid tree type: " + treeType);
         }
 
-        // validate database file exists
-        if (!Files.exists(Paths.get(this.database))) {
-            this.notifyInvalidArguments("Error: Database does not exist.");
-        }
-
-        // make sure top frequency is correct
+        // Make sure top frequency is correct
         if (topFrequency != 10 && topFrequency != 25 && topFrequency != 50) {
             this.notifyInvalidArguments("Error: Top frequency must be <10/25/50>");
         }
@@ -76,7 +76,7 @@ public class SSHSearchDatabaseArguments {
     private void notifyInvalidArguments(String message) throws IllegalArgumentException {
         String formattedString = message + "\n";
 
-        formattedString += "Usage: SSHSearchDatabase --type=<tree-type> --database=<sqlite-database-path> --top-frequency=<10/25/50>"
+        formattedString += "Usage: java -jar build/libs/SSHSearchDatabase.jar --type=<tree-type> --database=<sqlite-database-path> --top-frequency=<10/25/50>"
                 + "\n";
 
         throw new IllegalArgumentException(formattedString);
@@ -117,5 +117,4 @@ public class SSHSearchDatabaseArguments {
                 ", top-frequency='" + topFrequency +
                 '}';
     }
-
 }
