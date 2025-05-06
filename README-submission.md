@@ -6,9 +6,9 @@
 
 | Last Name | First Name | GitHub User Name |
 |-----------|------------|------------------|
-| Korber       Devyn        DevynKore          |
-| Brooks       | Rhys        | RhysBrooks1              |
-| TBD       | TBD        | TBD              |
+| Korber       Devyn        DevynKore       |
+| Brooks    | Rhys       | RhysBrooks1      |
+| Stringham | James      | jwstringham      |
 
 # Test Results
 How many of the dumpfiles matched (using the check-dump-files.sh script)?
@@ -70,8 +70,8 @@ Implementing the disk‑backed B‑Tree for SSH log analysis pushed me to turn t
 ## Reflection (Team member name: Rhys Brooks )
 Implementing the Btree class helped me put into practice a lot of the fundamentals of working with trees and caches. It was also my first time working with reading and writing static memory using the disk write and read methods. Workign as a team asllowed me to understand some of the difficulties that come with asynchronous work as there were sometimes issues that appeared on one computer that did not appear on others. Overall I feel that this project sharpened my skills as both a programmer and a team player in the world of software development.
 
-## Reflection (Team member name: )
-[Individual reflection to be added]
+## Reflection (Team member name: James Stringham)
+Working on the SSHSearchBTree module gave me a good experience in parsing logs and building a disk BTree search tool. My main focus was implementing the logic to read keys from query files, search them in the BTree, and return matching results. During testing, I encountered a quite a bit of errors including, NullPointerException errors when the search result was null. These were often caused by truncated or empty BTree files, which affected parsing. In other cases, small mismatches in key formats between the logs and query inputs led to failed lookups.
 
 # Additional Notes
 The most challenging aspect of this project was understanding the exact format required for the `user-ip` dump file. The file needed to preserve various patterns from the SSH log entries rather than normalizing them to a standard format. 
