@@ -36,12 +36,16 @@ public class SSHSearchBTree {
             BufferedReader reader = new BufferedReader(new FileReader(arguments.getQueryFile()));
             String line;            
             while ((line = reader.readLine()) != null) {
+                
                 line = line.trim();
                 if (line.isEmpty()) continue;
 
                 System.out.println("Searching for: " + line);
                 TreeObject query = new TreeObject(line);
                 TreeObject result = btree.search(query.getKey());
+                System.out.println("Searching for: '" + line + "' (length: " + line.length() + ")");
+                System.out.println("Found: '" + result.getKey() + "' (length: " + result.getKey().length() + ")");
+
 
 
                 if (result != null) {
