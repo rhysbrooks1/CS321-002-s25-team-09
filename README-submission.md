@@ -16,9 +16,7 @@ How many of the dumpfiles matched (using the check-dump-files.sh script)?
 - 8/9 all others passs check dump files script. 
 
 How many of the btree query files results matched (using the check-btree-search.sh script)?
-- Testing is in progress.
-- James' perview
-- currently unfinished 
+- The accepted-ip and user-ip files matched (including top 25) however the others did not.
 
 How many of the database query files results matched (using the check-db-search.sh script)?
 - 5/8 are passing
@@ -71,7 +69,7 @@ Implementing the disk‑backed B‑Tree for SSH log analysis pushed me to turn t
 Implementing the Btree class helped me put into practice a lot of the fundamentals of working with trees and caches. It was also my first time working with reading and writing static memory using the disk write and read methods. Workign as a team asllowed me to understand some of the difficulties that come with asynchronous work as there were sometimes issues that appeared on one computer that did not appear on others. Overall I feel that this project sharpened my skills as both a programmer and a team player in the world of software development.
 
 ## Reflection (Team member name: James Stringham)
-Working on the SSHSearchBTree module gave me a good experience in parsing logs and building a disk BTree search tool. My main focus was implementing the logic to read keys from query files, search them in the BTree, and return matching results. During testing, I encountered a quite a bit of errors including, NullPointerException errors when the search result was null. These were often caused by truncated or empty BTree files, which affected parsing. In other cases, small mismatches in key formats between the logs and query inputs led to failed lookups.
+Working on the SSHSearchBTree module gave me a good experience in parsing logs and building a disk BTree search tool. My main focus was implementing the logic to read keys from query files, search them in the BTree, and return matching results. During testing, I encountered a number of errors that were extremely difficult to isolate and resolve due to the complexity of disk I/O, BTree structure, and cache interactions. A preliminary error was in the BTree constructor where all files were truncated upon creation, ideal for CreateBtree, but corrupted the BTree files when trying to search. This issue had an easy fix and did not cause too much trouble. The most frustrating part of implementing the search was that the BTree creation process would create invalid internal nodes with child addresses of 0, which would only be flagged during later searchs as runtime errors. Debugging these issues required deep inspection of the splitChild and writeNode logic and extremely thorough print tracing. Interestingly, the system functioned correctly for datasets like accepted-ip and user-ip, which suggests the final bug likely only shows when the BTree grows large enough to force multiple internal splits (as is the case with accepted-time and the other large data sets). Ultimately, this issue proved to be one of the most challenging parts of the project, pushing me to understand how B-Trees function conceptually. The bug was unfortunately too complex for me to pinpoint down after countless hours of chasing it and went unresolved. This was by far the most involved CS project I have ever worked on and although the result of the search module was not what I wanted, I still learned a lot and improved as a developer/debugger. 
 
 # Additional Notes
 The most challenging aspect of this project was understanding the exact format required for the `user-ip` dump file. The file needed to preserve various patterns from the SSH log entries rather than normalizing them to a standard format. 
