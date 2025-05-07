@@ -46,6 +46,12 @@ Throughout this project, we encountered several technical challenges that requir
    - The project required using a fixed degree value of 0 for filenames regardless of the actual BTree degree.
    - This separation between the computational degree and the filename degree was important for consistency.
 
+5. **Truncation in the BTree Constructor**:
+   - The project requires a couple uses for the BTree class: writing and reading.
+   - When creating a BTree for writing purposes, it is important to truncate the files to prevent corruption.
+   - When creating a BTree for reading purposes, if the file is truncated, all of the data will be erased, ruining the loading process.
+   - A proper check in the constructor to ensure if the file needs to be written or read is important for ensureing correct functionality for both use cases.
+
 ## Learning Outcomes
 
 Working on this project provided valuable insights into:
