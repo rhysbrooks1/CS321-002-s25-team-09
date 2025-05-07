@@ -17,19 +17,19 @@ public class SSHSearchBTree {
 			BTree btree;
 			if(arguments.isCacheEnabled())
 			{
-				btree = new BTree(arguments.getDegree(), arguments.getBtreeFile(), true, arguments.getCacheSize());
+				btree = new BTree(arguments.getBtreeFile(), true, arguments.getCacheSize());
 			}
 			else
 			{
-				btree = new BTree(arguments.getDegree(), arguments.getBtreeFile());
+				btree = new BTree(arguments.getBtreeFile());
 			}
 
-            System.out.println("Using B-tree file: " + arguments.getBtreeFile());
+            //System.out.println("Using B-tree file: " + arguments.getBtreeFile());
             File f = new File(arguments.getBtreeFile());
             if (!f.exists()) {
                 System.out.println("ERROR: File does not exist!");
             } else {
-                System.out.println("B-tree file size: " + f.length() + " bytes");
+                //System.out.println("B-tree file size: " + f.length() + " bytes");
             }
 
             List<SearchResult> results = new ArrayList<>();
@@ -40,19 +40,17 @@ public class SSHSearchBTree {
                 line = line.trim();
                 if (line.isEmpty()) continue;
 
-                System.out.println("Searching for: " + line);
+                //System.out.println("Searching for: " + line);
                 TreeObject query = new TreeObject(line);
                 TreeObject result = btree.search(query.getKey());
-                System.out.println("Searching for: '" + line + "' (length: " + line.length() + ")");
-                System.out.println("Found: '" + result.getKey() + "' (length: " + result.getKey().length() + ")");
-
-
-
-                if (result != null) {
-                    results.add(new SearchResult(result.getKey(), result.getCount()));
-                } else {
-                    System.out.println("Not found: " + line);
+                //System.out.println("Searching for: '" + line + "' (length: " + line.length() + ")");
+                if (result == null) {
+                    //System.err.println("Key not found: '" + line + "'");
+                    continue;
                 }
+
+                //System.out.println("Found: '" + result.getKey() + "' (length: " + result.getKey().length() + ")");
+                results.add(new SearchResult(result.getKey(), result.getCount()));
 
             }
             reader.close();
